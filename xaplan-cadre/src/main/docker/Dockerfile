@@ -1,5 +1,4 @@
 # VERSION 1.0.0
-# Author magaoling 
 
 FROM 42.123.99.17:5002/envimages/ubuntu14.04_jdk1.8:v1.0.2
 ENV file=xaplan-cadre-1.0.0.jar
