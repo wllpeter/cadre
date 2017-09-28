@@ -1,0 +1,7 @@
+version: '2.0'
+services:
+  xaplan-cadre:			
+    extends:				
+      file: common.yml
+      service: commonService
+    image: ${registry}/${project}/xaplan-cadre:${tag}
