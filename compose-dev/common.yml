@@ -1,7 +1,7 @@
 version: '2.0'
 services:
   commonService:
-    extra_hosts:						
+    extra_hosts:
       - "microservices001:10.20.10.21"
       - "microservices002:10.20.10.22"
       - "microservices003:10.20.10.23"
@@ -9,8 +9,8 @@ services:
       - "microservices005:10.20.10.25"
       - "microservices006:10.20.10.41" 
       - "microservices007:10.20.20.1" 
-    network_mode: "host"               
-    environment:					
+    network_mode: "host" 
+    environment:
       - host=${host}
       - runEnv=${runEnv}
       - bind=${host}
