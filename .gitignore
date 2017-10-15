@@ -1,1 +1,5 @@
 /.project
+.idea
+log
+*.iml
+.settings
