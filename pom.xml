@@ -22,6 +22,7 @@
 		<spring.boot.admin>1.5.0</spring.boot.admin>
 		<docker.registry.address>42.123.99.17:5002</docker.registry.address>
 		<docker.plugin.version>0.4.13</docker.plugin.version>
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
 	</properties>
 
 
@@ -49,6 +50,17 @@
 				<groupId>de.codecentric</groupId>
 				<artifactId>spring-boot-admin-starter-client</artifactId>
 				<version>${spring.boot.admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -1,17 +1,17 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
-import com.ddb.xaplan.cadre.dao.OfficerBasicInfoDao;
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
+import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by 王凯斌 on 2017/10/16.
@@ -19,19 +19,15 @@ import javax.servlet.http.HttpServletRequest;
 @RestController("/api")
 public class OfficerBasicInfoController {
 
-    @Autowired
-    private OfficerBasicInfoDao officerBasicInfoDao;
-
+    @Resource(name="officerBasicInfoServiceImpl")
+    private OfficerBasicInfoService officerBasicInfoService;
 
     @ApiOperation(value = "add basic info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "demo", required = true, paramType = "query", dataType = "String") })
+            @ApiImplicitParam(name = "demo",paramType = "query", dataType = "String") })
     @GetMapping("/officerBasicInfo")
-    public DataInfo<OfficerBasicInfoDO> add(HttpServletRequest request, @RequestParam(name = "demo") String demo) {
+    public DataInfo<List<OfficerBasicInfoDO>> search(@RequestParam(name = "demo") String demo) {
 
-        OfficerBasicInfoDO officerBasicInfoDO = new OfficerBasicInfoDO();
-        officerBasicInfoDO.setIdCard(demo);
-        officerBasicInfoDao.save(officerBasicInfoDO);
-        return new DataInfo<OfficerBasicInfoDO>(officerBasicInfoDO);
+        return DataInfo.success(officerBasicInfoService.search("idCard","123"));
     }
 }
