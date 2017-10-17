@@ -1,23 +1,20 @@
 package com.ddb.xaplan.cadre.entity;
 
 import com.ddb.xaplan.cadre.enums.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by 陈亚兰 on 2017/9/19.
- * 中小企业信用贷报送清单
+ * Created by 王凯斌 on 2017/10/16.
+ * 干部基本信息
  */
 @Entity
 @Table(name = "officer_basic_info")
 @Where(clause = "is_deleted=0")
 public class OfficerBasicInfoDO extends BaseEntity {
-
-    private static final long serialVersionUID = 8607327201742166650L;
 
     private String photo;
 
@@ -54,6 +51,10 @@ public class OfficerBasicInfoDO extends BaseEntity {
     private Date workDate;
 
     private String firstDegree;
+
+    private AreaDO area;
+
+    private String areaIds;
 
     @Column
     public String getPhoto() {
@@ -215,5 +216,24 @@ public class OfficerBasicInfoDO extends BaseEntity {
 
     public void setFirstDegree(String firstDegree) {
         this.firstDegree = firstDegree;
+    }
+
+    @OneToOne
+    @JoinColumn
+    public AreaDO getArea() {
+        return area;
+    }
+
+    public void setArea(AreaDO area) {
+        this.area = area;
+    }
+
+    @Column
+    public String getAreaIds() {
+        return areaIds;
+    }
+
+    public void setAreaIds(String areaIds) {
+        this.areaIds = areaIds;
     }
 }
