@@ -23,7 +23,8 @@ import javax.annotation.Resource;
 /**
  * Created by 王凯斌 on 2017/10/16.
  */
-@RestController("/api/officerBasicInfo")
+@RestController
+@RequestMapping("/api/officer")
 public class OfficerBasicInfoController {
 
     @Resource(name="officerBasicInfoServiceImpl")

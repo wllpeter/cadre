@@ -5,7 +5,7 @@ package com.ddb.xaplan.cadre.enums;
  * normal：正常  illegal_no_handler：违法未处理 close:注销
  */
 public enum  VehicleStatus {
-    normal,
-    illegal_no_handler,
-    close
+    NORMAL,
+    ILLEGAL_NO_HANDLER,
+    CLOSE
 }
