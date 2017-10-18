@@ -23,6 +23,7 @@
 		<docker.registry.address>42.123.99.17:5002</docker.registry.address>
 		<docker.plugin.version>0.4.13</docker.plugin.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+		<poi.version>3.16</poi.version>
 	</properties>
 
 
@@ -62,6 +63,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${poi.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<build>

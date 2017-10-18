@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
 /**
  * Created by 王凯斌 on 2017/10/17.
  */
+@RestController
+@RequestMapping("/api/officer")
 public class OfficerCurriculumVitaeController {
 
     @Resource(name="officerCurriculumVitaeServiceImpl")
@@ -28,7 +31,7 @@ public class OfficerCurriculumVitaeController {
     @ApiOperation(value = "search prize info controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String") })
-    @RequestMapping(value = "/{officerId}/prizeInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/{officerId}/curriculumVitae",method = RequestMethod.GET)
     public DataInfo<List<OfficerCurriculumVitaeDO>> search(@PathVariable Long officerId){
 
         List<OfficerCurriculumVitaeDO> items = officerCurriculumVitaeService.search(
