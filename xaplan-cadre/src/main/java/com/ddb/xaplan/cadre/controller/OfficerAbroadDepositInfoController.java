@@ -4,7 +4,6 @@ import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.OfficerAbroadDepositInfoDO;
 import com.ddb.xaplan.cadre.service.OfficerAbroadDepositInfoService;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
-import com.netflix.discovery.converters.Auto;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +29,7 @@ public class OfficerAbroadDepositInfoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String") })
     @RequestMapping(value="/{officerId}/abroadDeposit",method = RequestMethod.GET)
-    public DataInfo search(@PathVariable Long officerId){
+    public DataInfo<List<OfficerAbroadDepositInfoDO>> search(@PathVariable Long officerId){
         List<OfficerAbroadDepositInfoDO> items=officerAbroadDepositInfoService.search("officerBasicInfoDO",
                 officerBasicInfoService.find(officerId));
         if(items.size()==0){

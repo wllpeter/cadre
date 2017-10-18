@@ -32,7 +32,7 @@ public class OfficerInsuranceInfoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String") })
     @RequestMapping(value="/{officerId}/insuranceInfo",method = RequestMethod.GET)
-    public DataInfo search(@PathVariable Long officerId){
+    public DataInfo<List<OfficerInsuranceInfoDO>> search(@PathVariable Long officerId){
         List<OfficerInsuranceInfoDO> items=officerInsuranceInfoService.search("officerBasicInfoDO",
                 officerBasicInfoService.find(officerId));
         if(items.size()==0){
