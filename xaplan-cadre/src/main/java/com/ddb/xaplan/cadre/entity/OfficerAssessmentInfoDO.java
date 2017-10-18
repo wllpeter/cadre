@@ -5,19 +5,14 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 
-/**
- * Author:Zan Yang
- * Title:交通违章
- */
 @Entity
-@Table(name = "officer_traffic_violation")
+@Table(name = "officer_assessment_info")
 @Where(clause = "is_deleted=0")
-public class OfficerTrafficViolationDO extends  BaseEntity{
+public class OfficerAssessmentInfoDO extends BaseEntity {
     private OfficerBasicInfoDO officerBasicInfo;
     private String year;
-    private Integer quantity;
-    private Integer point;
-    private Integer amount;
+    private String grade;
+
     @JsonBackReference
     @OneToOne
     @JoinColumn
@@ -28,6 +23,7 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
     public void setOfficerBasicInfo(OfficerBasicInfoDO officerBasicInfo) {
         this.officerBasicInfo = officerBasicInfo;
     }
+
     @Column
     public String getYear() {
         return year;
@@ -36,28 +32,13 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
     public void setYear(String year) {
         this.year = year;
     }
+
     @Column
-    public Integer getQuantity() {
-        return quantity;
+    public String getGrade() {
+        return grade;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-    @Column
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
-    }
-    @Column
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

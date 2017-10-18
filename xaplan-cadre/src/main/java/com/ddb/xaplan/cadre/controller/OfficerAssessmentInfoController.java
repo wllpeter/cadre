@@ -1,11 +1,9 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
-import com.ddb.xaplan.cadre.entity.OfficerPrizeInfoDO;
-import com.ddb.xaplan.cadre.entity.OfficerTrafficViolationDO;
+import com.ddb.xaplan.cadre.entity.OfficerAssessmentInfoDO;
+import com.ddb.xaplan.cadre.service.OfficerAssessmentInfoService;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
-import com.ddb.xaplan.cadre.service.OfficerPrizeInfoService;
-import com.ddb.xaplan.cadre.service.OfficerTrafficViolationService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,21 +20,21 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/officer")
-public class OfficerTrafficViolationController {
+public class OfficerAssessmentInfoController {
 
-    @Resource(name="officerTrafficViolationServiceImpl")
-    private OfficerTrafficViolationService officerTrafficViolationService;
+    @Resource(name="officerAssessmentInfoServiceImpl")
+    private OfficerAssessmentInfoService officerAssessmentInfoService;
 
     @Resource(name="officerBasicInfoServiceImpl")
     private OfficerBasicInfoService officerBasicInfoService;
 
-    @ApiOperation(value = "search traffic violation controller")
+    @ApiOperation(value = "search assessment info controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String") })
-    @RequestMapping(value = "/{officerId}/trafficViolation",method = RequestMethod.GET)
-    public DataInfo< List<OfficerTrafficViolationDO>> search(@PathVariable Long officerId){
+    @RequestMapping(value = "/{officerId}/assessmentInfo",method = RequestMethod.GET)
+    public DataInfo< List<OfficerAssessmentInfoDO>> search(@PathVariable Long officerId){
 
-        List<OfficerTrafficViolationDO> items = officerTrafficViolationService.search(
+        List<OfficerAssessmentInfoDO> items = officerAssessmentInfoService.search(
                 "officerBasicInfo",officerBasicInfoService.find(officerId));
         if(items.size()==0){
             return DataInfo.error("未找到关联数据");
