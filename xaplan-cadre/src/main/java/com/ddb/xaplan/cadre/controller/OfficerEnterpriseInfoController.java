@@ -2,10 +2,8 @@ package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.OfficerEnterpriseInfoDO;
-import com.ddb.xaplan.cadre.entity.OfficerVehicleInfoDO;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
 import com.ddb.xaplan.cadre.service.OfficerEnterpriseInfoService;
-import com.ddb.xaplan.cadre.service.OfficerVerhicleInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * Created by 王凯斌 on 2017/10/17.
+ * Created by ZanYang on 2017/10/17.
  */
 @RestController
 @RequestMapping("/api/officer")

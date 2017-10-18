@@ -19,7 +19,7 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
     private Integer point;
     private Integer amount;
     @JsonBackReference
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     public OfficerBasicInfoDO getOfficerBasicInfo() {
         return officerBasicInfo;

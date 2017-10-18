@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 /**
  * Author:Zan Yang
- * Title:交通违章
+ * Title:车辆信息
  */
 @Entity
 @Table(name = "officer_vehicle_info")
@@ -22,7 +22,7 @@ public class OfficerVehicleInfoDO extends  BaseEntity{
     private VehicleStatus status;
     private String plateNumber;
     @JsonBackReference
-    @ManyToOne
+    @OneToOne
     @JoinColumn
     public OfficerBasicInfoDO getOfficerBasicInfo() {
         return officerBasicInfo;
