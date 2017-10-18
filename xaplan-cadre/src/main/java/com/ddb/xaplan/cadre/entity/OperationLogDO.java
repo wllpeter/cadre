@@ -30,6 +30,8 @@ public class OperationLogDO extends BaseEntity{
 
     private String content;
 
+    private String type;
+
     @Column
     public String getRole() {
         return role;
@@ -100,5 +102,14 @@ public class OperationLogDO extends BaseEntity{
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Column
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
