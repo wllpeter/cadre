@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -103,11 +104,18 @@ public class ExcelUtils {
 
         List<List<String>> newData = new ArrayList<>();
         for (T item : data) {
+            List<Field> fields = new ArrayList<>();
+            fields.addAll(Arrays.asList(item.getClass().getSuperclass().getDeclaredFields()));
+            fields.addAll(Arrays.asList(item.getClass().getDeclaredFields()));
+
             List<String> row = new ArrayList<>();
             for(String attr:attrs){
-                Field field = item.getClass().getDeclaredField(attr);
-                field.setAccessible(true);
-                row.add((String)field.get(item));
+                for(Field field:fields){
+                    if (field.getName().equals(attr)){
+                        field.setAccessible(true);
+                        row.add(String.valueOf(field.get(item)));
+                    }
+                }
             }
             newData.add(row);
         }
