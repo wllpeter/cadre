@@ -6,17 +6,19 @@ package com.ddb.xaplan.cadre.enums;
  */
 public enum EducationLevel {
 
-    ILLITERACY,
+    ILLITERACY,//文盲
 
-    PRIMARY,
+    PRIMARY,//小学
 
-    JUNIOR_MIDDLE,
+    JUNIOR_MIDDLE,//初中
 
-    HIGH,
+    HIGH,//高中
 
-    UNDERGRADUATE,
+    PROFESSION_College,//大专
 
-    MASTER,
+    UNDERGRADUATE,//本科
 
-    PHD
+    MASTER,//硕士
+
+    PHD//博士
 }
