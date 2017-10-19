@@ -55,6 +55,15 @@ public class PropertyInformationController {
     @Resource(name="officerAbroadInvestmentInfoServiceImpl")
     private OfficerAbroadInvestmentInfoService officerAbroadInvestmentInfoService;
 
+    //股票信息
+    @Resource(name="officerStockInfoServiceImpl")
+    private OfficerStockInfoService officerStockInfoService;
+
+    //基金信息
+    @Resource(name="officerFundInfoServiceImpl")
+    private OfficerFundInfoService officerFundInfoService;
+
+
     @ApiOperation(value = "search propertyInformation controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String")})
@@ -85,7 +94,16 @@ public class PropertyInformationController {
         List<OfficerAbroadInvestmentInfoDO> abroadInvestmentItems=this.officerAbroadInvestmentInfoService.search(
                 "officerBasicInfo",this.officerBasicInfoService.find(officerId));
         map.put("abroadInvestmentItems",abroadInvestmentItems);
-
+        //股票信息
+        List<OfficerStockInfoDO> stockItems=this.officerStockInfoService.search(
+                "officerBasicInfo",this.officerBasicInfoService.find(officerId)
+        );
+        map.put("stockItems",stockItems);
+        //基金信息
+        List<OfficerFundInfoDO> fundItems=this.officerFundInfoService.search(
+                "officerBasicInfo",this.officerBasicInfoService.find(officerId)
+        );
+        map.put("fundItems",fundItems);
         if(map.size()==0){
             return DataInfo.error("没有找到");
         }

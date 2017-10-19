@@ -21,7 +21,7 @@ import java.util.List;
  * 收入信息
  */
 @RestController
-@RequestMapping("/api/officerEstateInfo")
+@RequestMapping("/api/officerIncomeInfo")
 public class OfficerIncomeInfoController {
 
     //收入信息
