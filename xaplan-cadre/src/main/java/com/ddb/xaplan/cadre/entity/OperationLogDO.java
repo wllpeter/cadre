@@ -18,6 +18,8 @@ public class OperationLogDO extends BaseEntity{
 
     private String uuid;
 
+    private String idCard;
+
     private String userName;
 
     private String telephone;
@@ -48,6 +50,15 @@ public class OperationLogDO extends BaseEntity{
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     @Column

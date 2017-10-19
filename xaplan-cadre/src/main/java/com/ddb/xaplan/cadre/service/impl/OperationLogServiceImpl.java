@@ -37,7 +37,7 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
                 if (StringUtils.isNotEmpty(keyword)) {
                     predicate.getExpressions().add(
                             criteriaBuilder.or(
-                                    criteriaBuilder.like(root.get("uuid"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("idCard"), "%" +keyword+"%"),
                                     criteriaBuilder.like(root.get("userName"), "%" +keyword+"%")
                             )
                     );
