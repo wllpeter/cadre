@@ -35,7 +35,7 @@ public class AlertInfoController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword",paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "alertType",paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "areaID",paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "size",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "page",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "sort",paramType = "query", dataType = "String")
