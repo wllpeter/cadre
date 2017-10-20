@@ -25,8 +25,11 @@ public class MedicalReimburseDO extends BaseEntity {
     //住院天数
     private Integer hospitalizedDuration;
 
+    //花费总额
+    private BigDecimal expense_amount;
+
     //报销金额
-    private BigDecimal amount;
+    private BigDecimal reimbursement_amount;
 
     //病情
     private String diseaseName;
@@ -74,12 +77,21 @@ public class MedicalReimburseDO extends BaseEntity {
     }
 
     @Column
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getExpense_amount() {
+        return expense_amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setExpense_amount(BigDecimal expense_amount) {
+        this.expense_amount = expense_amount;
+    }
+
+    @Column
+    public BigDecimal getReimbursement_amount() {
+        return reimbursement_amount;
+    }
+
+    public void setReimbursement_amount(BigDecimal reimbursement_amount) {
+        this.reimbursement_amount = reimbursement_amount;
     }
 
     @Column
