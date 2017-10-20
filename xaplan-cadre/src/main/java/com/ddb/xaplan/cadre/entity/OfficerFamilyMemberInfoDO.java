@@ -23,7 +23,7 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity{
 
     private OfficerBasicInfoDO officerBasicInfoDO;//干部信息
 
-    private String name;//干部姓名
+    private String name;//姓名
 
     private String idCard;//身份证号
 
