@@ -6,9 +6,13 @@ package com.ddb.xaplan.cadre.enums;
  */
 public enum PoliticsStatus {
 
-    PEOPLE,
+    PEOPLE,//群众
 
-    LEAGUE_MEMBER,
+    LEAGUE_MEMBER,//团员
 
-    PARTY_MEMBER
+    PARTY_MEMBER,//党员
+
+    PRE_PARTY_MEMBER,//预备党员
+
+    OTHER//其他
 }

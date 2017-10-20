@@ -36,7 +36,7 @@ public class FeedbackServiceImpl extends BaseServiceImpl<FeedbackDO> implements 
                 if (StringUtils.isNotEmpty(keyword)) {
                     predicate.getExpressions().add(
                             criteriaBuilder.or(
-                                    criteriaBuilder.like(root.get("uuid"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("idCard"), "%" +keyword+"%"),
                                     criteriaBuilder.like(root.get("userName"), "%" +keyword+"%")
                             )
                     );
