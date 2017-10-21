@@ -25,6 +25,8 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity{
 
     private String name;//姓名
 
+    private String cadre_id_card;//干部身份证号
+
     private String idCard;//身份证号
 
     private String passport;//护照号码
@@ -104,6 +106,15 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getCadre_id_card() {
+        return cadre_id_card;
+    }
+
+    public void setCadre_id_card(String cadre_id_card) {
+        this.cadre_id_card = cadre_id_card;
     }
 
     public String getIdCard() {
