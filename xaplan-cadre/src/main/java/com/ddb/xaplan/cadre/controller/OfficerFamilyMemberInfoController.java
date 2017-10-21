@@ -1,7 +1,6 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
-import com.ddb.xaplan.cadre.entity.OfficerFamilyMemberInfoDO;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
 import com.ddb.xaplan.cadre.service.OfficerFamilyMemberInfoService;
 import io.swagger.annotations.ApiImplicitParam;
