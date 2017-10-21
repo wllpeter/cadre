@@ -2,9 +2,8 @@ package com.ddb.xaplan.cadre.entity;
 
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by 王凯斌 on 2017/10/19.
@@ -27,6 +26,8 @@ public class AlertInfoDO extends BaseEntity {
 
     private AlertInfoDO.AlertType alertType;
 
+    private Date occurDate;
+
     private String name;
 
     private String idCard;
@@ -36,6 +37,8 @@ public class AlertInfoDO extends BaseEntity {
     private String title;
 
     private String content;
+
+    private AreaDO area;
 
     @Column
     public String getPhoto() {
@@ -53,6 +56,15 @@ public class AlertInfoDO extends BaseEntity {
 
     public void setAlertType(AlertType alertType) {
         this.alertType = alertType;
+    }
+
+    @Column
+    public Date getOccurDate() {
+        return occurDate;
+    }
+
+    public void setOccurDate(Date occurDate) {
+        this.occurDate = occurDate;
     }
 
     @Column
@@ -98,5 +110,15 @@ public class AlertInfoDO extends BaseEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @ManyToOne
+    @JoinColumn
+    public AreaDO getArea() {
+        return area;
+    }
+
+    public void setArea(AreaDO area) {
+        this.area = area;
     }
 }
