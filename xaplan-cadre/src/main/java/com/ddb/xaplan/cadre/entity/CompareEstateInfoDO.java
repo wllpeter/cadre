@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name="compare_salary_info")
+@Table(name="compare_estate_info")
 @Where(clause = "is_deleted = 0")
 public class CompareEstateInfoDO extends BaseEntity {
     private String cadreIdCard;
