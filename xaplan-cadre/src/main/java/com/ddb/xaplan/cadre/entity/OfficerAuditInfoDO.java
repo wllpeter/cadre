@@ -3,10 +3,7 @@ package com.ddb.xaplan.cadre.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -36,7 +33,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
 
     private String problem;//存在问题
 
-    private double amount;//金额
+    private Double amount;//金额
 
     private String evaluation;//审计评价
 
@@ -91,6 +88,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.startDate = startDate;
     }
 
+    @Column(name="performance",length = 16777215)
     public String getPerformance() {
         return performance;
     }
@@ -99,6 +97,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.performance = performance;
     }
 
+    @Column(name="problem",length = 16777215)
     public String getProblem() {
         return problem;
     }
@@ -107,14 +106,15 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.problem = problem;
     }
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 
+    @Column(name="evaluation",length = 16777215)
     public String getEvaluation() {
         return evaluation;
     }

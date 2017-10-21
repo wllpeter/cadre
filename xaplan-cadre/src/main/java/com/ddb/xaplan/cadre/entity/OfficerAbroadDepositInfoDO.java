@@ -28,7 +28,7 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
 
     private String currency;//币种
 
-    private float amount;//金额
+    private Float amount;//金额
 
     @JsonBackReference
     @OneToOne
@@ -73,11 +73,11 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.currency = currency;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 }

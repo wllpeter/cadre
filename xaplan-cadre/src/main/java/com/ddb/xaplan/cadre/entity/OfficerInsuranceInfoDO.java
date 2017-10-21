@@ -28,7 +28,7 @@ public class OfficerInsuranceInfoDO extends BaseEntity{
 
     private String companyName;//保险公司名称
 
-    private float amount;//积累缴纳保费用、投资金
+    private Float amount;//积累缴纳保费用、投资金
 
     @JsonBackReference
     @OneToOne
@@ -73,11 +73,11 @@ public class OfficerInsuranceInfoDO extends BaseEntity{
         this.companyName = companyName;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 }
