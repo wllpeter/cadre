@@ -48,6 +48,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.officerBasicInfoDO = officerBasicInfoDO;
     }
 
+    @Column
     public String getYear() {
         return year;
     }
@@ -56,6 +57,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.year = year;
     }
 
+    @Column
     public String getReportNumber() {
         return reportNumber;
     }
@@ -64,6 +66,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.reportNumber = reportNumber;
     }
 
+    @Column
     public String getOrganization() {
         return organization;
     }
@@ -72,6 +75,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.organization = organization;
     }
 
+    @Column
     public String getTitle() {
         return title;
     }
@@ -80,6 +84,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.title = title;
     }
 
+    @Column
     public Date getStartDate() {
         return startDate;
     }
@@ -106,6 +111,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.problem = problem;
     }
 
+    @Column
     public Double getAmount() {
         return amount;
     }
