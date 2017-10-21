@@ -1,12 +1,10 @@
 package com.ddb.xaplan.cadre.entity;
 
-import com.ddb.xaplan.cadre.enums.Gender;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.Date;
 
 /**
  * author:Zan Yang
@@ -33,7 +31,7 @@ public class CompareEnterpriseInfoDO extends BaseEntity{
 
     private String capital;
 
-    private String range;
+    private String businessRange;
 
     @Column
     public String getCadreIdCard() {
@@ -117,11 +115,11 @@ public class CompareEnterpriseInfoDO extends BaseEntity{
     }
 
     @Column
-    public String getRange() {
-        return range;
+    public String getBusinessRange() {
+        return businessRange;
     }
 
-    public void setRange(String range) {
-        this.range = range;
+    public void setBusinessRange(String businessRange) {
+        this.businessRange = businessRange;
     }
 }
