@@ -1,6 +1,5 @@
 package com.ddb.xaplan.cadre.service.impl;
 
-import com.ddb.xaplan.cadre.entity.OfficerFamilyMemberInfoDO;
 import com.ddb.xaplan.cadre.service.OfficerFamilyMemberInfoService;
 import org.springframework.stereotype.Service;
 
