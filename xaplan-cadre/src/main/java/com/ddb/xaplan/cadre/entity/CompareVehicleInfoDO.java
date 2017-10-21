@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "compare_vehicle_info")
 @Where(clause = "is_deleted = 0")
-public class compareVehicleInfoDO extends BaseEntity{
+public class CompareVehicleInfoDO extends BaseEntity{
     private String idCard;
     private String model;
     private Boolean isImported;
