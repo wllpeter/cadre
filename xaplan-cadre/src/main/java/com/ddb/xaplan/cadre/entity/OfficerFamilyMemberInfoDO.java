@@ -2,13 +2,13 @@ package com.ddb.xaplan.cadre.entity;
 
 import com.ddb.xaplan.cadre.enums.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.el.parser.BooleanNode;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.Date;
-import java.util.function.BooleanSupplier;
 
 /**
  * Created by 陈亚兰 on 2017/10/17.
@@ -17,7 +17,7 @@ import java.util.function.BooleanSupplier;
 @Entity
 @Table(name="officer_family_member_info")
 @Where(clause = "is_deleted=0")
-public class OfficerFamilyMemberInfoDO extends BaseEntity {
+public class OfficerFamilyMemberInfoDO extends BaseEntity{
 
     private static final long serialVersionUID = 667242011618513702L;
 
@@ -51,13 +51,13 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
 
     private String title;//现任职务
 
-    private Boolean isHighTitle;//是否担任高级职务
+    private boolean isHighTitle;//是否担任高级职务
 
     private UnitProperty orgType;//单位性质
 
-    private Boolean isRegistered;//是否有备案信息
+    private boolean isRegistered;//是否有备案信息
 
-    private Boolean isMigration;//是否移居国（境）外
+    private boolean isMigration;//是否移居国（境）外
 
     private String migrationArea;//移居国家（地区）
 
@@ -69,7 +69,7 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
 
     private Date migrationDate;//移居时间
 
-    private Boolean locooy;//是否连续在国（境）外连续工作、生活一年以上
+    private boolean locooy;//是否连续在国（境）外连续工作、生活一年以上
 
     private String locooyArea;//所在国家（地区）
 
@@ -77,7 +77,7 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
 
     private Date locooyStartDate;//起始时间
 
-    private Boolean marridForeign;//是否与外国人、无国际人、港澳台居民通婚
+    private boolean marridForeign;//是否与外国人、无国际人、港澳台居民通婚
 
     private String spouse;//配偶姓名
 
@@ -100,7 +100,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.officerBasicInfoDO = officerBasicInfoDO;
     }
 
-    @Column
     public String getName() {
         return name;
     }
@@ -109,7 +108,7 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.name = name;
     }
 
-    @Column
+
     public String getCadre_id_card() {
         return cadre_id_card;
     }
@@ -118,7 +117,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.cadre_id_card = cadre_id_card;
     }
 
-    @Column
     public String getIdCard() {
         return idCard;
     }
@@ -127,7 +125,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.idCard = idCard;
     }
 
-    @Column
     public String getPassport() {
         return passport;
     }
@@ -136,7 +133,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.passport = passport;
     }
 
-    @Column
     public String getSpecPassport() {
         return specPassport;
     }
@@ -145,7 +141,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.specPassport = specPassport;
     }
 
-    @Column
     public FamilyRelationship getFamilyRelationship() {
         return familyRelationship;
     }
@@ -154,7 +149,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.familyRelationship = familyRelationship;
     }
 
-    @Column
     public Date getBirthday() {
         return birthday;
     }
@@ -163,7 +157,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.birthday = birthday;
     }
 
-    @Column
     public String getNation() {
         return nation;
     }
@@ -172,7 +165,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.nation = nation;
     }
 
-    @Column
     public String getCulture() {
         return culture;
     }
@@ -181,7 +173,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.culture = culture;
     }
 
-    @Column
     public EducationLevel getEducationLevel() {
         return educationLevel;
     }
@@ -190,7 +181,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.educationLevel = educationLevel;
     }
 
-    @Column
     public PoliticsStatus getPoliticsStatus() {
         return politicsStatus;
     }
@@ -199,7 +189,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.politicsStatus = politicsStatus;
     }
 
-    @Column
     public String getOrganization() {
         return organization;
     }
@@ -208,7 +197,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.organization = organization;
     }
 
-    @Column
     public TitleLevel getTitleLevel() {
         return titleLevel;
     }
@@ -217,7 +205,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.titleLevel = titleLevel;
     }
 
-    @Column
     public String getTitle() {
         return title;
     }
@@ -226,16 +213,14 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.title = title;
     }
 
-    @Column
-    public Boolean getHighTitle() {
+    public boolean isHighTitle() {
         return isHighTitle;
     }
 
-    public void setHighTitle(Boolean highTitle) {
+    public void setHighTitle(boolean highTitle) {
         isHighTitle = highTitle;
     }
 
-    @Column
     public UnitProperty getOrgType() {
         return orgType;
     }
@@ -244,25 +229,22 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.orgType = orgType;
     }
 
-    @Column
-    public Boolean getRegistered() {
+    public boolean isRegistered() {
         return isRegistered;
     }
 
-    public void setRegistered(Boolean registered) {
+    public void setRegistered(boolean registered) {
         isRegistered = registered;
     }
 
-    @Column
-    public Boolean getMigration() {
+    public boolean isMigration() {
         return isMigration;
     }
 
-    public void setMigration(Boolean migration) {
+    public void setMigration(boolean migration) {
         isMigration = migration;
     }
 
-    @Column
     public String getMigrationArea() {
         return migrationArea;
     }
@@ -271,7 +253,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.migrationArea = migrationArea;
     }
 
-    @Column
     public String getLivingCity() {
         return livingCity;
     }
@@ -280,7 +261,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.livingCity = livingCity;
     }
 
-    @Column
     public String getMigrationId() {
         return migrationId;
     }
@@ -289,7 +269,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.migrationId = migrationId;
     }
 
-    @Column
     public MigrationType getMigrationType() {
         return migrationType;
     }
@@ -298,7 +277,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.migrationType = migrationType;
     }
 
-    @Column
     public Date getMigrationDate() {
         return migrationDate;
     }
@@ -307,16 +285,14 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.migrationDate = migrationDate;
     }
 
-    @Column
-    public Boolean getLocooy() {
+    public boolean isLocooy() {
         return locooy;
     }
 
-    public void setLocooy(Boolean locooy) {
+    public void setLocooy(boolean locooy) {
         this.locooy = locooy;
     }
 
-    @Column
     public String getLocooyArea() {
         return locooyArea;
     }
@@ -325,7 +301,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.locooyArea = locooyArea;
     }
 
-    @Column
     public String getLocooyCity() {
         return locooyCity;
     }
@@ -334,7 +309,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.locooyCity = locooyCity;
     }
 
-    @Column
     public Date getLocooyStartDate() {
         return locooyStartDate;
     }
@@ -343,16 +317,14 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.locooyStartDate = locooyStartDate;
     }
 
-    @Column
-    public Boolean getMarridForeign() {
+    public boolean isMarridForeign() {
         return marridForeign;
     }
 
-    public void setMarridForeign(Boolean marridForeign) {
+    public void setMarridForeign(boolean marridForeign) {
         this.marridForeign = marridForeign;
     }
 
-    @Column
     public String getSpouse() {
         return spouse;
     }
@@ -361,7 +333,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.spouse = spouse;
     }
 
-    @Column
     public String getSpouseArea() {
         return spouseArea;
     }
@@ -370,7 +341,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.spouseArea = spouseArea;
     }
 
-    @Column
     public String getSpouseOrg() {
         return spouseOrg;
     }
@@ -379,7 +349,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.spouseOrg = spouseOrg;
     }
 
-    @Column
     public String getSpouseTitle() {
         return spouseTitle;
     }
@@ -388,7 +357,6 @@ public class OfficerFamilyMemberInfoDO extends BaseEntity {
         this.spouseTitle = spouseTitle;
     }
 
-    @Column
     public Date getMarriageDate() {
         return marriageDate;
     }

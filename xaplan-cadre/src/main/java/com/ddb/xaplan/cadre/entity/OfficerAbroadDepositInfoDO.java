@@ -3,7 +3,10 @@ package com.ddb.xaplan.cadre.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * Created by 陈亚兰 on 2017/10/18.
@@ -38,7 +41,6 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.officerBasicInfoDO = officerBasicInfoDO;
     }
 
-    @Column
     public String getOwnerName() {
         return ownerName;
     }
@@ -47,7 +49,6 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.ownerName = ownerName;
     }
 
-    @Column
     public String getOwnerArea() {
         return ownerArea;
     }
@@ -56,7 +57,6 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.ownerArea = ownerArea;
     }
 
-    @Column
     public String getOrgName() {
         return orgName;
     }
@@ -65,7 +65,6 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.orgName = orgName;
     }
 
-    @Column
     public String getCurrency() {
         return currency;
     }
@@ -74,7 +73,6 @@ public class OfficerAbroadDepositInfoDO extends BaseEntity {
         this.currency = currency;
     }
 
-    @Column
     public Float getAmount() {
         return amount;
     }
