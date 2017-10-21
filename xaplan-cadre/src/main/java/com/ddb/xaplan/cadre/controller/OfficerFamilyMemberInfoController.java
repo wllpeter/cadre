@@ -34,8 +34,8 @@ public class OfficerFamilyMemberInfoController {
     @RequestMapping(value = "/{officerId}/memberinfo",method = RequestMethod.GET)
     public DataInfo<List<OfficerFamilyMemberInfoDO>> search(@PathVariable Long officerId){
 
-        List<OfficerFamilyMemberInfoDO> items = officerFamilyMemberInfoService.search(
-                "officerBasicInfoDO",officerBasicInfoService.find(officerId));
+        List<OfficerFamilyMemberInfoDO> items=officerFamilyMemberInfoService.search(
+                "officerBasicInfoDO", officerBasicInfoService.find(officerId));
         if(items.size()==0){
             return DataInfo.error("未找到关联数据");
         }
