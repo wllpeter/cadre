@@ -7,5 +7,5 @@ package com.ddb.xaplan.cadre.enums;
 public enum  VehicleStatus {
     NORMAL,
     ILLEGAL_NO_HANDLER,
-    CLOSE
+    Other
 }

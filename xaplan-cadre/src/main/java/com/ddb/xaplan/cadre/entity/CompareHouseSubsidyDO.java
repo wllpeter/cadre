@@ -26,6 +26,17 @@ public class CompareHouseSubsidyDO extends BaseEntity{
 
     private Float amount;//金额
 
+    private String idCard;//身份证
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
     @Column
     public String getName() {
         return name;
