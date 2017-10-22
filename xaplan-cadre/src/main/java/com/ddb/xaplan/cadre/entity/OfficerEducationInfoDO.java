@@ -5,10 +5,7 @@ import com.ddb.xaplan.cadre.enums.EducationLevel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -56,6 +53,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.officerBasicInfoDO = officerBasicInfoDO;
     }
 
+    @Column
     public Bachelor getBachelor() {
         return bachelor;
     }
@@ -64,6 +62,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.bachelor = bachelor;
     }
 
+    @Column
     public EducationLevel getEducationLevel() {
         return educationLevel;
     }
@@ -72,6 +71,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.educationLevel = educationLevel;
     }
 
+    @Column
     public String getInstitution() {
         return institution;
     }
@@ -80,6 +80,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.institution = institution;
     }
 
+    @Column
     public Date getStartDate() {
         return startDate;
     }
@@ -88,6 +89,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.startDate = startDate;
     }
 
+    @Column
     public Date getEndDate() {
         return endDate;
     }
@@ -96,6 +98,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.endDate = endDate;
     }
 
+    @Column
     public String getSchoolName() {
         return schoolName;
     }
@@ -104,6 +107,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.schoolName = schoolName;
     }
 
+    @Column
     public String getDiscipline() {
         return discipline;
     }
@@ -112,6 +116,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.discipline = discipline;
     }
 
+    @Column
     public String getSituation() {
         return situation;
     }
@@ -120,6 +125,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.situation = situation;
     }
 
+    @Column
     public Date getBachelorDate() {
         return bachelorDate;
     }
@@ -128,6 +134,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.bachelorDate = bachelorDate;
     }
 
+    @Column
     public String getBachelorOrg() {
         return bachelorOrg;
     }
@@ -136,6 +143,7 @@ public class OfficerEducationInfoDO extends BaseEntity{
         this.bachelorOrg = bachelorOrg;
     }
 
+    @Column
     public String getCertificate() {
         return certificate;
     }

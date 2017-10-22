@@ -25,6 +25,8 @@ public class CompareScholarshipDO extends BaseEntity {
 
     private Float amount;//金额
 
+    private String idCard;//身份证号
+
     @Column
     public String getIdCard() {
         return idCard;
@@ -34,7 +36,7 @@ public class CompareScholarshipDO extends BaseEntity {
         this.idCard = idCard;
     }
 
-    private String idCard;//身份证号
+
 
     @Column
     public String getName() {
