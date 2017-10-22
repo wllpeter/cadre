@@ -26,6 +26,17 @@ public class CompareScholarshipDO extends BaseEntity {
     private Float amount;//金额
 
     @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    private String idCard;//身份证号
+
+    @Column
     public String getName() {
         return name;
     }
