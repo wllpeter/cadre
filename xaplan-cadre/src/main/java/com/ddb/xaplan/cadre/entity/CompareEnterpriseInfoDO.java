@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "compare_enterprise_info")
-@Where(clause = "is_delete = 0")
+@Where(clause = "is_deleted = 0")
 public class CompareEnterpriseInfoDO extends BaseEntity{
     private String cadreIdCard;
 

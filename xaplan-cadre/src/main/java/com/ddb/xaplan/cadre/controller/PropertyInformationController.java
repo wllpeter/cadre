@@ -81,7 +81,7 @@ public class PropertyInformationController {
         //收入信息
         List<OfficerIncomeInfoDO> IncomeItems=this.officerIncomeInfoService.search(
                 "officerBasicInfo",this.officerBasicInfoService.find(officerId));
-        map.put("IncomeItems",IncomeItems);
+        map.put("incomeItems",IncomeItems);
         //保险信息
         List<OfficerInsuranceInfoDO> insuranceItems=officerInsuranceInfoService.search("officerBasicInfoDO",
                 officerBasicInfoService.find(officerId));

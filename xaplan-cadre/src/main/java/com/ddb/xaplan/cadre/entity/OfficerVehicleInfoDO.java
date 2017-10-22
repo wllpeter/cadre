@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=0")
 public class OfficerVehicleInfoDO extends  BaseEntity{
     private OfficerBasicInfoDO officerBasicInfo;
-    private String model;
-    private Boolean isImported;
-    private String type;
-    private String owner;
-    private VehicleStatus status;
-    private String plateNumber;
+    private String model;//型号
+    private Boolean isImported;//是否进口
+    private String type;//类型
+    private String owner;//所有人
+    private VehicleStatus status;//状态
+    private String plateNumber;//车牌号
     @JsonBackReference
     @OneToOne
     @JoinColumn

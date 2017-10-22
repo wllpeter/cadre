@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "compare_basic_info")
-@Where(clause = "is_delete = 0")
+@Where(clause = "is_deleted = 0")
 public class CompareBasicInfoDO extends BaseEntity{
     private String name;
 

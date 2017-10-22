@@ -3,6 +3,8 @@ package com.ddb.xaplan.cadre.service.impl;
 import com.ddb.xaplan.cadre.dao.AlertInfoDao;
 import com.ddb.xaplan.cadre.entity.AlertInfoDO;
 import com.ddb.xaplan.cadre.entity.AreaDO;
+import com.ddb.xaplan.cadre.entity.CompareBasicInfoDO;
+import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.service.AlertInfoService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.lang.reflect.Field;
 
 /**
  * Created by 王凯斌 on 2017/10/17.
@@ -50,5 +53,47 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                 return predicate;
             }
         },pageable);
+    }
+
+    @Override
+    public AlertInfoDO compareBasicInfo(OfficerBasicInfoDO source, CompareBasicInfoDO compared, String attr) {
+
+        Object sourceValue = getValue(source,attr);
+        Object comparedValue = getValue(compared,attr);
+        if(sourceValue==null&&comparedValue==null){
+            return null;
+        }
+        if ((sourceValue==null||comparedValue==null)
+                ||!sourceValue.equals(comparedValue)){
+
+            AlertInfoDO alertInfoDO = new AlertInfoDO();
+            alertInfoDO.setAlertType(AlertInfoDO.AlertType.BASIC);
+            alertInfoDO.setArea(source.getArea());
+            alertInfoDO.setIdCard(source.getIdCard());
+            alertInfoDO.setName(source.getName());
+            alertInfoDO.setOrganization(source.getOrganization());
+            alertInfoDO.setPhoto(source.getPhoto());
+            alertInfoDO.setTitle(source.getTitle());
+            alertInfoDO.setContent(
+                    String.format("组织部-%s-%s,公安局-%s-%s",attr,sourceValue,attr,comparedValue));
+            return alertInfoDao.save(alertInfoDO);
+        }
+        return null;
+    }
+
+    private Object getValue(Object obj, String attr){
+
+        try {
+            Field field = obj.getClass().getDeclaredField(attr);
+            field.setAccessible(true);
+            return field.get(obj);
+        }catch (NoSuchFieldException e){
+            e.printStackTrace();
+            return null;
+        }catch (IllegalAccessException e){
+            e.printStackTrace();
+            return null;
+        }
+
     }
 }

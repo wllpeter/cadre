@@ -103,7 +103,7 @@ public class AlertInfoDO extends BaseEntity {
         this.title = title;
     }
 
-    @Column
+    @Column(length = 50000)
     public String getContent() {
         return content;
     }
