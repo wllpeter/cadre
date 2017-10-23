@@ -1,5 +1,6 @@
 package com.ddb.xaplan.cadre.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.ddb.xaplan.cadre.dao.AlertInfoDao;
 import com.ddb.xaplan.cadre.entity.AlertInfoDO;
 import com.ddb.xaplan.cadre.entity.AreaDO;
@@ -18,6 +19,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 王凯斌 on 2017/10/17.
@@ -65,6 +68,9 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
         }
         if ((sourceValue==null||comparedValue==null)
                 ||!sourceValue.equals(comparedValue)){
+            Map<String,Object> describe = new HashMap<>();
+            describe.put("sourceValue","组织部:"+sourceValue);
+            describe.put("comparedValue","公安部:"+comparedValue);
 
             AlertInfoDO alertInfoDO = new AlertInfoDO();
             alertInfoDO.setAlertType(AlertInfoDO.AlertType.BASIC);
@@ -74,8 +80,9 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             alertInfoDO.setOrganization(source.getOrganization());
             alertInfoDO.setPhoto(source.getPhoto());
             alertInfoDO.setTitle(source.getTitle());
-            alertInfoDO.setContent(
-                    String.format("组织部-%s-%s,公安局-%s-%s",attr,sourceValue,attr,comparedValue));
+            alertInfoDO.setContent(attr);
+            alertInfoDO.setDescription(JSON.toJSONString(describe));
+
             return alertInfoDao.save(alertInfoDO);
         }
         return null;

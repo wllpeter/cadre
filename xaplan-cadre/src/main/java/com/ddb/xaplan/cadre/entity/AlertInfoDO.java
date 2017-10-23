@@ -38,6 +38,10 @@ public class AlertInfoDO extends BaseEntity {
 
     private String content;
 
+    private String description;
+
+    private Integer amount;
+
     private AreaDO area;
 
     @Column
@@ -103,13 +107,31 @@ public class AlertInfoDO extends BaseEntity {
         this.title = title;
     }
 
-    @Column(length = 50000)
+    @Column
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Column(length = 500000)
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Column
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 
     @ManyToOne
