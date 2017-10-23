@@ -106,7 +106,7 @@ public class OfficerEnterpriseInfoDO extends BaseEntity {
         this.capital = capital;
     }
 
-    @Column
+    @Column(name="management_range",length = 16777215)
     public String getManagementRange() {
         return managementRange;
     }
