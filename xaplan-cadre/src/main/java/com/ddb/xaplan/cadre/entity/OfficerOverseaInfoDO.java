@@ -19,6 +19,10 @@ public class OfficerOverseaInfoDO extends BaseEntity {
 
     private OfficerBasicInfoDO officerBasicInfoDO;//干部信息外键
 
+    private String name;//姓名
+
+    private String idCard;//身份证号
+
     private String certificate;//证件类别
 
     private String certificateNumber;//护照号码
@@ -54,6 +58,24 @@ public class OfficerOverseaInfoDO extends BaseEntity {
 
     public void setOfficerBasicInfoDO(OfficerBasicInfoDO officerBasicInfoDO) {
         this.officerBasicInfoDO = officerBasicInfoDO;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     @Column
