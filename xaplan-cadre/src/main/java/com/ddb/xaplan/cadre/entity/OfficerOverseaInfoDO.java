@@ -56,6 +56,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.officerBasicInfoDO = officerBasicInfoDO;
     }
 
+    @Column
     public String getCertificate() {
         return certificate;
     }
@@ -64,6 +65,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.certificate = certificate;
     }
 
+    @Column
     public String getCertificateNumber() {
         return certificateNumber;
     }
@@ -72,6 +74,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.certificateNumber = certificateNumber;
     }
 
+    @Column
     public String getStatus() {
         return status;
     }
@@ -80,6 +83,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.status = status;
     }
 
+    @Column
     public String getValidPeriod() {
         return validPeriod;
     }
@@ -88,6 +92,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.validPeriod = validPeriod;
     }
 
+    @Column
     public String getOrganization() {
         return organization;
     }
@@ -96,6 +101,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.organization = organization;
     }
 
+    @Column
     public String getMarker() {
         return marker;
     }
@@ -104,6 +110,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.marker = marker;
     }
 
+    @Column
     public String getDestination() {
         return destination;
     }
@@ -112,6 +119,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.destination = destination;
     }
 
+    @Column
     public Date getOccurDate() {
         return occurDate;
     }
@@ -120,6 +128,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.occurDate = occurDate;
     }
 
+    @Column
     public String getOccurPort() {
         return occurPort;
     }
@@ -128,6 +137,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.occurPort = occurPort;
     }
 
+    @Column
     public String getAirline() {
         return airline;
     }
@@ -136,6 +146,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.airline = airline;
     }
 
+    @Column
     public String getReason() {
         return reason;
     }
@@ -144,6 +155,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
         this.reason = reason;
     }
 
+    @Column
     public String getAuditOrg() {
         return auditOrg;
     }
