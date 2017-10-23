@@ -40,6 +40,9 @@ public class MedicalReimburseDO extends BaseEntity {
     //地区
     private AreaDO area;
 
+    //地址
+    private String address;
+
     @Column
     public String getName() {
         return name;
@@ -120,5 +123,14 @@ public class MedicalReimburseDO extends BaseEntity {
 
     public void setArea(AreaDO area) {
         this.area = area;
+    }
+
+    @Column
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
