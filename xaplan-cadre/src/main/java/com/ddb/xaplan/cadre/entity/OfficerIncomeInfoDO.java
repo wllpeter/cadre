@@ -18,6 +18,8 @@ public class OfficerIncomeInfoDO extends  BaseEntity{
     //干部信息外键
     private OfficerBasicInfoDO officerBasicInfo;
 
+    private String idCard;//身份证号
+
     //工资（含津贴、补贴）
     private BigDecimal salary;
 
@@ -60,6 +62,15 @@ public class OfficerIncomeInfoDO extends  BaseEntity{
     }
     public void setOfficerBasicInfo(OfficerBasicInfoDO officerBasicInfo) {
         this.officerBasicInfo = officerBasicInfo;
+    }
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 
     @Column
