@@ -235,6 +235,22 @@ public class AlertInfoController {
                                     compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getIdCard()));
                     alertInfoService.save(alertInfoDO);
                 }
+                for(CompareSubsidyInfoDO compareSubsidyInfoDO:
+                        compareSubsidyInfoService.search("idCard",idCard)){
+
+                    AlertInfoDO alertInfoDO = new AlertInfoDO();
+                    alertInfoDO.setAlertType(AlertInfoDO.AlertType.CORRUPTION);
+                    alertInfoDO.setArea(item.getArea());
+                    alertInfoDO.setIdCard(item.getIdCard());
+                    alertInfoDO.setName(item.getName());
+                    alertInfoDO.setOrganization(item.getOrganization());
+                    alertInfoDO.setTitle(item.getTitle());
+                    alertInfoDO.setPhoto(item.getPhoto());
+                    alertInfoDO.setContent(
+                            String.format("关联助学金：%s",
+                                    compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getIdCard()));
+                    alertInfoService.save(alertInfoDO);
+                }
             }
 
         }
