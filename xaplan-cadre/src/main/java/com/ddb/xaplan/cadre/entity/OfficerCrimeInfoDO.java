@@ -20,6 +20,11 @@ public class OfficerCrimeInfoDO extends BaseEntity{
     //干部信息外键
     private OfficerBasicInfoDO officerBasicInfo;
 
+    private String name;
+
+    private String idCard;
+
+
     //时间
     private Date occurDate;
 
@@ -43,6 +48,23 @@ public class OfficerCrimeInfoDO extends BaseEntity{
         this.officerBasicInfo = officerBasicInfo;
     }
 
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
 
     @Column
     public Date getOccurDate() {
