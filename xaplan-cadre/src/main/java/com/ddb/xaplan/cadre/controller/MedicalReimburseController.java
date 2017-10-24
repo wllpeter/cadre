@@ -28,7 +28,7 @@ public class MedicalReimburseController {
     @Resource(name = "medicalReimburseServiceImpl")
     private MedicalReimburseService medicalReimburseService;
 
-    @ApiOperation(value = "查询医疗统计图")
+    @ApiOperation(value = "search medical general charts")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Long")
@@ -47,7 +47,7 @@ public class MedicalReimburseController {
         return DataInfo.success(result);
     }
 
-    @ApiOperation(value = "查询病名排名")
+    @ApiOperation(value = "search medical rank")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Long")
