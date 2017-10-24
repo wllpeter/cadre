@@ -1,6 +1,7 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.*;
 import com.ddb.xaplan.cadre.service.*;
@@ -39,6 +40,9 @@ public class AlertInfoController {
     @Resource(name = "compareEstateInfoServiceImpl")
     private CompareEstateInfoService compareEstateInfoService;
 
+    @Resource(name = "compareEnterpriseInfoServiceImpl")
+    private CompareEnterpriseInfoService compareEnterpriseInfoService;
+
     @Resource(name = "compareVehicleInfoServiceImpl")
     private CompareVehicleInfoService compareVehicleInfoService;
 
@@ -59,6 +63,9 @@ public class AlertInfoController {
 
     @Resource(name = "officerBasicInfoServiceImpl")
     private OfficerBasicInfoService officerBasicInfoService;
+
+    @Resource(name = "officerEnterpriseInfoServiceImpl")
+    private OfficerEnterpriseInfoService officerEnterpriseInfoService;
 
     @Resource(name = "officerFamilyMemberInfoServiceImpl")
     private OfficerFamilyMemberInfoService officerFamilyMemberInfoService;
@@ -88,10 +95,11 @@ public class AlertInfoController {
 
     @RequestMapping(value = "/generate", method = RequestMethod.GET)
     public DataInfo<String> generate() {
-        basicGenerateHelper();
-        estateGenerateHelper();
-        vehicleGenerateHelper();
-        corruptionGenerateHelper();
+        enterpriseGenerateHelper();
+//        basicGenerateHelper();
+//        estateGenerateHelper();
+//        vehicleGenerateHelper();
+//        corruptionGenerateHelper();
         return DataInfo.success("In process");
     }
 
@@ -145,7 +153,7 @@ public class AlertInfoController {
             AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("房产数量预警");
             alertInfoDO.setAmount(comparedValue.size());
-            alertInfoDO.setDescription(JSON.toJSONString(describe));
+            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);
         }
 
@@ -186,7 +194,47 @@ public class AlertInfoController {
             AlertInfoDO alertInfoDO =getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("车辆数量预警");
             alertInfoDO.setAmount(comparedValue.size());
-            alertInfoDO.setDescription(JSON.toJSONString(describe));
+            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
+            alertInfoService.save(alertInfoDO);
+        }
+    }
+
+    @Async
+    private void enterpriseGenerateHelper() {
+
+        List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
+        for (OfficerBasicInfoDO item : items) {
+
+            if (StringUtils.isEmpty(item.getIdCard())) {
+                continue;
+            }
+            Set<String> idCards = getCardIds(item);
+
+            List<CompareEnterpriseInfoDO> comparedValue = new ArrayList<>();
+            Integer amount = 0;
+
+            for (String idCard :idCards) {
+                if (StringUtils.isEmpty(idCard)) {
+                    continue;
+                }
+                amount += compareEnterpriseInfoService.countByOwnerId(idCard);
+                comparedValue.addAll(
+                        compareEnterpriseInfoService.search("ownerId", idCard));
+            }
+
+            if (amount <= 0) {
+                continue;
+            }
+
+
+            Map<String,Object> describe = new HashMap<>();
+            describe.put("sourceValue",officerEnterpriseInfoService.search("officerBasicInfo",item));
+            describe.put("comparedValue",comparedValue);
+
+            AlertInfoDO alertInfoDO =getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
+            alertInfoDO.setContent("企业数量预警");
+            alertInfoDO.setAmount(comparedValue.size());
+            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);
         }
     }
@@ -209,7 +257,7 @@ public class AlertInfoController {
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("贫困户预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(comparePovertyInfoDO));
+                    alertInfoDO.setDescription(JSON.toJSONString(comparePovertyInfoDO,SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
                 for(CompareSubsidyInfoDO compareSubsidyInfoDO:
@@ -217,7 +265,7 @@ public class AlertInfoController {
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("低保预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO,SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
                 for(CompareHouseSubsidyDO compareHouseSubsidy:
@@ -225,7 +273,7 @@ public class AlertInfoController {
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("危房改造补助预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareHouseSubsidy));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareHouseSubsidy,SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
                 for(CompareSpecialCareDO compareSpecialCareDO:
@@ -233,7 +281,7 @@ public class AlertInfoController {
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("优抚预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareSpecialCareDO));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareSpecialCareDO,SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
 
@@ -244,8 +292,8 @@ public class AlertInfoController {
                         compareScholarshipService.search("name",name)){
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
-                    alertInfoDO.setContent("助学金");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship));
+                    alertInfoDO.setContent("助学金预警");
+                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship,SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
             }
@@ -302,5 +350,16 @@ public class AlertInfoController {
         alertInfoDO.setTitle(item.getTitle());
         alertInfoDO.setPhoto(item.getPhoto());
         return alertInfoDO;
+    }
+
+    private String getAreaIds(AreaDO areaDO){
+
+        StringBuilder areaIds = new StringBuilder();
+        while(areaDO!=null){
+            areaIds.append(areaDO.getId());
+            areaIds.append(",");
+            areaDO = areaDO.getParent();
+        }
+        return areaIds.toString();
     }
 }

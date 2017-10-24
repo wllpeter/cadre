@@ -44,6 +44,8 @@ public class AlertInfoDO extends BaseEntity {
 
     private AreaDO area;
 
+    private String areaIds;
+
     @Column
     public String getPhoto() {
         return photo;
@@ -142,5 +144,14 @@ public class AlertInfoDO extends BaseEntity {
 
     public void setArea(AreaDO area) {
         this.area = area;
+    }
+
+    @Column
+    public String getAreaIds() {
+        return areaIds;
+    }
+
+    public void setAreaIds(String areaIds) {
+        this.areaIds = areaIds;
     }
 }

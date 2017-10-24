@@ -102,14 +102,14 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
     @Override
     public T update(T t, String... ignore) {
 
-        if (!baseDao.exists(t.getId())) {
-            throw new IllegalArgumentException("update target does not exits");
+//        if (!baseDao.exists(t.getId())) {
+//            throw new IllegalArgumentException("update target does not exits");
+//        }
+        T original = baseDao.findOne(t.getId());
+        if (original != null) {
+            copyProperties(t, original, (String[]) ArrayUtils.addAll(ignore, UPDATE_IGNORE_PROPERTIES));
         }
-        T orginal = baseDao.findOne(t.getId());
-        if (orginal != null) {
-            copyProperties(t, orginal, (String[]) ArrayUtils.addAll(ignore, UPDATE_IGNORE_PROPERTIES));
-        }
-        return baseDao.save(orginal);
+        return baseDao.save(original);
     }
 
     @SuppressWarnings("unchecked")

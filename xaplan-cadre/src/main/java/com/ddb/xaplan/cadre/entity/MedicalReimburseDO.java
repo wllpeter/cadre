@@ -4,6 +4,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by 王凯斌 on 2017/10/20.
@@ -40,8 +41,20 @@ public class MedicalReimburseDO extends BaseEntity {
     //地区
     private AreaDO area;
 
+    //地区ids
+    private String areaIds;
+
     //地址
     private String address;
+
+    //入院时间
+    private Date startDate;
+
+    //出院时间
+    private Date endDate;
+
+    //补偿时间
+    private Date occurDate;
 
     @Column
     public String getName() {
@@ -126,11 +139,47 @@ public class MedicalReimburseDO extends BaseEntity {
     }
 
     @Column
+    public String getAreaIds() {
+        return areaIds;
+    }
+
+    public void setAreaIds(String areaIds) {
+        this.areaIds = areaIds;
+    }
+
+    @Column
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Column
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    @Column
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    @Column
+    public Date getOccurDate() {
+        return occurDate;
+    }
+
+    public void setOccurDate(Date occurDate) {
+        this.occurDate = occurDate;
     }
 }

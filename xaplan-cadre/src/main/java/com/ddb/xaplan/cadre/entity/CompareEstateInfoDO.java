@@ -11,16 +11,16 @@ import java.util.Date;
 @Table(name="compare_estate_info")
 @Where(clause = "is_deleted = 0")
 public class CompareEstateInfoDO extends BaseEntity {
-    private String cadreIdCard;
-    private String owerName;
-    private String ownerId;
-    private String relation;
-    private String source;
-    private String address;
-    private String proportion;
-    private String type;
-    private Date dealDate;
-    private String price;
+    private String cadreIdCard;//干部身份证
+    private String owerName;//户主名字
+    private String ownerId;//户主身份证
+    private String relation;//关系
+    private String source;//房屋来源
+    private String address;//地址
+    private String proportion;//面积
+    private String type;//类型
+    private Date dealDate;//交易日期
+    private String price;//价格
 
     @Column
     public String getCadreIdCard() {

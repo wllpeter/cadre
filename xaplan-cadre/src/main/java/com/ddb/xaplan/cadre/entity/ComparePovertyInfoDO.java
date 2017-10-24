@@ -20,9 +20,9 @@ public class ComparePovertyInfoDO extends BaseEntity {
 
     private String idCard;
 
-    private String type;
+    private String type;//属性
 
-    private String address;
+    private String address;//地址
 
     private int quantity;//人数
 

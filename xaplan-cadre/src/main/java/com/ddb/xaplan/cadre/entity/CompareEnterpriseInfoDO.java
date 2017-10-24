@@ -15,23 +15,23 @@ import javax.persistence.Table;
 public class CompareEnterpriseInfoDO extends BaseEntity{
     private String cadreIdCard;
 
-    private String creditCode;
+    private String creditCode;//信用号
 
-    private String regCode;
+    private String regCode;//注册号
 
-    private String name;
+    private String name;//公司名
 
-    private String regType;
+    private String regType;//注册类型
 
-    private String enterpriseType;
+    private String enterpriseType;//企业类型
 
-    private String ownerName;
+    private String ownerName;//法人
 
-    private String ownerId;
+    private String ownerId;//法人身份证
 
-    private String capital;
+    private String capital;//注册资本
 
-    private String businessRange;
+    private String businessRange;//经营范围
 
     @Column
     public String getCadreIdCard() {

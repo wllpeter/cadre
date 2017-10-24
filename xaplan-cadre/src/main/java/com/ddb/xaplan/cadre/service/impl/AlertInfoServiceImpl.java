@@ -1,6 +1,7 @@
 package com.ddb.xaplan.cadre.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ddb.xaplan.cadre.dao.AlertInfoDao;
 import com.ddb.xaplan.cadre.entity.AlertInfoDO;
 import com.ddb.xaplan.cadre.entity.AreaDO;
@@ -70,7 +71,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                 ||!sourceValue.equals(comparedValue)){
             Map<String,Object> describe = new HashMap<>();
             describe.put("sourceValue","组织部:"+sourceValue);
-            describe.put("comparedValue","公安部:"+comparedValue);
+            describe.put("comparedValue","公安局:"+comparedValue);
 
             AlertInfoDO alertInfoDO = new AlertInfoDO();
             alertInfoDO.setAlertType(AlertInfoDO.AlertType.BASIC);
@@ -81,7 +82,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             alertInfoDO.setPhoto(source.getPhoto());
             alertInfoDO.setTitle(source.getTitle());
             alertInfoDO.setContent(attr);
-            alertInfoDO.setDescription(JSON.toJSONString(describe));
+            alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
 
             return alertInfoDao.save(alertInfoDO);
         }
