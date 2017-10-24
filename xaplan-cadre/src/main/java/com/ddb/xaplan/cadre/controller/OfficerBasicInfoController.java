@@ -13,12 +13,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by 王凯斌 on 2017/10/16.
@@ -68,4 +67,38 @@ public class OfficerBasicInfoController {
         return DataInfo.success(
                 officerBasicInfoService.find(officerId));
     }
+
+    /**
+     * 返回各县党员、干部、籍贯本地外地、男女数量
+     */
+    @ApiOperation(value = "get basic info controller")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Integer"),
+    })
+    @GetMapping(value = "/{areaId}/getCount")
+    public DataInfo<Map<String,Integer>> getCount(@PathVariable Integer areaId){
+        Map<String,Integer> map=new HashMap<String,Integer>();
+        //党员数量
+        int partyMemberCount=this.officerBasicInfoService.getPartyMemberCount(areaId);
+        //干部数量
+        int cadreCount=this.officerBasicInfoService.getCadreCount(areaId);
+        //本地籍贯数量
+        int localNativePlaceCount=this.officerBasicInfoService.getLocalNativePlace(areaId);
+        //外地籍贯数量
+        int fieldNativePlaceCount=this.officerBasicInfoService.getFieldNativePlace(areaId);
+        //男生数量
+        int manCount=this.officerBasicInfoService.getManCount(areaId);
+        //女生数量
+        int womanCount=this.officerBasicInfoService.getWomanCount(areaId);
+        map.put("partyMemberCount",partyMemberCount);
+        map.put("cadreCount",cadreCount);
+        map.put("localNativePlaceCount",localNativePlaceCount);
+        map.put("fieldNativePlaceCount",fieldNativePlaceCount);
+        map.put("manCount",manCount);
+        map.put("womanCount",womanCount);
+        return DataInfo.success(map);
+    }
+
+
+
 }
