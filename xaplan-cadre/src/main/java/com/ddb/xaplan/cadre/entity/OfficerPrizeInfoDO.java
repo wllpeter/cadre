@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * Created by 王凯斌 on 2017/10/17.
+ * 奖励
  */
 @Entity
 @Table(name = "officer_prize_info")

@@ -114,7 +114,7 @@ public class CompareEnterpriseInfoDO extends BaseEntity{
         this.capital = capital;
     }
 
-    @Column
+    @Column(name="business_range",length = 16777215)
     public String getBusinessRange() {
         return businessRange;
     }

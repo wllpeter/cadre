@@ -18,6 +18,9 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
     private Integer quantity;
     private Integer point;
     private Integer amount;
+    private String idCard;//身份证号
+    private String name;//姓名
+
     @JsonBackReference
     @OneToOne
     @JoinColumn
@@ -36,6 +39,7 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
     public void setYear(String year) {
         this.year = year;
     }
+
     @Column
     public Integer getQuantity() {
         return quantity;
@@ -59,5 +63,23 @@ public class OfficerTrafficViolationDO extends  BaseEntity{
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    @Column
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    @Column
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

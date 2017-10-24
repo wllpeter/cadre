@@ -27,13 +27,13 @@ public class OfficerAuditInfoDO extends BaseEntity {
 
     private String title;//职务
 
-    private Date startDate;//任职时间
+    private String startDate;//任职时间
 
     private String performance;//主要业绩
 
     private String problem;//存在问题
 
-    private Double amount;//金额
+    private String amount;//金额
 
     private String evaluation;//审计评价
 
@@ -84,14 +84,7 @@ public class OfficerAuditInfoDO extends BaseEntity {
         this.title = title;
     }
 
-    @Column
-    public Date getStartDate() {
-        return startDate;
-    }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
 
     @Column(name="performance",length = 16777215)
     public String getPerformance() {
@@ -112,11 +105,20 @@ public class OfficerAuditInfoDO extends BaseEntity {
     }
 
     @Column
-    public Double getAmount() {
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    @Column
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
