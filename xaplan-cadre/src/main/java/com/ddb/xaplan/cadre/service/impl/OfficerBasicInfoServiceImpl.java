@@ -80,4 +80,55 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
             }
         },pageable);
     }
+
+
+    /**
+     * 获取各县党员数量
+     * @param areaId
+     * @return
+     */
+    @Override
+    public int getPartyMemberCount(int areaId) {
+        return this.officerBasicInfoDao.getPartyMemberCount(areaId);
+    }
+
+    /**
+     * 获取各县干部总数量
+     */
+    @Override
+    public int getCadreCount(int areaId) {
+        return this.officerBasicInfoDao.getCadreCount(areaId);
+    }
+
+    /**
+     * 获取各县籍贯本地的数量
+     */
+    @Override
+    public int getLocalNativePlace(int areaId) {
+        return this.officerBasicInfoDao.getLocalNativePlace(areaId);
+    }
+
+    /**
+     * 获取各县籍贯外地的数量
+     */
+    @Override
+    public int getFieldNativePlace(int areaId) {
+        return this.officerBasicInfoDao.getFieldNativePlace(areaId);
+    }
+
+    /**
+     * 获取各县男生数量
+     */
+    @Override
+    public int getManCount(int areaId) {
+        return this.officerBasicInfoDao.getManCount(areaId);
+    }
+
+    /**
+     * 获取各县女生数量
+     */
+    @Override
+    public int getWomanCount(int areaId) {
+        return this.officerBasicInfoDao.getWomanCount(areaId);
+    }
 }
