@@ -60,4 +60,15 @@ public class MedicalReimburseServiceImpl extends BaseServiceImpl<MedicalReimburs
         }
         return result;
     }
+
+    @Override
+    public int[] hosCount(String year, Long areaId, String month) {
+
+        int[] result = new int[31];
+        for(Object[] item:medicalReimburseDao.hosCount(year,areaId,month)){
+            int index = Integer.parseInt(item[0].toString())-1;
+            result[index]=Integer.parseInt(item[1].toString());
+        }
+        return result;
+    }
 }

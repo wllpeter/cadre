@@ -57,4 +57,15 @@ public class MedicalReimburseController {
 
         return DataInfo.success(medicalReimburseService.diseaseRank(year,areaId));
     }
+
+    @ApiOperation(value = "每日住院人数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "year",paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Long")
+    })
+    @RequestMapping(value = "/hosCount",method = RequestMethod.GET)
+    public DataInfo<int[]> hosCount(Long areaId, String year,String month) throws Exception{
+
+        return DataInfo.success(medicalReimburseService.hosCount(year,areaId,month));
+    }
 }

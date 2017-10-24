@@ -30,4 +30,10 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "LIMIT 0,20",nativeQuery = true)
     List<Object[]> diseaseRack(String year, Long areaId);
 
+    @Query(value = "select DAY(start_date),count(*)\n" +
+            "from medical_reimburse \n" +
+            "WHERE area_ids like concat(\"%,\",13,\",%\") and YEAR(start_date) = ?1 and area_ids like concat(\"%,\",?2,\",%\") and MONTH(start_date)=?3 and hospitalized=1\n" +
+            "GROUP BY DAY(start_date)",nativeQuery = true)
+    List<Object[]> hosCount(String year, Long areaId,String month);
+
 }

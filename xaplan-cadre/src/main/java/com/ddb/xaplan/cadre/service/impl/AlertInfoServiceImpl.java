@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -31,6 +32,18 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
 
     @Autowired
     private AlertInfoDao alertInfoDao;
+
+    private Map<String,String> dict;
+
+    @PostConstruct
+    private void init(){
+        dict.put("name","姓名");
+        dict.put("gender","性别");
+        dict.put("culture","民族");
+        dict.put("birthDate","生日");
+        dict.put("nativePlace","籍贯");
+        dict.put("address","地址");
+    }
 
     @Override
     public Page<AlertInfoDO> search(String keyword, AreaDO areaDO,
@@ -81,7 +94,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             alertInfoDO.setOrganization(source.getOrganization());
             alertInfoDO.setPhoto(source.getPhoto());
             alertInfoDO.setTitle(source.getTitle());
-            alertInfoDO.setContent(attr);
+            alertInfoDO.setContent(dict.get(attr));
             alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
 
             return alertInfoDao.save(alertInfoDO);
