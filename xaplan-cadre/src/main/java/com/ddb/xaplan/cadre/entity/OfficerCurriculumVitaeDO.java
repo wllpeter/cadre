@@ -1,11 +1,10 @@
 package com.ddb.xaplan.cadre.entity;
 
 import com.ddb.xaplan.cadre.enums.TitleLevel;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -28,7 +27,9 @@ public class OfficerCurriculumVitaeDO extends BaseEntity{
 
     private TitleLevel titleLevel;
 
-    @Column
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn
     public OfficerBasicInfoDO getOfficerBasicInfo() {
         return officerBasicInfo;
     }
