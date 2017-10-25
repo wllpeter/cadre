@@ -5,9 +5,11 @@ import com.ddb.xaplan.cadre.entity.AreaDO;
 import com.ddb.xaplan.cadre.entity.MedicalReimburseDO;
 import com.ddb.xaplan.cadre.service.MedicalReimburseService;
 import com.ddb.xaplan.cadre.vo.DiseaseRankItem;
+import com.ddb.xaplan.cadre.vo.ReimburseDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -109,5 +111,33 @@ public class MedicalReimburseServiceImpl extends BaseServiceImpl<MedicalReimburs
             i++;
         }
         return result;
+    }
+
+    @Override
+    public List<ReimburseDetailVO> getReimburseRank(Long areaId, Integer year, Integer season, int range) {
+        List<Object[]> getData = null;
+        if(null == season || (season != 1 && season != 2 && season != 3 && season != 4)){
+            getData = medicalReimburseDao.getReimburseRank(areaId, year, range);
+        }
+        else {
+            getData = medicalReimburseDao.getReimburseRank(areaId, year, season, range);
+        }
+        if(null != getData && getData.size() !=0){
+            List<ReimburseDetailVO> result = new ArrayList<>();
+            for(Object[] item : getData){
+                result.add(
+                        new ReimburseDetailVO(String.valueOf(item[0]),//名称
+                                String.valueOf(item[1]),//身份证号
+                                Integer.valueOf(item[2].toString()),//报销次数
+                                new BigDecimal(item[3].toString()),//报销金额
+                                Integer.valueOf(item[4].toString()),//住院天数
+                                Integer.valueOf(item[5].toString()),//门诊次数
+                                String.valueOf(item[6])//病名
+                        ));
+                continue;
+            }
+            return result;
+        }
+        return null;
     }
 }
