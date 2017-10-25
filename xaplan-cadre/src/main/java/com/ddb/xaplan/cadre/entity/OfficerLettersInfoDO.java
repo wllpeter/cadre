@@ -19,10 +19,67 @@ public class OfficerLettersInfoDO extends  BaseEntity {
     //案件数量
     private int count;
     //地区
-    private AreaDO areaDO;
+    private AreaDO area;
+    //来访
+    private int visitCount;
+    //来信
+    private int inLetterCount;
+    //上级转来
+    private int hightLevelTransferCount;
+    //电话
+    private int phoneCount;
+    //网络与其它
+    private int networkOtherCount;
 
+    @OneToOne
+    @JoinColumn
+    public AreaDO getArea() {
+        return area;
+    }
 
+    public void setArea(AreaDO area) {
+        this.area = area;
+    }
+    @Column
+    public int getVisitCount() {
+        return visitCount;
+    }
 
+    public void setVisitCount(int visitCount) {
+        this.visitCount = visitCount;
+    }
+    @Column
+    public int getInLetterCount() {
+        return inLetterCount;
+    }
+
+    public void setInLetterCount(int inLetterCount) {
+        this.inLetterCount = inLetterCount;
+    }
+    @Column
+    public int getHightLevelTransferCount() {
+        return hightLevelTransferCount;
+    }
+
+    public void setHightLevelTransferCount(int hightLevelTransferCount) {
+        this.hightLevelTransferCount = hightLevelTransferCount;
+    }
+    @Column
+    public int getPhoneCount() {
+        return phoneCount;
+    }
+
+    public void setPhoneCount(int phoneCount) {
+        this.phoneCount = phoneCount;
+    }
+    @Column
+    public int getNetworkOtherCount() {
+        return networkOtherCount;
+    }
+
+    public void setNetworkOtherCount(int networkOtherCount) {
+        this.networkOtherCount = networkOtherCount;
+    }
 
     @Column
     public int getYear() {
@@ -41,13 +98,6 @@ public class OfficerLettersInfoDO extends  BaseEntity {
         this.count = count;
     }
 
-    @OneToOne
-    @JoinColumn
-    public AreaDO getAreaDO() {
-        return areaDO;
-    }
 
-    public void setAreaDO(AreaDO areaDO) {
-        this.areaDO = areaDO;
-    }
+
 }
