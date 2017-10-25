@@ -22,6 +22,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +30,9 @@ import java.util.Map;
  */
 @Service("alertInfoServiceImpl")
 public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implements AlertInfoService {
-
+    private final String ANXIN = ",1,";
+    private final String RONGCHENG = ",2,";
+    private final String XIONGXIAN = ",3,";
     @Autowired
     private AlertInfoDao alertInfoDao;
 
@@ -100,6 +103,53 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             return alertInfoDao.save(alertInfoDO);
         }
         return null;
+    }
+
+    @Override
+    public HashMap<String, Object> getAlertCountByContent() {
+        List<Object[]> alertsRet = this.alertInfoDao.getAlertCountByContent();
+        if(null == alertsRet || alertsRet.size() == 0){
+            return null;
+        }
+        HashMap<String, Object> ret = new HashMap<>();
+        for (Object[] object: alertsRet) {
+            ret.put(String.valueOf(object[0]),Integer.valueOf(object[1].toString()));
+            continue;
+        }
+        return ret;
+    }
+
+    @Override
+    public HashMap<String, Object> getAlertCountByArea() {
+        List<String> areaList = this.alertInfoDao.getAlertCountByArea();
+        int anxinCount = 0;
+        int xiongxianCount = 0;
+        int rongchengCount = 0;
+        for(String str : areaList){
+            if(null == str){
+                continue;
+            }
+            if(str.contains(ANXIN)){
+                anxinCount++;
+                continue;
+            }
+            else if(str.contains(RONGCHENG)){
+                rongchengCount++;
+                continue;
+            }
+            else if(str.contains(XIONGXIAN)){
+                xiongxianCount++;
+                continue;
+            }
+            else {
+                continue;
+            }
+        }
+        HashMap<String,Object> ret = new HashMap<>();
+        ret.put("1" , anxinCount);
+        ret.put("2" , rongchengCount);
+        ret.put("3" , xiongxianCount);
+        return ret;
     }
 
     private Object getValue(Object obj, String attr){
