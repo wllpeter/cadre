@@ -32,8 +32,26 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
 
     @Query(value = "select DAY(start_date),count(*)\n" +
             "from medical_reimburse \n" +
-            "WHERE area_ids like concat(\"%,\",13,\",%\") and YEAR(start_date) = ?1 and area_ids like concat(\"%,\",?2,\",%\") and MONTH(start_date)=?3 and hospitalized=1\n" +
+            "WHERE YEAR(start_date) = ?1 and area_ids like concat(\"%,\",?2,\",%\") and MONTH(start_date)=?3 and hospitalized=1\n" +
             "GROUP BY DAY(start_date)",nativeQuery = true)
     List<Object[]> hosCount(String year, Long areaId,String month);
+
+    @Query(value = "select MONTH(start_date),count(*)/30 from medical_reimburse\n" +
+            "where area_ids like CONCAT(\"%,\",?2,\",%\") and YEAR(start_date) = ?1 and hospitalized =1\n" +
+            "GROUP BY MONTH(start_date)",nativeQuery = true)
+    List<Object[]> average(String year, Long areaId);
+
+    @Query(value = "SELECT disease_name,count(*)\n" +
+            "from medical_reimburse \n" +
+            "where YEAR(start_date) = ?1 \n" +
+            "\tand hospitalized_duration >=?4 \n" +
+            "\tand hospitalized_duration <?3 \n" +
+            "\tand disease_name is not null \n" +
+            "\tand disease_name !=\"\"\n" +
+            "\tand area_ids like CONCAT(\"%,\",?2,\",%\")\n" +
+            "GROUP BY disease_name\n" +
+            "ORDER BY count(*) DESC\n" +
+            "limit 0,3",nativeQuery = true)
+    List<Object[]> hosRank(String year, Long areaId, int maximum, int minimum);
 
 }
