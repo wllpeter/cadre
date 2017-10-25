@@ -32,15 +32,59 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
     public int getFieldNativePlace(int areaId);
 
     /**
-     * 获取各县男生数量
+     * 获取各县男女生数量
      */
-    public int getManCount(int areaId);
+    public int getGenderCount(int areaId,int gender);
+
+
 
     /**
-     * 获取各县女生数量
+     *获取各县硕士及以上学历人数
      */
-    public int getWomanCount(int areaId);
+    public int getMasterCount(int areaId);
 
+    /**
+     *获取各县大学本科学历人数
+     *
+     */
+    public int getUndergraduateCount(int areaId);
+
+    /**
+     *获取各县大学专科学历人数
+     *
+     */
+    public int getProfessionColleageCount(int areaId);
+
+    /**
+     *获取各县中专及以下学历人数
+     *
+     */
+    public int getSecondaryBelowCount(int areaId);
+
+    /**
+     * 获取各县年龄30岁以下人数
+     */
+    public int getThirtyBelowCount(int areaId);
+
+    /**
+     * 获取各县年龄31-40岁人数
+     */
+    public int getThirtyAndFourtyCount(int areaId);
+
+    /**
+     * 获取各县年龄41-50岁人数
+     */
+    public int getFourtyAndFivtyCount(int areaId);
+
+    /**
+     * 获取各县年龄51岁及以上人数
+     */
+    public int getFivtyAboveCount(int areaId);
+
+    /**
+     *获取各县各职级人数
+     */
+    public int getCountyCount(int areaId,int title_level);
 
     Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,

@@ -38,14 +38,90 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
     /**
      * 获取各县男生数量
      */
-    @Query(value="select count(1) from officer_basic_info where area_ids like concat(concat('%,',:areaId),',%') and gender=0",nativeQuery=true)
-    public int getManCount(@Param("areaId")int areaId);
+    @Query(value="select count(1) from officer_basic_info where area_ids like concat(concat('%,',:areaId),',%') and gender=:gender",nativeQuery=true)
+    public int getGenderCount(@Param("areaId")int areaId,@Param("gender")int gender);
+
+
+
+
 
     /**
-     * 获取各县女生数量
+     *获取各县硕士及以上学历人数
      */
-    @Query(value="select count(1) from officer_basic_info where area_ids like concat(concat('%,',:areaId),',%') and gender=1",nativeQuery=true)
-    public int getWomanCount(@Param("areaId")int areaId);
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and education_level>=6",nativeQuery=true)
+    public int getMasterCount(@Param("areaId")int areaId);
+
+    /**
+     *获取各县大学本科学历人数
+     *
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and education_level=5",nativeQuery=true)
+    public int getUndergraduateCount(@Param("areaId")int areaId);
+    /**
+     *获取各县大学专科学历人数
+     *
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and education_level=4",nativeQuery=true)
+    public int getProfessionColleageCount(@Param("areaId")int areaId);
+
+    /**
+     *获取各县中专及以下学历人数
+     *
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and education_level<=3",nativeQuery=true)
+    public int getSecondaryBelowCount(@Param("areaId")int areaId);
+
+    /**
+     * 获取各县年龄30岁以下人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and year(SYSDATE())-year(birth_date)<=30",nativeQuery=true)
+    public int getThirtyBelowCount(@Param("areaId")int areaId);
+
+    /**
+     * 获取各县年龄31-40岁人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and year(SYSDATE())-year(birth_date)>30" +
+            " and year(SYSDATE())-year(birth_date)<=40",nativeQuery=true)
+    public int getThirtyAndFourtyCount(@Param("areaId")int areaId);
+
+    /**
+     * 获取各县年龄41-50岁人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and year(SYSDATE())-year(birth_date)>40" +
+            " and year(SYSDATE())-year(birth_date)<=50",nativeQuery=true)
+    public int getFourtyAndFivtyCount(@Param("areaId")int areaId);
+
+
+    /**
+     * 获取各县年龄51岁及以上人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and year(SYSDATE())-year(birth_date)>50",nativeQuery=true)
+    public int getFivtyAboveCount(@Param("areaId")int areaId);
+
+    /**
+     * 获取各县县处级正职人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            " area_ids like concat('%,',:areaId,',%') and title_level=:title_level",nativeQuery=true)
+    public int getCountyCount(@Param("areaId")int areaId,@Param("title_level")int title_level);
+
+
+
+
+
+
+
+
+
+
 
 
 
