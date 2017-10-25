@@ -6,6 +6,7 @@ import com.ddb.xaplan.cadre.entity.MedicalReimburseDO;
 import com.ddb.xaplan.cadre.service.MedicalReimburseService;
 import com.ddb.xaplan.cadre.vo.DiseaseRankItem;
 import com.ddb.xaplan.cadre.vo.ReimburseDetailVO;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -132,7 +133,8 @@ public class MedicalReimburseServiceImpl extends BaseServiceImpl<MedicalReimburs
                                 new BigDecimal(item[3].toString()),//报销金额
                                 Integer.valueOf(item[4].toString()),//住院天数
                                 Integer.valueOf(item[5].toString()),//门诊次数
-                                String.valueOf(item[6])//病名
+                                String.valueOf(item[6]),//病名
+                                Integer.valueOf(item[7].toString())//住院次数
                         ));
                 continue;
             }
