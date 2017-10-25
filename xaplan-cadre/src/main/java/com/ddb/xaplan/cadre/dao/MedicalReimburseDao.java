@@ -54,4 +54,40 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "limit 0,3",nativeQuery = true)
     List<Object[]> hosRank(String year, Long areaId, int maximum, int minimum);
 
+    @Query(value = "SELECT \n" +
+            "name,\n" +
+            "id_card,\n" +
+            "count(*) as reimbursement_count,\n" +
+            "sum(reimbursement_amount) as reimbursement_amount,\n" +
+            "sum(hospitalized_duration) as hospitalized_duration,\n" +
+            "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
+            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name \n" +
+            "from medical_reimburse m \n" +
+            "where YEAR(occur_date) = ?2 \n" +
+            "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +
+            "and QUARTER(occur_date) = ?3\n" +
+            "and id_card is not null \n" +
+            "and id_card != ''\n" +
+            "group by id_card,name\n" +
+            "ORDER BY reimbursement_count DESC\n" +
+            "limit ?4",nativeQuery = true)
+    List<Object[]> getReimburseRank(Long areaId, Integer year, Integer season, int range);
+
+    @Query(value = "SELECT \n" +
+            "name,\n" +
+            "id_card,\n" +
+            "count(*) as reimbursement_count,\n" +
+            "sum(reimbursement_amount) as reimbursement_amount,\n" +
+            "sum(hospitalized_duration) as hospitalized_duration,\n" +
+            "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
+            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name \n" +
+            "from medical_reimburse m \n" +
+            "where YEAR(occur_date) = ?2 \n" +
+            "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +
+            "and id_card is not null \n" +
+            "and id_card != ''\n" +
+            "group by id_card,name\n" +
+            "ORDER BY reimbursement_count DESC\n" +
+            "limit ?3",nativeQuery = true)
+    List<Object[]> getReimburseRank(Long areaId, Integer year, int range);
 }
