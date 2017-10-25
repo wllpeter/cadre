@@ -48,10 +48,12 @@ public class FeedbackController {
 
     @ApiOperation(value = "add feedback controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "feedbackDO", dataType = "FeedbackDO"),
+            @ApiImplicitParam(name = "content",paramType = "query", dataType = "String")
     })
     @RequestMapping(method = RequestMethod.POST)
-    public DataInfo<FeedbackDO> add(FeedbackDO feedbackDO){
+    public DataInfo<FeedbackDO> add(String content){
+        FeedbackDO feedbackDO =new FeedbackDO();
+        feedbackDO.setContent(content);
         return DataInfo.success(feedbackService.save(feedbackDO));
     }
 }
