@@ -7,6 +7,8 @@ import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
+
 /**
  * Created by 王凯斌 on 2017/10/17.
  */
@@ -16,4 +18,8 @@ public interface AlertInfoService extends BaseService<AlertInfoDO>{
                              AlertInfoDO.AlertType alertType, Pageable pageable);
 
     AlertInfoDO compareBasicInfo(OfficerBasicInfoDO source, CompareBasicInfoDO compared, String attr);
+
+    HashMap<String,Object> getAlertCountByContent();
+
+    HashMap<String,Object> getAlertCountByArea();
 }

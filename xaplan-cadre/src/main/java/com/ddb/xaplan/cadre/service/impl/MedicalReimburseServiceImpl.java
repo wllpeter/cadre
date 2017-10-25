@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 王凯斌 on 2017/10/23.
@@ -68,6 +70,43 @@ public class MedicalReimburseServiceImpl extends BaseServiceImpl<MedicalReimburs
         for(Object[] item:medicalReimburseDao.hosCount(year,areaId,month)){
             int index = Integer.parseInt(item[0].toString())-1;
             result[index]=Integer.parseInt(item[1].toString());
+        }
+        return result;
+    }
+
+    @Override
+    public Map average(String year, Long areaId) {
+
+        Map<String,double[]> result = new HashMap<>();
+
+        double[] array = new double[12];
+        for(Object[] item:medicalReimburseDao.average(year,areaId)){
+            int index = Integer.parseInt(item[0].toString())-1;
+            array[index]=Double.valueOf(item[1].toString());
+        }
+
+        for(int i=1;i<5;i++){
+            double[] item = new double[3];
+            for(int j=0;j<3;j++){
+                item[j] = array[j+((i-1)*3)];
+            }
+            result.put(String.valueOf(i),item);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<DiseaseRankItem> hosRank(String year, Long areaId, int maximum, int minimum) {
+
+        List<DiseaseRankItem> result = new ArrayList<>();
+        int i = 1;
+        for(Object[] item:medicalReimburseDao.hosRank(year,areaId,maximum,minimum)){
+            result.add(
+                    new DiseaseRankItem(
+                            i,String.valueOf(item[0]),null,Integer.parseInt(item[1].toString()),
+                            null,null));
+            i++;
         }
         return result;
     }
