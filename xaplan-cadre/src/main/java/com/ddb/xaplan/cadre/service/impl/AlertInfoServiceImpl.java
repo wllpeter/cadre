@@ -33,7 +33,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
     @Autowired
     private AlertInfoDao alertInfoDao;
 
-    private Map<String,String> dict;
+    private Map<String,String> dict = new HashMap<>();
 
     @PostConstruct
     private void init(){
