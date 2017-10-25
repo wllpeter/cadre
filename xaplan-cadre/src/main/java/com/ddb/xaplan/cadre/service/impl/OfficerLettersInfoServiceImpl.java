@@ -6,6 +6,8 @@ import com.ddb.xaplan.cadre.service.OfficerLettersInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by 付鸣 on 2017/10/25.
  * 信访举报
@@ -38,5 +40,15 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
             int proportion = (int) ((year - yest) / yest * 100.0);
             return Integer.toString(proportion);
         }
+    }
+
+    /**
+     * 往年信访统计
+     * @param areaId
+     * @return
+     */
+    @Override
+    public List<OfficerLettersInfoDO> getLettersStatistics(int areaId) {
+        return this.officerLettersInfoDao.getLettersStatistics(areaId);
     }
 }
