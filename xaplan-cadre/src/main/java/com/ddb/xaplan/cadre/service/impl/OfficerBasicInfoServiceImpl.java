@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -117,18 +118,91 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     }
 
     /**
-     * 获取各县男生数量
+     * 获取各县男女性别数量
      */
     @Override
-    public int getManCount(int areaId) {
-        return this.officerBasicInfoDao.getManCount(areaId);
+    public int getGenderCount(int areaId,int gender) {
+        return this.officerBasicInfoDao.getGenderCount(areaId,gender);
+    }
+
+
+
+    /**
+     *获取各县硕士及以上学历人数
+     */
+    @Override
+    public int getMasterCount(int areaId) {
+        return this.officerBasicInfoDao.getMasterCount(areaId);
     }
 
     /**
-     * 获取各县女生数量
+     *获取各县大学本科学历人数
+     *
      */
     @Override
-    public int getWomanCount(int areaId) {
-        return this.officerBasicInfoDao.getWomanCount(areaId);
+    public int getUndergraduateCount(int areaId) {
+        return this.officerBasicInfoDao.getUndergraduateCount(areaId);
     }
+
+    /**
+     *获取各县大学专科学历人数
+     *
+     */
+    @Override
+    public int getProfessionColleageCount(int areaId) {
+        return this.officerBasicInfoDao.getProfessionColleageCount(areaId);
+    }
+
+    /**
+     *获取各县中专及以下学历人数
+     *
+     */
+    @Override
+    public int getSecondaryBelowCount(int areaId) {
+        return this.officerBasicInfoDao.getSecondaryBelowCount(areaId);
+    }
+
+    /**
+     * 获取各县年龄30岁以下人数
+     */
+    @Override
+    public int getThirtyBelowCount(int areaId) {
+        return this.officerBasicInfoDao.getThirtyBelowCount(areaId);
+    }
+
+    /**
+     * 获取各县年龄31-40岁人数
+     */
+    @Override
+    public int getThirtyAndFourtyCount(int areaId) {
+        return this.officerBasicInfoDao.getThirtyAndFourtyCount(areaId);
+    }
+
+    /**
+     * 获取各县年龄41-50岁人数
+     */
+    @Override
+    public int getFourtyAndFivtyCount(int areaId) {
+        return this.officerBasicInfoDao.getFourtyAndFivtyCount(areaId);
+    }
+
+    /**
+     * 获取各县年龄51岁及以上人数
+     */
+    @Override
+    public int getFivtyAboveCount(int areaId) {
+        return this.officerBasicInfoDao.getFivtyAboveCount(areaId);
+    }
+
+    /**
+     *获取各县各职级人数
+     */
+    @Override
+    public int getCountyCount(int areaId, int title_level) {
+        return this.officerBasicInfoDao.getCountyCount(areaId,title_level);
+    }
+
+
+
+
 }
