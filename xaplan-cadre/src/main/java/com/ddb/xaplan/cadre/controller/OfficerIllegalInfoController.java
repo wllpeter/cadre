@@ -52,9 +52,9 @@ public class OfficerIllegalInfoController {
      */
     @ApiOperation(value = "search IllegalStatistics info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaName",paramType = "PathVariable", dataType = "String") })
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String") })
     @GetMapping(value="/getIllegalStatistics")
-    public DataInfo<Map<String,List>> getCrimeStatistics(@RequestParam("areaName") String areaName){
+    public DataInfo<Map<String,List>> getCrimeStatistics(String areaName){
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;

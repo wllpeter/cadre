@@ -84,7 +84,7 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String"),
     })
     @GetMapping(value = "/getCount")
-    public DataInfo<Map<String,String>> getCount(@RequestParam("areaName") String areaName){
+    public DataInfo<Map<String,String>> getCount(String areaName){
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;
