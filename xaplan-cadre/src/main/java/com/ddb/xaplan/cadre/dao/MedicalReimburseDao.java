@@ -61,7 +61,8 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "sum(reimbursement_amount) as reimbursement_amount,\n" +
             "sum(hospitalized_duration) as hospitalized_duration,\n" +
             "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
-            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name \n" +
+            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name, \n" +
+            "count(case when hospitalized =0 then null when hospitalized = 1 then 1 end) as hospitalizedTime\n" +
             "from medical_reimburse m \n" +
             "where YEAR(occur_date) = ?2 \n" +
             "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +
@@ -80,7 +81,8 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "sum(reimbursement_amount) as reimbursement_amount,\n" +
             "sum(hospitalized_duration) as hospitalized_duration,\n" +
             "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
-            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name \n" +
+            "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name, \n" +
+            "count(case when hospitalized =0 then null when hospitalized = 1 then 1 end) as hospitalizedTime\n" +
             "from medical_reimburse m \n" +
             "where YEAR(occur_date) = ?2 \n" +
             "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +
