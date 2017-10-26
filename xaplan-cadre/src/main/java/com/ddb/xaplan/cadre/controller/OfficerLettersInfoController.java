@@ -25,9 +25,9 @@ public class OfficerLettersInfoController {
 
     @ApiOperation(value = "search Letters info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaName",paramType = "PathVariable", dataType = "String") })
-    @GetMapping(value="/getLettersStatistics")
-    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(@RequestParam("areaName") String areaName){
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String") })
+    @RequestMapping(value="/getLettersStatistics")
+    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(String areaName){
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;
