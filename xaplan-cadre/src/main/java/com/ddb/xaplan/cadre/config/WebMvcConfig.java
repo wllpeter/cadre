@@ -22,6 +22,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Value("${excel.http.url}")
     private String excelHttpUrl;
 
+    @Value("${upload.output.path}")
+    private String uploadOutputPath;
+
+    @Value("${upload.http.url}")
+    private String uploadHttpUrl;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
@@ -29,8 +35,15 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         if (!file.exists()) {
             file.mkdirs();
         }
+        File file2 = new File(uploadOutputPath);
+        if (!file2.exists()) {
+            file2.mkdirs();
+        }
         registry
                 .addResourceHandler(excelHttpUrl)
                 .addResourceLocations("file:" + excelOutputPath);
+        registry
+                .addResourceHandler(uploadHttpUrl)
+                .addResourceLocations("file:" + uploadOutputPath);
     }
 }

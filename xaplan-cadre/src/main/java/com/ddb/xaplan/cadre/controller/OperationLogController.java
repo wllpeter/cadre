@@ -79,6 +79,6 @@ public class OperationLogController {
             return DataInfo.error("文件生成错误");
         }
 
-        return DataInfo.success(path);
+        return DataInfo.success("/xaplan-cadre/excel/"+path);
     }
 }
