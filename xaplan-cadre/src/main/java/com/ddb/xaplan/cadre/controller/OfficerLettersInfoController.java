@@ -6,10 +6,7 @@ import com.ddb.xaplan.cadre.service.OfficerLettersInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,8 +26,8 @@ public class OfficerLettersInfoController {
     @ApiOperation(value = "search Letters info controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "areaName",paramType = "PathVariable", dataType = "String") })
-    @GetMapping(value="/{areaName}/getLettersStatistics")
-    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(@PathVariable String areaName){
+    @GetMapping(value="/getLettersStatistics")
+    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(@RequestParam("areaName") String areaName){
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;
