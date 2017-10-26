@@ -65,7 +65,7 @@ public class ExcelUtils {
         FileOutputStream fileOut = new FileOutputStream(excelFile);
         wb.write(fileOut);
         fileOut.close();
-        return "/excel/"+fileName + ".xls";
+        return fileName + ".xls";
     }
 
     /**

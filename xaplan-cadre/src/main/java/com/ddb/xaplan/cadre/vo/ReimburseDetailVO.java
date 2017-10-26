@@ -28,11 +28,13 @@ public class ReimburseDetailVO {
     //病因
     @ApiModelProperty(value = "病因")
     private String diseaseName;
-
+    //住院次数
+    @ApiModelProperty(value = "住院次数")
+    private int hospitalizedTime;
     public ReimburseDetailVO() {
     }
 
-    public ReimburseDetailVO(String name, String idCard, int reimburseTime, BigDecimal reimburseAmount, int hospitalizedDuration, int clinicTime, String diseaseName) {
+    public ReimburseDetailVO(String name, String idCard, int reimburseTime, BigDecimal reimburseAmount, int hospitalizedDuration, int clinicTime, String diseaseName, int hospitalizedTime) {
         this.name = name;
         this.idCard = idCard;
         this.reimburseTime = reimburseTime;
@@ -40,6 +42,7 @@ public class ReimburseDetailVO {
         this.hospitalizedDuration = hospitalizedDuration;
         this.clinicTime = clinicTime;
         this.diseaseName = diseaseName;
+        this.hospitalizedTime = hospitalizedTime;
     }
 
     public String getName() {
@@ -96,5 +99,13 @@ public class ReimburseDetailVO {
 
     public void setDiseaseName(String diseaseName) {
         this.diseaseName = diseaseName;
+    }
+
+    public int getHospitalizedTime() {
+        return hospitalizedTime;
+    }
+
+    public void setHospitalizedTime(int hospitalizedTime) {
+        this.hospitalizedTime = hospitalizedTime;
     }
 }
