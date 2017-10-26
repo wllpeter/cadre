@@ -84,45 +84,67 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
 
 
     /**
-     * 获取各县党员数量
+     * 获取党员数量
      * @param areaId
      * @return
      */
     @Override
     public int getPartyMemberCount(int areaId) {
-        return this.officerBasicInfoDao.getPartyMemberCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getPartyMemberSumCount();
+        }else{
+            return this.officerBasicInfoDao.getPartyMemberCount(areaId);
+        }
     }
 
     /**
-     * 获取各县干部总数量
+     * 获取干部总数量
      */
     @Override
     public int getCadreCount(int areaId) {
-        return this.officerBasicInfoDao.getCadreCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getCadreSumCount();
+        }else {
+            return this.officerBasicInfoDao.getCadreCount(areaId);
+        }
     }
 
     /**
-     * 获取各县籍贯本地的数量
+     * 获取籍贯本地的数量
      */
     @Override
     public int getLocalNativePlace(int areaId) {
-        return this.officerBasicInfoDao.getLocalNativePlace(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumLocalNativePlace();
+        }else{
+            return this.officerBasicInfoDao.getLocalNativePlace(areaId);
+        }
+
     }
 
     /**
-     * 获取各县籍贯外地的数量
+     * 获取籍贯外地的数量
      */
     @Override
     public int getFieldNativePlace(int areaId) {
-        return this.officerBasicInfoDao.getFieldNativePlace(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumFieldNativePlace();
+        }else{
+            return this.officerBasicInfoDao.getFieldNativePlace(areaId);
+        }
     }
 
     /**
-     * 获取各县男女性别数量
+     * 获取男女性别数量
      */
     @Override
     public int getGenderCount(int areaId,int gender) {
-        return this.officerBasicInfoDao.getGenderCount(areaId,gender);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumGenderCount(gender);
+        }else{
+            return this.officerBasicInfoDao.getGenderCount(areaId,gender);
+        }
+
     }
 
 
@@ -132,7 +154,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getMasterCount(int areaId) {
-        return this.officerBasicInfoDao.getMasterCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumMasterCount();
+        }else{
+            return this.officerBasicInfoDao.getMasterCount(areaId);
+        }
+
     }
 
     /**
@@ -141,7 +168,11 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getUndergraduateCount(int areaId) {
-        return this.officerBasicInfoDao.getUndergraduateCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumUndergraduateCount();
+        }else{
+            return this.officerBasicInfoDao.getUndergraduateCount(areaId);
+        }
     }
 
     /**
@@ -150,7 +181,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getProfessionColleageCount(int areaId) {
-        return this.officerBasicInfoDao.getProfessionColleageCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumProfessionColleageCount();
+        }else{
+            return this.officerBasicInfoDao.getProfessionColleageCount(areaId);
+        }
+
     }
 
     /**
@@ -159,7 +195,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getSecondaryBelowCount(int areaId) {
-        return this.officerBasicInfoDao.getSecondaryBelowCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumSecondaryBelowCount();
+        }else{
+            return this.officerBasicInfoDao.getSecondaryBelowCount(areaId);
+        }
+
     }
 
     /**
@@ -167,7 +208,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getThirtyBelowCount(int areaId) {
-        return this.officerBasicInfoDao.getThirtyBelowCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumThirtyBelowCount();
+        }else{
+            return this.officerBasicInfoDao.getThirtyBelowCount(areaId);
+        }
+
     }
 
     /**
@@ -175,7 +221,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getThirtyAndFourtyCount(int areaId) {
-        return this.officerBasicInfoDao.getThirtyAndFourtyCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumThirtyAndFourtyCount();
+        }else{
+            return this.officerBasicInfoDao.getThirtyAndFourtyCount(areaId);
+        }
+
     }
 
     /**
@@ -183,7 +234,11 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getFourtyAndFivtyCount(int areaId) {
-        return this.officerBasicInfoDao.getFourtyAndFivtyCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumFourtyAndFivtyCount();
+        }else{
+            return this.officerBasicInfoDao.getFourtyAndFivtyCount(areaId);
+        }
     }
 
     /**
@@ -191,7 +246,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getFivtyAboveCount(int areaId) {
-        return this.officerBasicInfoDao.getFivtyAboveCount(areaId);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumFivtyAboveCount();
+        }else{
+            return this.officerBasicInfoDao.getFivtyAboveCount(areaId);
+        }
+
     }
 
     /**
@@ -199,7 +259,12 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getCountyCount(int areaId, int title_level) {
-        return this.officerBasicInfoDao.getCountyCount(areaId,title_level);
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumCountyCount(title_level);
+        }else{
+            return this.officerBasicInfoDao.getCountyCount(areaId,title_level);
+        }
+
     }
 
 
