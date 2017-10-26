@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface OfficerCurriculumVitaeDao extends BaseDao<OfficerCurriculumVitaeDO>{
 
-    @Query("select d from OfficerCurriculumVitaeDO  d where d.officerBasicInfo=?1 order by d.startDate desc")
+    @Query("select d from OfficerCurriculumVitaeDO  d where d.officerBasicInfo=?1 order by d.startDate asc")
     List<OfficerCurriculumVitaeDO> search(OfficerBasicInfoDO officerBasicInfoDO);
 
 }

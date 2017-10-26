@@ -17,15 +17,15 @@ public class OfficerCurriculumVitaeDO extends BaseEntity{
 
     private OfficerBasicInfoDO officerBasicInfo;
 
-    private Date startDate;
+    private Date startDate;//开始时间
 
-    private Date endDate;
+    private Date endDate;//结束时间
 
-    private String organization;
+    private String organization;//单位
 
-    private String title;
+    private String title;//职务
 
-    private TitleLevel titleLevel;
+    private TitleLevel titleLevel;//职级
 
     @JsonBackReference
     @OneToOne
