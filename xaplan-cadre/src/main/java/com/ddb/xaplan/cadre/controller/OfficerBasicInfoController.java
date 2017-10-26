@@ -81,10 +81,20 @@ public class OfficerBasicInfoController {
      */
     @ApiOperation(value = "get basic info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaId",paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String"),
     })
-    @GetMapping(value = "/{areaId}/getCount")
-    public DataInfo<Map<String,String>> getCount(@PathVariable Integer areaId){
+    @GetMapping(value = "/{areaName}/getCount")
+    public DataInfo<Map<String,String>> getCount(@PathVariable String areaName){
+        int areaId=0;
+        if(areaName.equals("雄县")){
+            areaId=3;
+        }else if (areaName.equals("容城县")){
+            areaId=2;
+        }else if (areaName.equals("安新县")){
+            areaId=1;
+        }else{
+            areaId=0;
+        }
         Map<String,String> map=new HashMap<String,String>();
         //党员数量
         String partyMemberCount=Integer.toString(this.officerBasicInfoService.getPartyMemberCount(areaId));
@@ -134,8 +144,6 @@ public class OfficerBasicInfoController {
         String lettersCount=Integer.toString(this.officerLettersInfoService.getLettersCount(areaId));
         //本年与去年信访数量比例
         String lettersProportion=this.officerLettersInfoService.getLettersProportion(areaId);
-
-
         map.put("partyMemberCount",partyMemberCount);
         map.put("cadreCount",cadreCount);
         map.put("localNativePlaceCount",localNativePlaceCount);
@@ -158,6 +166,8 @@ public class OfficerBasicInfoController {
         map.put("illegalProportion",illegalProportion);
         map.put("crimeCount",crimeCount);
         map.put("crimeProportion",crimeProportion);
+        map.put("lettersCount",lettersCount);
+        map.put("lettersProportion",lettersProportion);
         return DataInfo.success(map);
     }
 
