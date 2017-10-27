@@ -47,7 +47,7 @@ public class OfficerOverseaInfoDO extends BaseEntity {
 
     private String auditOrg;//审批单位
 
-    private boolean isBusiness;//因公/因私
+    private Boolean isBusiness;//因公/因私
 
     @JsonBackReference
     @OneToOne
@@ -187,11 +187,11 @@ public class OfficerOverseaInfoDO extends BaseEntity {
     }
 
     @Column(name="is_business")
-    public boolean isBusiness() {
+    public Boolean isBusiness() {
         return isBusiness;
     }
 
-    public void setBusiness(boolean business) {
+    public void setBusiness(Boolean business) {
         isBusiness = business;
     }
 }
