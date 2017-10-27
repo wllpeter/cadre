@@ -1,13 +1,17 @@
 package com.ddb.xaplan.cadre.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.dao.OperationLogDao;
 import com.ddb.xaplan.cadre.entity.OperationLogDO;
 import com.ddb.xaplan.cadre.service.OperationLogService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,6 +30,9 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
 
     @Autowired
     private OperationLogDao operationLogDao;
+
+    @Value("${chain.save.url}")
+    private String chainSaveUrl;
 
     @Override
     public Page<OperationLogDO> search(String keyword, Date startDate, Date endDate, Pageable pageable) {
@@ -72,5 +79,28 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
                 return predicate;
             }
         });
+    }
+
+    @Override
+    public OperationLogDO save(OperationLogDO operationLogDO) {
+
+        try {
+            super.save(operationLogDO);
+            HttpUtils.get(String.format(
+                    chainSaveUrl,
+                    String.valueOf(operationLogDO.getCreateDate()),
+                    JSON.toJSONString(operationLogDO)));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return operationLogDO;
+    }
+
+    @Async
+    @Override
+    public void logger(String userInfo, String content) {
+        OperationLogDO operationLogDO = new OperationLogDO();
+        operationLogDO.setContent(content);
+        save(operationLogDO);
     }
 }

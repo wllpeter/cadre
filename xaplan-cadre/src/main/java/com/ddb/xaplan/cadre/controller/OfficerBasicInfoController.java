@@ -40,6 +40,9 @@ public class OfficerBasicInfoController {
     @Resource(name="officerCrimeInfoServiceImpl")
     private OfficerCrimeInfoService officerCrimeInfoService;
 
+    @Resource(name="operationLogServiceImpl")
+    private OperationLogService operationLogService;
+
     @ApiOperation(value = "search basic info controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword",paramType = "query", dataType = "String"),
@@ -72,8 +75,10 @@ public class OfficerBasicInfoController {
     @RequestMapping(value = "/{officerId}",method = RequestMethod.GET)
     public DataInfo<OfficerBasicInfoDO> search(@PathVariable Long officerId) {
 
-        return DataInfo.success(
-                officerBasicInfoService.find(officerId));
+        OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
+        operationLogService.logger(
+                null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
+        return DataInfo.success(officerBasicInfo);
     }
 
     /**

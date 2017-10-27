@@ -76,6 +76,9 @@ public class AlertInfoController {
     @Resource(name = "officerVehicleInfoServiceImpl")
     private OfficerVehicleInfoService officerVehicleInfoService;
 
+    @Resource(name="operationLogServiceImpl")
+    private OperationLogService operationLogService;
+
     @ApiOperation(value = "alert info search controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", paramType = "query", dataType = "String"),
@@ -90,6 +93,8 @@ public class AlertInfoController {
             String keyword, Long areaId, AlertInfoDO.AlertType alertType,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        operationLogService.logger(
+                null,"查看预警信息");
         return DataInfo.success(alertInfoService.search(keyword, areaService.find(areaId), alertType, pageable));
     }
 

@@ -3,6 +3,7 @@ package com.ddb.xaplan.cadre.controller;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.service.AreaService;
 import com.ddb.xaplan.cadre.service.MedicalReimburseService;
+import com.ddb.xaplan.cadre.service.OperationLogService;
 import com.ddb.xaplan.cadre.vo.DiseaseRankItem;
 import com.ddb.xaplan.cadre.vo.ReimburseDetailVO;
 import io.swagger.annotations.Api;
@@ -31,6 +32,9 @@ public class MedicalReimburseController {
     @Resource(name = "medicalReimburseServiceImpl")
     private MedicalReimburseService medicalReimburseService;
 
+    @Resource(name="operationLogServiceImpl")
+    private OperationLogService operationLogService;
+
     @ApiOperation(value = "search medical general charts")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",required = true,paramType = "query", dataType = "String"),
@@ -39,6 +43,8 @@ public class MedicalReimburseController {
     @RequestMapping(value = "/statistics",method = RequestMethod.GET)
     public DataInfo<Map> statistics(Long areaId, String year) throws Exception{
 
+        operationLogService.logger(
+                null,String.format("专题分析，地区：%s",areaService.find(areaId).getName()));
         Map<String,Object> result = new HashMap<>();
         result.put("hospitalCount",
                 medicalReimburseService.monthStatistics(year,1,areaId));
