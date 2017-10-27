@@ -18,13 +18,25 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
 
     @Autowired
     private OfficerLettersInfoDao officerLettersInfoDao;
+
     /**
      * 当年信访数量
      */
     @Override
     public int getLettersCount(int areaId) {
-
-        return this.officerLettersInfoDao.getLettersCount(areaId,0);
+        if (areaId == 0) {
+            if (this.officerLettersInfoDao.getLettersSumCount(0) == null) {
+                return 0;
+            } else {
+                return Integer.parseInt(this.officerLettersInfoDao.getLettersSumCount(0));
+            }
+        } else {
+            if (this.officerLettersInfoDao.getLettersCount(areaId, 0) == null) {
+                return 0;
+            } else {
+                return Integer.parseInt(this.officerLettersInfoDao.getLettersCount(areaId, 0));
+            }
+        }
     }
 
     /**
@@ -32,11 +44,33 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
      */
     @Override
     public String getLettersProportion(int areaId) {
-        double year=this.officerLettersInfoDao.getLettersCount(areaId,0);
-        double yest=this.officerLettersInfoDao.getLettersCount(areaId,1);
-        if(yest==0){
+        double year;
+        String syear;
+        if (areaId == 0) {
+            syear = this.officerLettersInfoDao.getLettersSumCount(0);
+        } else {
+            syear = this.officerLettersInfoDao.getLettersCount(areaId, 0);
+        }
+        if (syear == null || syear == "") {
+            year = 0;
+        } else {
+            year = Double.parseDouble(syear);
+        }
+        double yest;
+        String syest;
+        if (areaId == 0) {
+            syest = this.officerLettersInfoDao.getLettersSumCount(1);
+        } else {
+            syest = this.officerLettersInfoDao.getLettersCount(areaId, 1);
+        }
+        if (syest == null || syest == "") {
+            yest = 0;
+        } else {
+            yest = Double.parseDouble(syest);
+        }
+        if (yest == 0) {
             return "-";
-        }else {
+        } else {
             int proportion = (int) ((year - yest) / yest * 100.0);
             return Integer.toString(proportion);
         }
@@ -49,6 +83,11 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
      */
     @Override
     public List<OfficerLettersInfoDO> getLettersStatistics(int areaId) {
-        return this.officerLettersInfoDao.getLettersStatistics(areaId);
+        if(areaId==0){
+            return this.officerLettersInfoDao.getLettersSumStatistics();
+        }else{
+            return this.officerLettersInfoDao.getLettersStatistics(areaId);
+        }
+
     }
 }

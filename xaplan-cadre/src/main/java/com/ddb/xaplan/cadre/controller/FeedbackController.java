@@ -80,6 +80,6 @@ public class FeedbackController {
             e.printStackTrace();
             return DataInfo.error(e.getMessage());
         }
-        return DataInfo.success(uploadOutputPath + fileName);
+        return DataInfo.success("/upload/" + fileName);
     }
 }

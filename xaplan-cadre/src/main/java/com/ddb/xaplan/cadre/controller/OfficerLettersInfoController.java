@@ -6,10 +6,7 @@ import com.ddb.xaplan.cadre.service.OfficerLettersInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,15 +19,25 @@ import java.util.List;
 @RequestMapping("/api/officerLettersInfo")
 public class OfficerLettersInfoController {
 
-    //违纪涉法
+    //信访举报
     @Resource(name="officerLettersInfoServiceImpl")
     private OfficerLettersInfoService officerLettersInfoService;
 
     @ApiOperation(value = "search Letters info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaId",paramType = "PathVariable", dataType = "Integer") })
-    @GetMapping(value="/{areaId}/getLettersStatistics")
-    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(@PathVariable Integer areaId){
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String") })
+    @RequestMapping(value="/getLettersStatistics")
+    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(String areaName){
+        int areaId=0;
+        if(areaName.equals("雄县")){
+            areaId=3;
+        }else if (areaName.equals("容城县")){
+            areaId=2;
+        }else if (areaName.equals("安新县")){
+            areaId=1;
+        }else{
+            areaId=0;
+        }
         List<OfficerLettersInfoDO> list=this.officerLettersInfoService.getLettersStatistics(areaId);
         if(list.size()==0){
             return DataInfo.error("未找到关联数据");
