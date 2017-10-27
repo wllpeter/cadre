@@ -8,6 +8,14 @@ public class StatisticsBean {
     private String name;
     private int count;
 
+    public StatisticsBean() {
+    }
+
+    public StatisticsBean(String name, int count) {
+        this.name = name;
+        this.count = count;
+    }
+
     public String getName() {
         return name;
     }
