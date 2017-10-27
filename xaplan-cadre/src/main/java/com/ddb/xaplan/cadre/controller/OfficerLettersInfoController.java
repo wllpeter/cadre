@@ -51,9 +51,13 @@ public class OfficerLettersInfoController {
         List<OfficerLettersInfoDO> list=this.officerLettersInfoService.getLettersStatistics(areaId);
         List<StatisticsBean> reportedList = this.reportedService.getBeReportedList(areaId);
         List<StatisticsBean> natureList = this.letterNatureService.getNatureList(areaId);
+        List<StatisticsBean> reportedsByYear = this.reportedService.getBeReportedByYear(areaId);
+        List<StatisticsBean> naturesByYear = this.letterNatureService.getNaturesByYear(areaId);
         result.put("letter_resource",list);
         result.put("reported",reportedList);
         result.put("nature",natureList);
+        result.put("reported_by_year",reportedsByYear);
+        result.put("nature_by_year",naturesByYear);
         return DataInfo.success(result);
 
     }

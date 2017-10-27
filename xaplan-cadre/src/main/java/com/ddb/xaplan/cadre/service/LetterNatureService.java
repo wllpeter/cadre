@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface LetterNatureService extends BaseService<LetterNatureDO> {
     List<StatisticsBean> getNatureList(int areaId);
+
+    List<StatisticsBean> getNaturesByYear(int areaId);
 }
