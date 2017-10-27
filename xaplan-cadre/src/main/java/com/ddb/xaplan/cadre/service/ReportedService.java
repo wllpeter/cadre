@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReportedService extends BaseService<ReportedDO>{
     List<StatisticsBean> getBeReportedList(int areaId);
+
+    List<StatisticsBean> getBeReportedByYear(int areaId);
 }
