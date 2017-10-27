@@ -1,10 +1,13 @@
 package com.ddb.xaplan.cadre.common.tool;
-
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.assertj.core.data.MapEntry;
+import org.omg.CORBA.ShortHolder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,16 +15,13 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 王凯斌 on 2017/6/17.
  */
 @Component
-public class ExcelUtils {
+public class  ExcelUtils {
 
     private final static int page = 10000;
 
@@ -60,12 +60,8 @@ public class ExcelUtils {
                 fillRowWithCells(dataRow, data.get(n));
             }
         }
-        File parentFile = new File(excelPath);
-        File excelFile = new File(parentFile, fileName + ".xls");
-        FileOutputStream fileOut = new FileOutputStream(excelFile);
-        wb.write(fileOut);
-        fileOut.close();
-        return fileName + ".xls";
+        String fileResult = createExcelByWorkBook(fileName,wb);
+        return fileResult;
     }
 
     /**
@@ -104,22 +100,78 @@ public class ExcelUtils {
 
         List<List<String>> newData = new ArrayList<>();
         for (T item : data) {
-            List<Field> fields = new ArrayList<>();
-            fields.addAll(Arrays.asList(item.getClass().getSuperclass().getDeclaredFields()));
-            fields.addAll(Arrays.asList(item.getClass().getDeclaredFields()));
-
-            List<String> row = new ArrayList<>();
-            for(String attr:attrs){
-                for(Field field:fields){
-                    if (field.getName().equals(attr)){
-                        field.setAccessible(true);
-                        row.add(String.valueOf(field.get(item)));
-                    }
-                }
-            }
+            List<String> row = createRow(item, attrs);
             newData.add(row);
         }
         return createExcel(fileName, title, newData);
+    }
+
+    private static <T> List<String> createRow(T item, String[] attrs) throws Exception {
+        List<Field> fields = new ArrayList<>();
+        fields.addAll(Arrays.asList(item.getClass().getSuperclass().getDeclaredFields()));
+        fields.addAll(Arrays.asList(item.getClass().getDeclaredFields()));
+
+        List<String> row = new ArrayList<>();
+        for(String attr:attrs){
+            for(Field field:fields){
+                if (field.getName().equals(attr)){
+                    field.setAccessible(true);
+                    row.add(String.valueOf(field.get(item)));
+                }
+            }
+        }
+        return  row;
+    }
+
+    /**
+     * author：ZAN YANG
+     * 组装不同sheet的表格
+     */
+    public static <T> HSSFWorkbook setSheet2Workbook(HSSFWorkbook workbook, ExcelExportEntity<T> excelExportEntity )throws Exception{
+        Sheet sheet = workbook.createSheet(excelExportEntity.getSheetName());
+        Row titleRow = sheet.createRow(0);
+        fillRowWithCells(titleRow, excelExportEntity.getTitles());
+        List<List<String>> newData = new LinkedList<>();
+        List<T> datas = excelExportEntity.getDatas();
+        for(T data : datas) {
+            List<String> rows = createRow(data,excelExportEntity.getArgs());
+            newData.add(rows);
+        }
+        int endIndex = newData.size();
+        for(int startIndex = 0; startIndex < endIndex; startIndex++){
+            Row dataRow = sheet.createRow(startIndex+1);
+            fillRowWithCells(dataRow, newData.get(startIndex));
+            continue;
+        }
+        return workbook;
+    }
+
+//    public static <T> HSSFWorkbook setSheet2Workbook(HSSFWorkbook workbook, String sheetName, List<String> titles,List<Map> datas)throws Exception{
+//        Sheet sheet = workbook.createSheet(sheetName);
+//        Row titleRow = sheet.createRow(0);
+//        fillRowWithCells(titleRow, titles);
+//        List<List<String>> newData = new LinkedList<>();
+//        List<T> datas = excelExportEntity.getDatas();
+//        for(T data : datas) {
+//            List<String> rows = createRow(data,excelExportEntity.getArgs());
+//            newData.add(rows);
+//        }
+//        int endIndex = newData.size();
+//        for(int startIndex = 0; startIndex < endIndex; startIndex++){
+//            Row dataRow = sheet.createRow(startIndex+1);
+//            fillRowWithCells(dataRow, newData.get(startIndex));
+//            continue;
+//        }
+//        return workbook;
+//    }
+
+    public static String createExcelByWorkBook(String fileName,Workbook workbook) throws Exception{
+        File parentFile = new File(excelPath);
+        File excelFile = new File(parentFile, fileName + ".xls");
+        FileOutputStream fileOut = new FileOutputStream(excelFile);
+        workbook.write(fileOut);
+        fileOut.close();
+        return fileName+".xls";
     }
 
 }

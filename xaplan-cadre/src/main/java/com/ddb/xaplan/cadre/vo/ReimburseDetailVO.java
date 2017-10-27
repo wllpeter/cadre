@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 
 @ApiModel(value = "ReimburseDetailVO",description = "报销排名返回模型")
 public class ReimburseDetailVO {
+    //排名
+    @ApiModelProperty(value = "排名")
+    private int rank;
     //名称
     @ApiModelProperty(value = "名称")
     private String name;
@@ -107,5 +110,13 @@ public class ReimburseDetailVO {
 
     public void setHospitalizedTime(int hospitalizedTime) {
         this.hospitalizedTime = hospitalizedTime;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }
