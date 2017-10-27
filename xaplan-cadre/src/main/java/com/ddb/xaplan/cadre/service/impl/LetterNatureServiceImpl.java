@@ -32,4 +32,23 @@ public class LetterNatureServiceImpl extends BaseServiceImpl<LetterNatureDO> imp
         }
         return null;
     }
+
+    @Override
+    public List<StatisticsBean> getNaturesByYear(int areaId) {
+        List<Object[]> ret;
+        if (areaId == 0) {
+            ret = this.letterNatureDao.getLetterNatureByYear();
+        } else {
+            ret = this.letterNatureDao.getLetterNatureByYear(areaId);
+        }
+        if(null != ret && ret.size() > 0 ){
+            List<StatisticsBean> result = new ArrayList<>();
+            for(Object[] item : ret){
+                result.add(new StatisticsBean(item[0].toString(),Integer.valueOf(item[1].toString())));
+                continue;
+            }
+            return result;
+        }
+        return null;
+    }
 }

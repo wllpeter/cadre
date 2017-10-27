@@ -48,14 +48,14 @@ public interface OfficerCrimeInfoDao extends BaseDao<OfficerCrimeInfoDO>{
      */
     @Query(value="select type name,count(1) count from officer_crime_info where  \n" +
             " result like concat('%',(select LEFT(name,2) from sys_area where id=:areaId),'%')\n" +
-            " group by type",nativeQuery=true)
+            " group by type order by type desc",nativeQuery=true)
     public List<Object[]> getGroupCrimeCount(@Param("areaId")int areaId);
 
     /**
      * 三县犯罪分类
      */
     @Query(value="select type name,count(1) count from officer_crime_info\n" +
-            " group by type",nativeQuery=true)
+            " group by type order by type desc",nativeQuery=true)
     public List<Object[]> getGroupSumCrimeCount();
 
 

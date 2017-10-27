@@ -33,4 +33,23 @@ public class ReportedServiceImpl extends BaseServiceImpl<ReportedDO> implements 
         }
         return null;
     }
+
+    @Override
+    public List<StatisticsBean> getBeReportedByYear(int areaId) {
+        List<Object[]> ret;
+        if (areaId == 0) {
+            ret = this.reportedDao.getBeReportedByYear();
+        } else {
+            ret = this.reportedDao.getBeReportedByYear(areaId);
+        }
+        if(null != ret && ret.size() > 0 ){
+            List<StatisticsBean> result = new ArrayList<>();
+            for(Object[] item : ret){
+                result.add(new StatisticsBean(item[0].toString(),Integer.valueOf(item[1].toString())));
+                continue;
+            }
+            return result;
+        }
+        return null;
+    }
 }
