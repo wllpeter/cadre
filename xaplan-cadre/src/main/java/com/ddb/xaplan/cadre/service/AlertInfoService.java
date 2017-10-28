@@ -22,4 +22,8 @@ public interface AlertInfoService extends BaseService<AlertInfoDO>{
     HashMap<String,Object> getAlertCountByContent();
 
     HashMap<String,Object> getAlertCountByArea();
+
+    HashMap<String,Object> getAlertCountByContent(Integer alertType);
+
+    HashMap<String,Object> getAlertCountByArea(Integer alertType);
 }

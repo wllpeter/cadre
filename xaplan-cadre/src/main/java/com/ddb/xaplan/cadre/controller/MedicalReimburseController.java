@@ -218,7 +218,7 @@ public class MedicalReimburseController {
 //        }
         for(int i = 0; i < monthHos.length;i++){
             Cell cell = dayTimeTitle.createCell(i);
-            cell.setCellValue(month+"月"+i+1+"日");
+            cell.setCellValue(month+"月"+(i+1)+"日");
             Cell cellData = dayTimeData.createCell(i);
             cellData.setCellValue(monthHos[i]);
             continue;
@@ -244,6 +244,19 @@ public class MedicalReimburseController {
         String[] rankAttrs = new String[]{"order","name","nonHosCount","nonHosAmount","hosCount","hosAmount"};
         ExcelExportEntity<DiseaseRankItem> diseaseRankList = new ExcelExportEntity<>("病因排名",Arrays.asList(rankTitles),rank,rankAttrs);
         workbook = ExcelUtils.setSheet2Workbook(workbook,diseaseRankList);
+        /**
+         * 报销排名
+         */
+        List<ReimburseDetailVO> result = this.medicalReimburseService.getReimburseRank(areaId, Integer.parseInt(year), 0, REIMBURSE_RANK_LIMIT_RANGE);
+        int index = 1;
+        for(ReimburseDetailVO temp : result){
+            temp.setRank(index);
+            index++;
+        }
+        List<String> reiTitles = Arrays.asList("排名","姓名","身份证号","报销次数","报销金额","住院次数","住院天数","门诊次数","病因");
+        String[] reiAttrs = new String[]{"rank","name","idCard","reimburseTime","reimburseAmount","hospitalizedTime","hospitalizedDuration","clinicTime","diseaseName"};
+        ExcelExportEntity<ReimburseDetailVO> reimRankList = new ExcelExportEntity<>("报销排名",reiTitles,result, reiAttrs);
+        workbook = ExcelUtils.setSheet2Workbook(workbook,reimRankList);
         String ret = ExcelUtils.createExcelByWorkBook(areaDO.getName()+year+"年统计数据",workbook);
         return ret;
     }
