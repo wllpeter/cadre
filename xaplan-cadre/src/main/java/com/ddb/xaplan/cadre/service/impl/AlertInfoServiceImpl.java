@@ -161,6 +161,53 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
         return ret;
     }
 
+    @Override
+    public HashMap<String, Object> getAlertCountByContent(Integer alertType) {
+        List<Object[]> alertsRet = this.alertInfoDao.getAlertCountByContent(alertType);
+        if(null == alertsRet || alertsRet.size() == 0){
+            return null;
+        }
+        HashMap<String, Object> ret = new HashMap<>();
+        for (Object[] object: alertsRet) {
+            ret.put(String.valueOf(object[0]),Integer.valueOf(object[1].toString()));
+            continue;
+        }
+        return ret;
+    }
+
+    @Override
+    public HashMap<String, Object> getAlertCountByArea(Integer alertType) {
+        List<String> areaList = this.alertInfoDao.getAlertCountByArea(alertType);
+        int anxinCount = 0;
+        int xiongxianCount = 0;
+        int rongchengCount = 0;
+        for(String str : areaList){
+            if(null == str){
+                continue;
+            }
+            if(str.contains(ANXIN)){
+                anxinCount++;
+                continue;
+            }
+            else if(str.contains(RONGCHENG)){
+                rongchengCount++;
+                continue;
+            }
+            else if(str.contains(XIONGXIAN)){
+                xiongxianCount++;
+                continue;
+            }
+            else {
+                continue;
+            }
+        }
+        HashMap<String,Object> ret = new HashMap<>();
+        ret.put("1" , anxinCount);
+        ret.put("2" , rongchengCount);
+        ret.put("3" , xiongxianCount);
+        return ret;
+    }
+
     private Object getValue(Object obj, String attr){
 
         try {
