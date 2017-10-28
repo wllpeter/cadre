@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Retention;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -135,7 +136,7 @@ public class MedicalReimburseController {
             @ApiImplicitParam(name = "month", paramType = "query", dataType = "Integer",value = "月份")
     })
     @GetMapping("/get_disease_rank_excel")
-    public String exportDiseaseTop20Page(String year,String month, Long areaId)throws Exception{
+    public DataInfo<byte[]> exportDiseaseTop20Page(String year, String month, Long areaId, HttpServletResponse response)throws Exception{
         AreaDO areaDO = this.areaService.find(areaId);
         HSSFWorkbook workbook = new HSSFWorkbook();
         /**
@@ -257,8 +258,8 @@ public class MedicalReimburseController {
         String[] reiAttrs = new String[]{"rank","name","idCard","reimburseTime","reimburseAmount","hospitalizedTime","hospitalizedDuration","clinicTime","diseaseName"};
         ExcelExportEntity<ReimburseDetailVO> reimRankList = new ExcelExportEntity<>("报销排名",reiTitles,result, reiAttrs);
         workbook = ExcelUtils.setSheet2Workbook(workbook,reimRankList);
-        String ret = ExcelUtils.createExcelByWorkBook(areaDO.getName()+year+"年统计数据",workbook);
-        return ret;
+        byte[] bytes = ExcelUtils.createExcelByWorkBookByBytes(areaDO.getName()+year+"年统计数据",workbook);
+        return DataInfo.success(bytes);
     }
     @ApiOperation(value = "报销排名导出")
     @ApiImplicitParams({
