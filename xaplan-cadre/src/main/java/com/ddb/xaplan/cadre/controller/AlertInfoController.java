@@ -108,7 +108,7 @@ public class AlertInfoController {
     public DataInfo<List<AlertInfoDO>> infos(@PathVariable Long officerId) {
 
         return DataInfo.success(
-                alertInfoService.search("", officerBasicInfoService.find(officerId)));
+                alertInfoService.search("officerBasicInfo", officerBasicInfoService.find(officerId)));
     }
 
     @RequestMapping(value = "/generate", method = RequestMethod.GET)
@@ -123,7 +123,7 @@ public class AlertInfoController {
 
     private void basicGenerateHelper() {
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
-        String[] attrs = {"name", "gender", "culture", "birthDate", "nativePlace", "address"};
+        String[] attrs = {"name", "gender", "culture", "nativePlace", "address"};
         for (OfficerBasicInfoDO item : items) {
             if (StringUtils.isEmpty(item.getIdCard())) {
                 continue;

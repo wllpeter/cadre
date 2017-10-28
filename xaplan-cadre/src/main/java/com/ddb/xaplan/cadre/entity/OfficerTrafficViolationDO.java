@@ -14,10 +14,10 @@ import javax.persistence.*;
 @Where(clause = "is_deleted=0")
 public class OfficerTrafficViolationDO extends  BaseEntity{
     private OfficerBasicInfoDO officerBasicInfo;
-    private String year;
-    private Integer quantity;
-    private Integer point;
-    private Integer amount;
+    private String year;//年份
+    private Integer quantity;//次数
+    private Integer point;//分数
+    private Integer amount;//金额
     private String idCard;//身份证号
     private String name;//姓名
 
