@@ -1,6 +1,5 @@
 package com.ddb.xaplan.cadre.common.tool;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
@@ -174,9 +174,9 @@ public class  ExcelUtils {
 
     public static byte[] createExcelByWorkBookByBytes(String fileName, Workbook workbook) throws Exception{
         //response.reset();
-        ByteOutputStream os = new ByteOutputStream();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
         workbook.write(os);
-        byte[] bytes = os.getBytes();
+        byte[] bytes = os.toByteArray();
 //        response.reset();
 //        response.setContentType("application/vnd.ms-excel;charset=utf-8");
 //        response.setHeader("Content-Disposition",
