@@ -6,20 +6,26 @@ import com.ddb.xaplan.cadre.common.tool.ExcelUtils;
 import com.ddb.xaplan.cadre.entity.AreaDO;
 import com.ddb.xaplan.cadre.service.AreaService;
 import com.ddb.xaplan.cadre.service.MedicalReimburseService;
-import com.ddb.xaplan.cadre.service.OperationLogService;
 import com.ddb.xaplan.cadre.vo.DiseaseRankItem;
 import com.ddb.xaplan.cadre.vo.ReimburseDetailVO;
+import com.sun.xml.internal.ws.api.pipe.FiberContextSwitchInterceptor;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Retention;
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -37,9 +43,6 @@ public class MedicalReimburseController {
     @Resource(name = "medicalReimburseServiceImpl")
     private MedicalReimburseService medicalReimburseService;
 
-    @Resource(name="operationLogServiceImpl")
-    private OperationLogService operationLogService;
-
     @ApiOperation(value = "search medical general charts")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",required = true,paramType = "query", dataType = "String"),
@@ -48,8 +51,6 @@ public class MedicalReimburseController {
     @RequestMapping(value = "/statistics",method = RequestMethod.GET)
     public DataInfo<Map> statistics(Long areaId, String year) throws Exception{
 
-        operationLogService.logger(
-                null,String.format("专题分析，地区：%s",areaService.find(areaId).getName()));
         Map<String,Object> result = new HashMap<>();
         result.put("hospitalCount",
                 medicalReimburseService.monthStatistics(year,1,areaId));
@@ -135,7 +136,7 @@ public class MedicalReimburseController {
             @ApiImplicitParam(name = "month", paramType = "query", dataType = "Integer",value = "月份")
     })
     @GetMapping("/get_disease_rank_excel")
-    public String exportDiseaseTop20Page(String year,String month, Long areaId)throws Exception{
+    public DataInfo<byte[]> exportDiseaseTop20Page(String year, String month, Long areaId, HttpServletResponse response)throws Exception{
         AreaDO areaDO = this.areaService.find(areaId);
         HSSFWorkbook workbook = new HSSFWorkbook();
         /**
@@ -257,8 +258,8 @@ public class MedicalReimburseController {
         String[] reiAttrs = new String[]{"rank","name","idCard","reimburseTime","reimburseAmount","hospitalizedTime","hospitalizedDuration","clinicTime","diseaseName"};
         ExcelExportEntity<ReimburseDetailVO> reimRankList = new ExcelExportEntity<>("报销排名",reiTitles,result, reiAttrs);
         workbook = ExcelUtils.setSheet2Workbook(workbook,reimRankList);
-        String ret = ExcelUtils.createExcelByWorkBook(areaDO.getName()+year+"年统计数据",workbook);
-        return ret;
+        byte[] bytes = ExcelUtils.createExcelByWorkBookByBytes(areaDO.getName()+year+"年统计数据",workbook);
+        return DataInfo.success(bytes);
     }
     @ApiOperation(value = "报销排名导出")
     @ApiImplicitParams({

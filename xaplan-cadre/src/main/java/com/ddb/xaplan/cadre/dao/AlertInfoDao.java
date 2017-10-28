@@ -17,9 +17,9 @@ public interface AlertInfoDao extends BaseDao<AlertInfoDO>{
     List<String> getAlertCountByArea();
 
     @Query(value = "select content as content,count(*) as count from alert_info " +
-            "where alert_type = ?1 group by content",nativeQuery = true)
+            "where alert_type = ?1 group by content order by count(*) limit 3",nativeQuery = true)
     List<Object[]> getAlertCountByContent(Integer alertType);
 
-    @Query(value = "select area_ids from alert_info where area_ids  is not null and area_ids !='' and alert_type =?1",nativeQuery = true)
+    @Query(value = "select area_ids from alert_info where area_ids  is not null and area_ids !='' and alert_type =?1 ",nativeQuery = true)
     List<String> getAlertCountByArea(Integer alertType);
 }

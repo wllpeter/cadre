@@ -1,4 +1,5 @@
 package com.ddb.xaplan.cadre.common.tool;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.formula.functions.T;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
@@ -174,4 +177,18 @@ public class  ExcelUtils {
         return fileName+".xls";
     }
 
+    public static byte[] createExcelByWorkBookByBytes(String fileName, Workbook workbook) throws Exception{
+        //response.reset();
+        ByteOutputStream os = new ByteOutputStream();
+        workbook.write(os);
+        byte[] bytes = os.getBytes();
+//        response.reset();
+//        response.setContentType("application/vnd.ms-excel;charset=utf-8");
+//        response.setHeader("Content-Disposition",
+//                "attachment;filename=" + new String((fileName + ".xls").getBytes("GBK"), "iso-8859-1"));
+//        response.getOutputStream().write(bytes);
+//        response.getOutputStream().flush();
+//        response.getOutputStream().close();
+        return bytes;
+    }
 }
