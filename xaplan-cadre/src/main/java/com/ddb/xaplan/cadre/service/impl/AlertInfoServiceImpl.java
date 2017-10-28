@@ -49,7 +49,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
     }
 
     @Override
-    public Page<AlertInfoDO> search(String keyword, AreaDO areaDO,
+    public Page<AlertInfoDO> search(Integer minimum,String keyword, AreaDO areaDO,
                                     AlertInfoDO.AlertType alertType, Pageable pageable) {
 
         return alertInfoDao.findAll(new Specification<AlertInfoDO>() {
@@ -59,8 +59,15 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                 Predicate predicate = criteriaBuilder.conjunction();
                 if (StringUtils.isNotEmpty(keyword)) {
                     predicate.getExpressions().add(
-                            criteriaBuilder.like(root.get("organization"), "%" +keyword+"%")
+                            criteriaBuilder.or(
+                                    criteriaBuilder.like(root.get("organization"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("content"), "%" +keyword+"%")
+                            )
                     );
+                }
+                if(minimum!=null){
+                    predicate.getExpressions().add(
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("amount"),minimum));
                 }
                 if(areaDO!=null){
                     predicate.getExpressions().add(
@@ -90,6 +97,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             describe.put("comparedValue","公安局:"+comparedValue);
 
             AlertInfoDO alertInfoDO = new AlertInfoDO();
+            alertInfoDO.setOfficerBasicInfo(source);
             alertInfoDO.setAlertType(AlertInfoDO.AlertType.BASIC);
             alertInfoDO.setArea(source.getArea());
             alertInfoDO.setIdCard(source.getIdCard());
@@ -97,6 +105,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             alertInfoDO.setOrganization(source.getOrganization());
             alertInfoDO.setPhoto(source.getPhoto());
             alertInfoDO.setTitle(source.getTitle());
+            alertInfoDO.setAreaIds(source.getAreaIds());
             alertInfoDO.setContent(dict.get(attr));
             alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
 

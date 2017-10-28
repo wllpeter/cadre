@@ -1,5 +1,6 @@
 package com.ddb.xaplan.cadre.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -12,6 +13,8 @@ import java.util.Date;
 @Table(name = "alert_info")
 @Where(clause = "is_deleted=0")
 public class AlertInfoDO extends BaseEntity {
+
+    private OfficerBasicInfoDO officerBasicInfo;
 
     public enum AlertType {
 
@@ -45,6 +48,17 @@ public class AlertInfoDO extends BaseEntity {
     private AreaDO area;
 
     private String areaIds;
+
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn
+    public OfficerBasicInfoDO getOfficerBasicInfo() {
+        return officerBasicInfo;
+    }
+
+    public void setOfficerBasicInfo(OfficerBasicInfoDO officerBasicInfo) {
+        this.officerBasicInfo = officerBasicInfo;
+    }
 
     @Column
     public String getPhoto() {
