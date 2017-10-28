@@ -88,7 +88,7 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
             super.save(operationLogDO);
             HttpUtils.get(String.format(
                     chainSaveUrl,
-                    String.valueOf(operationLogDO.getCreateDate()),
+                    String.valueOf(operationLogDO.getCreateDate().getTime()),
                     JSON.toJSONString(operationLogDO)));
         }catch (Exception e){
             e.printStackTrace();
