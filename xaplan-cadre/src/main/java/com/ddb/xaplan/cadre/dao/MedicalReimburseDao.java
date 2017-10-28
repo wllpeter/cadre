@@ -13,9 +13,9 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
 
     List<MedicalReimburseDO> findByAreaAndAddressLike(AreaDO area,String address);
 
-    @Query(value = "SELECT MONTH(occur_date) monthValue,count(*) countValue from medical_reimburse \n" +
-            "where occur_date is not null and YEAR(occur_date) = ?1 and hospitalized = ?2 and area_ids like CONCAT('%,',?3,',%')" +
-            "GROUP BY MONTH(occur_date)\n",nativeQuery = true)
+    @Query(value = "SELECT MONTH(start_date) monthValue,count(*) countValue from medical_reimburse \n" +
+            "where occur_date is not null and YEAR(start_date) = ?1 and hospitalized = ?2 and area_ids like CONCAT('%,',?3,',%')" +
+            "GROUP BY MONTH(start_date)\n",nativeQuery = true)
     List<Object[]> monthStatistics(String year,int hospitalized, Long areaId);
 
     @Query(value = "SELECT MONTH(occur_date) monthValue,sum(reimbursement_amount) sumValue from medical_reimburse \n" +
