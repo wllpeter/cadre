@@ -1,20 +1,15 @@
 package com.ddb.xaplan.cadre.common.tool;
+
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.formula.functions.T;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.assertj.core.data.MapEntry;
-import org.omg.CORBA.ShortHolder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
