@@ -18,6 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -88,8 +89,8 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
             super.save(operationLogDO);
             HttpUtils.get(String.format(
                     chainSaveUrl,
-                    String.valueOf(operationLogDO.getCreateDate().getTime()),
-                    JSON.toJSONString(operationLogDO)));
+                    URLEncoder.encode(String.valueOf(operationLogDO.getCreateDate().getTime()),"UTF-8"),
+                    URLEncoder.encode(JSON.toJSONString(operationLogDO),"UTF-8")));
         }catch (Exception e){
             e.printStackTrace();
         }
