@@ -232,8 +232,6 @@ public class AlertInfoController {
                     continue;
                 }
                 amount += compareEnterpriseInfoService.countByOwnerId(idCard);
-                comparedValue.addAll(
-                        compareEnterpriseInfoService.search("ownerId", idCard));
             }
 
             if (amount <= 0) {
@@ -273,13 +271,19 @@ public class AlertInfoController {
                     alertInfoDO.setDescription(JSON.toJSONString(comparePovertyInfoDO, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
+                Set<String> sets = new HashSet<>();
                 for (CompareSubsidyInfoDO compareSubsidyInfoDO :
                         compareSubsidyInfoService.search("idCard", idCard)) {
 
-                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
-                    alertInfoDO.setContent("低保预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO, SerializerFeature.WriteNullStringAsEmpty));
-                    alertInfoService.save(alertInfoDO);
+                    if(!sets.contains(compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getAmount())){
+                        AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
+                        alertInfoDO.setContent("低保预警");
+                        alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO, SerializerFeature.WriteNullStringAsEmpty));
+                        alertInfoService.save(alertInfoDO);
+
+                        sets.add(compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getAmount());
+                    }
+
                 }
                 for (CompareHouseSubsidyDO compareHouseSubsidy :
                         compareHouseSubsidyService.search("idCard", idCard)) {

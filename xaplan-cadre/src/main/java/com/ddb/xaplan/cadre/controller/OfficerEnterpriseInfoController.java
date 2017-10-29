@@ -1,7 +1,8 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
-import com.ddb.xaplan.cadre.entity.OfficerEnterpriseInfoDO;
+import com.ddb.xaplan.cadre.entity.CompareEnterpriseInfoDO;
+import com.ddb.xaplan.cadre.service.CompareEnterpriseInfoService;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
 import com.ddb.xaplan.cadre.service.OfficerEnterpriseInfoService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,14 +29,17 @@ public class OfficerEnterpriseInfoController {
     @Resource(name="officerBasicInfoServiceImpl")
     private OfficerBasicInfoService officerBasicInfoService;
 
+    @Resource(name = "compareEnterpriseInfoServiceImpl")
+    private CompareEnterpriseInfoService compareEnterpriseInfoService;
+
     @ApiOperation(value = "search enterprise info controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String") })
     @RequestMapping(value = "/{officerId}/enterpriseInfo",method = RequestMethod.GET)
-    public DataInfo< List<OfficerEnterpriseInfoDO>> search(@PathVariable Long officerId){
+    public DataInfo< List<CompareEnterpriseInfoDO>> search(@PathVariable Long officerId){
 
-        List<OfficerEnterpriseInfoDO> items = officerEnterpriseInfoService.search(
-                "officerBasicInfo",officerBasicInfoService.find(officerId));
+        List<CompareEnterpriseInfoDO> items = compareEnterpriseInfoService.search(
+                "ownerId",officerBasicInfoService.find(officerId).getIdCard());
         if(items.size()==0){
             return DataInfo.error("未找到关联数据");
         }
