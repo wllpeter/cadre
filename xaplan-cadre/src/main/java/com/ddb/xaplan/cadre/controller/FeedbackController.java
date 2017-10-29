@@ -64,6 +64,7 @@ public class FeedbackController {
     public DataInfo<FeedbackDO> add(String content,String images){
         FeedbackDO feedbackDO =new FeedbackDO();
         feedbackDO.setContent(content);
+        feedbackDO.setImages(images);
         return DataInfo.success(feedbackService.save(feedbackDO));
     }
 

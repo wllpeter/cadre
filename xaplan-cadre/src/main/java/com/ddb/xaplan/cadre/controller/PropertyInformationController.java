@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/PropertyInformation")
 public class PropertyInformationController {
+
+    @Resource(name = "alertInfoServiceImpl")
+    private AlertInfoService alertInfoService;
 
     //干部信息
     @Resource(name="officerBasicInfoServiceImpl")
@@ -69,18 +73,20 @@ public class PropertyInformationController {
             @ApiImplicitParam(name = "officerId",paramType = "PathVariable", dataType = "String")})
     @GetMapping("/{officerId}/searchInfo")
     public DataInfo<Map<String,List>> search(@PathVariable Long officerId){
+
+        OfficerBasicInfoDO officerBasicInfoDO = officerBasicInfoService.find(officerId);
         Map<String,List> map=new HashMap<String,List>();
         //车辆信息
         List<OfficerVehicleInfoDO> vehicleItems = officerVehicleInfoService.search(
-                "officerBasicInfo",officerBasicInfoService.find(officerId));
+                "officerBasicInfo",officerBasicInfoDO);
         map.put("vehicleItems",vehicleItems);
         //房产信息
         List<OfficerEstateInfoDO> estateItems=this.officerEstateInfoService.search(
-                "officerBasicInfo",this.officerBasicInfoService.find(officerId));
+                "officerBasicInfo",officerBasicInfoDO);
         map.put("estateItems",estateItems);
         //收入信息
         List<OfficerIncomeInfoDO> IncomeItems=this.officerIncomeInfoService.search(
-                "officerBasicInfo",this.officerBasicInfoService.find(officerId));
+                "officerBasicInfo",officerBasicInfoDO);
         map.put("incomeItems",IncomeItems);
         //保险信息
         List<OfficerInsuranceInfoDO> insuranceItems=officerInsuranceInfoService.search("officerBasicInfoDO",
@@ -92,21 +98,35 @@ public class PropertyInformationController {
         map.put("abroadDepositItems",abroadDepositItems);
         //国外投资信息
         List<OfficerAbroadInvestmentInfoDO> abroadInvestmentItems=this.officerAbroadInvestmentInfoService.search(
-                "officerBasicInfo",this.officerBasicInfoService.find(officerId));
+                "officerBasicInfo",officerBasicInfoDO);
         map.put("abroadInvestmentItems",abroadInvestmentItems);
         //股票信息
         List<OfficerStockInfoDO> stockItems=this.officerStockInfoService.search(
-                "officerBasicInfo",this.officerBasicInfoService.find(officerId)
+                "officerBasicInfo",officerBasicInfoDO
         );
         map.put("stockItems",stockItems);
         //基金信息
         List<OfficerFundInfoDO> fundItems=this.officerFundInfoService.search(
-                "officerBasicInfo",this.officerBasicInfoService.find(officerId)
+                "officerBasicInfo",officerBasicInfoDO
         );
         map.put("fundItems",fundItems);
-        if(map.size()==0){
-            return DataInfo.error("没有找到");
+
+        List<AlertInfoDO> vehicleAlerts = new ArrayList<>();
+        List<AlertInfoDO> estateAlerts = new ArrayList<>();
+
+        for(AlertInfoDO alertInfoDO:
+                alertInfoService.search("officerBasicInfo",officerBasicInfoDO)){
+            if("房产数量预警".equals(alertInfoDO.getContent())){
+                estateAlerts.add(alertInfoDO);
+                continue;
+            }
+            if("车辆数量预警".equals(alertInfoDO.getContent())){
+                vehicleAlerts.add(alertInfoDO);
+            }
         }
+        map.put("vehicleAlerts",vehicleAlerts);
+        map.put("estateAlerts",estateAlerts);
+
         return DataInfo.success(map);
     }
 }
