@@ -243,10 +243,12 @@ public class MedicalReimburseController {
          * 报销排名
          */
         List<ReimburseDetailVO> result = this.medicalReimburseService.getReimburseRank(areaId, Integer.parseInt(year), 0, REIMBURSE_RANK_LIMIT_RANGE);
-        int index = 1;
-        for(ReimburseDetailVO temp : result){
-            temp.setRank(index);
-            index++;
+        if(null != result && result.size() != 0) {
+            int index = 1;
+            for (ReimburseDetailVO temp : result) {
+                temp.setRank(index);
+                index++;
+            }
         }
         List<String> reiTitles = Arrays.asList("排名","姓名","身份证号","报销次数","报销金额","住院次数","住院天数","门诊次数","病因");
         String[] reiAttrs = new String[]{"rank","name","idCard","reimburseTime","reimburseAmount","hospitalizedTime","hospitalizedDuration","clinicTime","diseaseName"};
