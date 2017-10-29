@@ -18,6 +18,11 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "GROUP BY MONTH(start_date)\n",nativeQuery = true)
     List<Object[]> monthStatistics(String year,int hospitalized, Long areaId);
 
+    @Query(value = "SELECT MONTH(occur_date) monthValue,count(*) countValue from medical_reimburse \n" +
+            "where occur_date is not null and YEAR(occur_date) = ?1 and area_ids like CONCAT('%,',?2,',%')" +
+            "GROUP BY MONTH(occur_date)\n",nativeQuery = true)
+    List<Object[]> monthCountStatistics(String year, Long areaId);
+
     @Query(value = "SELECT MONTH(occur_date) monthValue,sum(reimbursement_amount) sumValue from medical_reimburse \n" +
             "where occur_date is not null and YEAR(occur_date) = ?1 and area_ids like CONCAT('%,',?2,',%')" +
             "GROUP BY MONTH(occur_date)\n",nativeQuery = true)

@@ -31,6 +31,17 @@ public class MedicalReimburseServiceImpl extends BaseServiceImpl<MedicalReimburs
     }
 
     @Override
+    public int[] monthCountStatistics(String year, Long areaId) {
+
+        int[] result = new int[12];
+        for(Object[] item:medicalReimburseDao.monthCountStatistics(year,areaId)){
+            int index = Integer.parseInt(item[0].toString())-1;
+            result[index]=Integer.parseInt(item[1].toString());
+        }
+        return result;
+    }
+
+    @Override
     public int[] monthStatistics(String year, int hospitalized, Long areaId) {
 
         int[] result = new int[12];

@@ -48,8 +48,8 @@ public class MedicalReimburseController {
         Map<String,Object> result = new HashMap<>();
         result.put("hospitalCount",
                 medicalReimburseService.monthStatistics(year,1,areaId));
-        result.put("nonHospitalCount",
-                medicalReimburseService.monthStatistics(year,0,areaId));
+        result.put("reimburseCount",
+                medicalReimburseService.monthCountStatistics(year,areaId));
         result.put("monthAmountStatistics",
                 medicalReimburseService.monthAmountStatistics(year,areaId));
 
