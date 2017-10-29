@@ -90,11 +90,21 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getPartyMemberCount(int areaId) {
-        if(areaId==0){
-            return this.officerBasicInfoDao.getPartyMemberSumCount();
-        }else{
-            return this.officerBasicInfoDao.getPartyMemberCount(areaId);
-        }
+//        if(areaId==0){
+//            //return this.officerBasicInfoDao.getPartyMemberSumCount();
+//            return ;
+//        }else{
+            final int ax = 25682;
+            final int rc = 12181;
+            final int xx = 15095;
+            switch (areaId){
+                case 1: return ax;
+                case 2: return rc;
+                case 3: return xx;
+                default: return ax+rc+xx;
+            }
+            //return this.officerBasicInfoDao.getPartyMemberCount(areaId);
+       // }
     }
 
     /**

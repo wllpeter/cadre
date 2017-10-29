@@ -80,9 +80,9 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "count(*) as reimbursement_count,\n" +
             "sum(reimbursement_amount) as reimbursement_amount,\n" +
             "sum(hospitalized_duration) as hospitalized_duration,\n" +
-            "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
+            "count(hospitalized) - sum(hospitalized) as clinicTime,\n" +
             "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name, \n" +
-            "count(case when hospitalized =0 then null when hospitalized = 1 then 1 end) as hospitalizedTime\n" +
+            "sum(hospitalized) as hospitalizedTime\n" +
             "from medical_reimburse m \n" +
             "where YEAR(occur_date) = ?2 \n" +
             "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +
