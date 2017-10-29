@@ -22,6 +22,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -177,7 +178,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
         if(null == alertsRet || alertsRet.size() == 0){
             return null;
         }
-        HashMap<String, Object> ret = new HashMap<>();
+        HashMap<String, Object> ret = new LinkedHashMap<>();
         for (Object[] object: alertsRet) {
             ret.put(String.valueOf(object[0]),Integer.valueOf(object[1].toString()));
             continue;
