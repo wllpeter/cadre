@@ -127,6 +127,9 @@ public class  ExcelUtils {
      */
     public static <T> HSSFWorkbook setSheet2Workbook(HSSFWorkbook workbook, ExcelExportEntity<T> excelExportEntity )throws Exception{
         Sheet sheet = workbook.createSheet(excelExportEntity.getSheetName());
+        if(excelExportEntity.getDatas() == null || excelExportEntity.getDatas().size() == 0){
+            return workbook;
+        }
         Row titleRow = sheet.createRow(0);
         fillRowWithCells(titleRow, excelExportEntity.getTitles());
         List<List<String>> newData = new LinkedList<>();
