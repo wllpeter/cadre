@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -175,18 +176,16 @@ public class  ExcelUtils {
         return fileName+".xls";
     }
 
-    public static byte[] createExcelByWorkBookByBytes(String fileName, Workbook workbook) throws Exception{
-        //response.reset();
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        workbook.write(os);
-        byte[] bytes = os.toByteArray();
-//        response.reset();
-//        response.setContentType("application/vnd.ms-excel;charset=utf-8");
-//        response.setHeader("Content-Disposition",
-//                "attachment;filename=" + new String((fileName + ".xls").getBytes("GBK"), "iso-8859-1"));
-//        response.getOutputStream().write(bytes);
-//        response.getOutputStream().flush();
-//        response.getOutputStream().close();
-        return bytes;
+    public static void createExcelByWorkBookByBytes(String fileName, Workbook workbook, HttpServletResponse response) throws Exception{
+          response.reset();
+        //ByteArrayOutputStream os = new ByteArrayOutputStream();
+        //workbook.write(os);
+          response.reset();
+          response.setContentType("application/vnd.ms-excel;charset=utf-8");
+          response.setHeader("Content-Disposition",
+                 "attachment;filename=" + new String((fileName + ".xls").getBytes("GBK"), "iso-8859-1"));
+          workbook.write(response.getOutputStream());
+          response.getOutputStream().flush();
+          response.getOutputStream().close();
     }
 }
