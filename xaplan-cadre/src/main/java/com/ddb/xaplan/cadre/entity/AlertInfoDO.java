@@ -190,7 +190,7 @@ public class AlertInfoDO extends BaseEntity {
     @Transient
     public String getOfficerId() {
 
-        return getOfficerBasicInfo()==null?String.valueOf(getOfficerBasicInfo().getId()):null;
+        return getOfficerBasicInfo()!=null?String.valueOf(getOfficerBasicInfo().getId()):null;
     }
 
 }

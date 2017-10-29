@@ -93,8 +93,18 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
         if ((sourceValue==null||comparedValue==null)
                 ||!sourceValue.equals(comparedValue)){
             Map<String,Object> describe = new HashMap<>();
-            describe.put("sourceValue","组织部:"+sourceValue);
-            describe.put("comparedValue","公安局:"+comparedValue);
+
+            if(sourceValue==null||"".equals(sourceValue)){
+                describe.put("sourceValue","组织部: - ");
+            }else{
+                describe.put("sourceValue","组织部:"+sourceValue);
+            }
+
+            if(comparedValue==null||"".equals(comparedValue)){
+                describe.put("comparedValue","公安局: - ");
+            }else{
+                describe.put("comparedValue","公安局:"+comparedValue);
+            }
 
             AlertInfoDO alertInfoDO = new AlertInfoDO();
             alertInfoDO.setOfficerBasicInfo(source);

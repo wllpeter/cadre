@@ -113,11 +113,11 @@ public class AlertInfoController {
 
     @RequestMapping(value = "/generate", method = RequestMethod.GET)
     public DataInfo<String> generate() {
-        enterpriseGenerateHelper();
+//        enterpriseGenerateHelper();
         basicGenerateHelper();
-        estateGenerateHelper();
-        vehicleGenerateHelper();
-        corruptionGenerateHelper();
+//        estateGenerateHelper();
+//        vehicleGenerateHelper();
+//        corruptionGenerateHelper();
         return DataInfo.success("In process");
     }
 
