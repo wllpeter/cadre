@@ -298,18 +298,27 @@ public class AlertInfoController {
                     alertInfoService.save(alertInfoDO);
                 }
 
-            }
-
-            for (String name : names) {
                 for (CompareScholarshipDO compareScholarship :
-                        compareScholarshipService.search("name", name)) {
+                        compareScholarshipService.search("idCard", idCard)) {
 
                     AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("助学金预警");
                     alertInfoDO.setDescription(JSON.toJSONString(compareScholarship, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
+
             }
+
+//            for (String name : names) {
+//                for (CompareScholarshipDO compareScholarship :
+//                        compareScholarshipService.search("name", name)) {
+//
+//                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
+//                    alertInfoDO.setContent("助学金预警");
+//                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship, SerializerFeature.WriteNullStringAsEmpty));
+//                    alertInfoService.save(alertInfoDO);
+//                }
+//            }
 
 
         }
