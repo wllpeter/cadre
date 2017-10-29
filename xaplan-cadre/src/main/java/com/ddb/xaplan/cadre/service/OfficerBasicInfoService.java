@@ -1,16 +1,22 @@
 package com.ddb.xaplan.cadre.service;
 
+import com.ddb.xaplan.cadre.entity.AlertInfoDO;
 import com.ddb.xaplan.cadre.entity.AreaDO;
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.enums.Gender;
 import com.ddb.xaplan.cadre.enums.TitleLevel;
+import com.ddb.xaplan.cadre.vo.ComparedBasicVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 /**
  * Created by 王凯斌 on 2017/10/17.
  */
 public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>{
+
+    ComparedBasicVO findVO(OfficerBasicInfoDO officerBasicInfoDO, List<AlertInfoDO> alertInfoDOList);
     /**
      * 获取各县党员数量
      */

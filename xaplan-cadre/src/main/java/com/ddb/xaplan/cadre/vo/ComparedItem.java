@@ -9,9 +9,7 @@ public class ComparedItem {
 
     Boolean isNormal;
 
-    String source;
-
-    String compared;
+    String describe;
 
     public Object getValue() {
         return value;
@@ -29,19 +27,26 @@ public class ComparedItem {
         isNormal = normal;
     }
 
-    public String getSource() {
-        return source;
+    public String getDescribe() {
+        return describe;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setDescribe(String describe) {
+        this.describe = describe;
     }
 
-    public String getCompared() {
-        return compared;
+    public static ComparedItem normal(Object value){
+        ComparedItem item = new ComparedItem();
+        item.setValue(value);
+        item.setNormal(true);
+        return item;
     }
 
-    public void setCompared(String compared) {
-        this.compared = compared;
+    public static ComparedItem abnormal(Object value,String describe){
+        ComparedItem item = new ComparedItem();
+        item.setValue(value);
+        item.setNormal(false);
+        item.setDescribe(describe);
+        return item;
     }
 }

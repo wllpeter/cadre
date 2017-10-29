@@ -5,6 +5,7 @@ import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.enums.Gender;
 import com.ddb.xaplan.cadre.enums.TitleLevel;
 import com.ddb.xaplan.cadre.service.*;
+import com.ddb.xaplan.cadre.vo.ComparedBasicVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,9 @@ public class OfficerBasicInfoController {
 
     @Resource(name="officerBasicInfoServiceImpl")
     private OfficerBasicInfoService officerBasicInfoService;
+
+    @Resource(name = "alertInfoServiceImpl")
+    private AlertInfoService alertInfoService;
 
     @Resource(name="areaServiceImpl")
     private AreaService areaService;
@@ -79,6 +83,21 @@ public class OfficerBasicInfoController {
         operationLogService.logger(
                 null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
         return DataInfo.success(officerBasicInfo);
+    }
+
+    @ApiOperation(value = "带预警信息的基础信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "officerId",paramType = "query", dataType = "String"),
+    })
+    @RequestMapping(value = "/{officerId}/alerts",method = RequestMethod.GET)
+    public DataInfo<ComparedBasicVO> alerts(@PathVariable Long officerId) {
+
+        OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
+        operationLogService.logger(
+                null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
+        return DataInfo.success(
+                officerBasicInfoService.findVO(
+                        officerBasicInfo,alertInfoService.search("officerBasicInfo",officerBasicInfo)));
     }
 
     /**

@@ -17,13 +17,13 @@ public class OfficerPrizeInfoDO extends BaseEntity{
 
     private OfficerBasicInfoDO officerBasicInfo;
 
-    private Date prizeDate;
+    private Date prizeDate;//获奖时间
 
-    private String name;
+    private String name;//获奖名称
 
-    private String organization;
+    private String organization;//单位
 
-    private String reason;
+    private String reason;//原因
 
     @JsonBackReference
     @OneToOne
