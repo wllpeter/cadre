@@ -13,11 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -92,12 +88,14 @@ public class AlertInfoController {
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<AlertInfoDO>> search(
+            @CookieValue(name = "userInfo",required=false) String userInfo,
             String keyword, Long areaId, AlertInfoDO.AlertType alertType, Integer minimum,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         operationLogService.logger(
                 null, "查看预警信息");
-        return DataInfo.success(alertInfoService.search(minimum, keyword, areaService.find(areaId), alertType, pageable));
+        return DataInfo.success(alertInfoService.search(minimum, keyword, areaService.find(areaId), alertType, pageable,
+                JSON.parseObject(userInfo).getString("distinctCode")));
     }
 
     @ApiOperation(value = "全息档案预警")

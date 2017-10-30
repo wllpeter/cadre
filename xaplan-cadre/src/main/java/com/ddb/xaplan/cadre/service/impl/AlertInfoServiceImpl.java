@@ -51,7 +51,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
 
     @Override
     public Page<AlertInfoDO> search(Integer minimum,String keyword, AreaDO areaDO,
-                                    AlertInfoDO.AlertType alertType, Pageable pageable) {
+                                    AlertInfoDO.AlertType alertType, Pageable pageable,String userAreaCode) {
 
         return alertInfoDao.findAll(new Specification<AlertInfoDO>() {
 
@@ -71,9 +71,20 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                     predicate.getExpressions().add(
                             criteriaBuilder.greaterThanOrEqualTo(root.get("amount"),minimum));
                 }
+                if(userAreaCode!=null){
+                    if(!userAreaCode.equals("130600")){
+                        Map<String,Long> map = new HashMap<>();
+                        map.put("130629",2L);
+                        map.put("130632",1L);
+                        map.put("130638",3L);
+                        predicate.getExpressions().add(
+                                criteriaBuilder.like(root.get("areaIds"), "%," +map.get(userAreaCode)+",%"));
+                    }
+
+                }
                 if(areaDO!=null){
                     predicate.getExpressions().add(
-                            criteriaBuilder.equal(root.get("area"), areaDO));
+                            criteriaBuilder.like(root.get("areaIds"), "%," +areaDO.getId()+",%"));
                 }
                 if(alertType!=null){
                     predicate.getExpressions().add(

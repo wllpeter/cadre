@@ -15,7 +15,7 @@ import java.util.HashMap;
 public interface AlertInfoService extends BaseService<AlertInfoDO>{
 
     Page<AlertInfoDO> search(Integer minimum,String keyword,AreaDO areaDO,
-                             AlertInfoDO.AlertType alertType, Pageable pageable);
+                             AlertInfoDO.AlertType alertType, Pageable pageable,String userAreaCode);
 
     AlertInfoDO compareBasicInfo(OfficerBasicInfoDO source, CompareBasicInfoDO compared, String attr);
 

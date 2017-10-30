@@ -48,7 +48,7 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
         Map<String,AlertInfoDO> map = alertListToMap(alertInfoDOList);
 
         for(Field attr:ComparedBasicVO.class.getDeclaredFields()){
-            if("id".equals(attr)){
+            if("id".equals(attr.getName())){
                 continue;
             }
             try{
@@ -99,7 +99,7 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     @Override
     public Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable) {
+            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,String userAreaCode) {
 
         return officerBasicInfoDao.findAll(new Specification<OfficerBasicInfoDO>() {
 
@@ -114,6 +114,17 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
                                     criteriaBuilder.like(root.get("idCard"), "%" +keyword+"%")
                                     )
                             );
+                }
+                if(userAreaCode!=null){
+                    if(!userAreaCode.equals("130600")){
+                        Map<String,Long> map = new HashMap<>();
+                        map.put("130629",2L);
+                        map.put("130632",1L);
+                        map.put("130638",3L);
+                        predicate.getExpressions().add(
+                                criteriaBuilder.like(root.get("areaIds"), "%," +map.get(userAreaCode)+",%"));
+                    }
+
                 }
                 if(area!=null){
                     predicate.getExpressions().add(

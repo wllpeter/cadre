@@ -94,7 +94,7 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
 
     Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable);
+            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,String userAreaCode);
 
 
 
