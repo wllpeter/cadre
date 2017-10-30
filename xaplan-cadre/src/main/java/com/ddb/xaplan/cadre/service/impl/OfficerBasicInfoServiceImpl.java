@@ -48,6 +48,9 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
         Map<String,AlertInfoDO> map = alertListToMap(alertInfoDOList);
 
         for(Field attr:ComparedBasicVO.class.getDeclaredFields()){
+            if("id".equals(attr)){
+                continue;
+            }
             try{
                 Field valueField =OfficerBasicInfoDO.class.getDeclaredField(attr.getName());
                 attr.setAccessible(true);
