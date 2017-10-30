@@ -62,6 +62,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                     predicate.getExpressions().add(
                             criteriaBuilder.or(
                                     criteriaBuilder.like(root.get("organization"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("name"), "%" +keyword+"%"),
                                     criteriaBuilder.like(root.get("content"), "%" +keyword+"%")
                             )
                     );

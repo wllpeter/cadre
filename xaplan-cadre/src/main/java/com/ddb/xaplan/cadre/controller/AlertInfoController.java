@@ -113,11 +113,11 @@ public class AlertInfoController {
 
     @RequestMapping(value = "/generate", method = RequestMethod.GET)
     public DataInfo<String> generate() {
-//        enterpriseGenerateHelper();
+        enterpriseGenerateHelper();
         basicGenerateHelper();
-//        estateGenerateHelper();
-//        vehicleGenerateHelper();
-//        corruptionGenerateHelper();
+        estateGenerateHelper();
+        vehicleGenerateHelper();
+        corruptionGenerateHelper();
         return DataInfo.success("In process");
     }
 
@@ -226,12 +226,23 @@ public class AlertInfoController {
 
             List<CompareEnterpriseInfoDO> comparedValue = new ArrayList<>();
             Integer amount = 0;
+            Float count = 0f;
 
             for (String idCard : idCards) {
                 if (StringUtils.isEmpty(idCard)) {
                     continue;
                 }
-                amount += compareEnterpriseInfoService.countByOwnerId(idCard);
+                List<CompareEnterpriseInfoDO>  es =compareEnterpriseInfoService.search("ownerId", idCard);
+                comparedValue.addAll(es);
+                amount += es.size();
+                for(CompareEnterpriseInfoDO compareEnterpriseInfo:es){
+                    if(StringUtils.isEmpty(compareEnterpriseInfo.getCapital())){
+                        continue;
+                    }
+                    count+=Float.valueOf(compareEnterpriseInfo.getCapital());
+                }
+
+
             }
 
             if (amount <= 0) {
@@ -245,6 +256,7 @@ public class AlertInfoController {
 
             AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("企业数量预警");
+            alertInfoDO.setPhoto(count.toString());
             alertInfoDO.setAmount(comparedValue.size());
             alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);

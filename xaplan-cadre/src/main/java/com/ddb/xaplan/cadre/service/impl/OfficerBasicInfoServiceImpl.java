@@ -114,7 +114,7 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
                 }
                 if(area!=null){
                     predicate.getExpressions().add(
-                            criteriaBuilder.like(root.get("areaIds"), "%" +area.getId()+"%"));
+                            criteriaBuilder.like(root.get("areaIds"), "%," +area.getId()+",%"));
                 }
                 if(StringUtils.isNotEmpty(org)){
                     predicate.getExpressions().add(

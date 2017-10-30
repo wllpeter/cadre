@@ -77,8 +77,9 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "officerId",paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/{officerId}",method = RequestMethod.GET)
-    public DataInfo<OfficerBasicInfoDO> search(@PathVariable Long officerId) {
-
+    public DataInfo<OfficerBasicInfoDO> search(@PathVariable Long officerId,
+                                               @CookieValue("userInfo") String userInfo) {
+        System.out.println("=================="+userInfo);
         OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
         operationLogService.logger(
                 null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
