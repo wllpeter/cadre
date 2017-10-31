@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URLDecoder;
 
 /**
  * Created by 王凯斌 on 2017/4/26.
@@ -28,7 +29,13 @@ public class HttpUtils {
         }
         for(Cookie c:request.getCookies()){
             if(name.equals(c.getName())){
-                return c.getValue();
+                try{
+                    return URLDecoder.decode(c.getValue(), "UTF-8");
+                }catch (Exception e){
+                    e.printStackTrace();
+                    break;
+                }
+
             }
         }
         return null;
