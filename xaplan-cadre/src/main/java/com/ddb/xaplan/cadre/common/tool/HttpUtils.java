@@ -30,6 +30,12 @@ public class HttpUtils {
         for(Cookie c:request.getCookies()){
             if(name.equals(c.getName())){
                 try{
+                    System.out.println("iso-8859-1:======================");
+                    System.out.println(URLDecoder.decode(c.getValue(), "iso-8859-1"));
+                    System.out.println("UTF-8:======================");
+                    System.out.println(URLDecoder.decode(c.getValue(), "UTF-8"));
+                    System.out.println("GBK:======================");
+                    System.out.println(URLDecoder.decode(c.getValue(), "GBK"));
                     return URLDecoder.decode(c.getValue(), "UTF-8");
                 }catch (Exception e){
                     e.printStackTrace();
