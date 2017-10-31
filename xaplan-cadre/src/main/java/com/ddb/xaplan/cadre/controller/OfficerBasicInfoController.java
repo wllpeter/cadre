@@ -1,6 +1,7 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.enums.Gender;
@@ -68,11 +69,21 @@ public class OfficerBasicInfoController {
             Gender gender, Integer minimumAge, Integer maxAge,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        JSONObject user = null;
+        try{
+            user = JSON.parseObject(userInfo);
+        }catch (Exception e){
+            user=null;
+        }
+        if(userInfo==null||user==null){
+            return DataInfo.error("登陆状态有误");
+        }
+
         return DataInfo.success(
                 officerBasicInfoService.search(
                         keyword,areaService.find(areaId),org,titleLevel,
                         gender,minimumAge,maxAge,pageable,
-                        JSON.parseObject(userInfo).getString("distinctCode")));
+                        user.getString("distinctCode")));
     }
 
     @ApiOperation(value = "get basic info controller")
@@ -80,10 +91,12 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "officerId",paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/{officerId}",method = RequestMethod.GET)
-    public DataInfo<OfficerBasicInfoDO> search(@PathVariable Long officerId) {
+    public DataInfo<OfficerBasicInfoDO> search(
+            @CookieValue(name = "userInfo",required=false) String userInfo,
+            @PathVariable Long officerId) {
         OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
         operationLogService.logger(
-                null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
+                userInfo,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
         return DataInfo.success(officerBasicInfo);
     }
 
@@ -92,11 +105,13 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "officerId",paramType = "query", dataType = "String"),
     })
     @RequestMapping(value = "/{officerId}/alerts",method = RequestMethod.GET)
-    public DataInfo<ComparedBasicVO> alerts(@PathVariable Long officerId) {
+    public DataInfo<ComparedBasicVO> alerts(
+            @CookieValue(name = "userInfo",required=false) String userInfo,
+            @PathVariable Long officerId) {
 
         OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
         operationLogService.logger(
-                null,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
+                userInfo,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
         return DataInfo.success(
                 officerBasicInfoService.findVO(
                         officerBasicInfo,alertInfoService.search("officerBasicInfo",officerBasicInfo)));

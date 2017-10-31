@@ -1,6 +1,8 @@
 package com.ddb.xaplan.cadre.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.dao.OperationLogDao;
 import com.ddb.xaplan.cadre.entity.OperationLogDO;
@@ -100,8 +102,25 @@ public class OperationLogServiceImpl extends BaseServiceImpl<OperationLogDO> imp
     @Async
     @Override
     public void logger(String userInfo, String content) {
+
+        JSONObject user = null;
+        try{
+            user = JSON.parseObject(userInfo);
+        }catch (Exception e){
+            user=null;
+        }
+
+
         OperationLogDO operationLogDO = new OperationLogDO();
         operationLogDO.setContent(content);
+        if(user!=null){
+            operationLogDO.setUserName(user.getString("username"));
+            operationLogDO.setUuid(user.getString("userid"));
+            operationLogDO.setRole(user.getString("position"));
+            operationLogDO.setOrganization(user.getString("department"));
+            operationLogDO.setArea(user.getString("distinctName"));
+        }
+
         save(operationLogDO);
     }
 }

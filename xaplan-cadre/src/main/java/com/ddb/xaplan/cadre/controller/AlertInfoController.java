@@ -1,6 +1,7 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.*;
@@ -92,10 +93,20 @@ public class AlertInfoController {
             String keyword, Long areaId, AlertInfoDO.AlertType alertType, Integer minimum,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        JSONObject user = null;
+        try{
+            user = JSON.parseObject(userInfo);
+        }catch (Exception e){
+            user=null;
+        }
+
+        if(userInfo==null||user==null){
+            return DataInfo.error("登陆状态有误");
+        }
         operationLogService.logger(
-                null, "查看预警信息");
+                userInfo, "查看预警信息");
         return DataInfo.success(alertInfoService.search(minimum, keyword, areaService.find(areaId), alertType, pageable,
-                JSON.parseObject(userInfo).getString("distinctCode")));
+                user.getString("distinctCode")));
     }
 
     @ApiOperation(value = "全息档案预警")

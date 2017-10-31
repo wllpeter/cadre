@@ -1,5 +1,7 @@
 package com.ddb.xaplan.cadre.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.FeedbackDO;
 import com.ddb.xaplan.cadre.service.FeedbackService;
@@ -12,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -61,10 +60,29 @@ public class FeedbackController {
             @ApiImplicitParam(name = "images",paramType = "query", dataType = "String")
     })
     @RequestMapping(method = RequestMethod.POST)
-    public DataInfo<FeedbackDO> add(String content,String images){
+    public DataInfo<FeedbackDO> add(
+            @CookieValue(name = "userInfo",required=false) String userInfo,
+            String content,String images){
+
+        JSONObject user = null;
+        try{
+            user = JSON.parseObject(userInfo);
+        }catch (Exception e){
+            user=null;
+        }
+
+        if(userInfo==null||user==null){
+            return DataInfo.error("登陆状态有误");
+        }
+
         FeedbackDO feedbackDO =new FeedbackDO();
         feedbackDO.setContent(content);
         feedbackDO.setImages(images);
+        feedbackDO.setUserName(user.getString("username"));
+        feedbackDO.setUuid(user.getString("userid"));
+        feedbackDO.setRole(user.getString("position"));
+        feedbackDO.setOrganization(user.getString("department"));
+        feedbackDO.setArea(user.getString("distinctName"));
         return DataInfo.success(feedbackService.save(feedbackDO));
     }
 
