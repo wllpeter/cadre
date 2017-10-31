@@ -3,6 +3,7 @@ package com.ddb.xaplan.cadre.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ddb.xaplan.cadre.common.DataInfo;
+import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.enums.Gender;
 import com.ddb.xaplan.cadre.enums.TitleLevel;
@@ -18,6 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,11 +66,12 @@ public class OfficerBasicInfoController {
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<OfficerBasicInfoDO>> search(
-            @CookieValue(name = "userInfo",required=false) String userInfo,
+            HttpServletRequest request,
             String keyword, Long areaId, String org, TitleLevel titleLevel,
             Gender gender, Integer minimumAge, Integer maxAge,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
         JSONObject user = null;
         try{
             user = JSON.parseObject(userInfo);
@@ -92,8 +95,10 @@ public class OfficerBasicInfoController {
     })
     @RequestMapping(value = "/{officerId}",method = RequestMethod.GET)
     public DataInfo<OfficerBasicInfoDO> search(
-            @CookieValue(name = "userInfo",required=false) String userInfo,
+            HttpServletRequest request,
             @PathVariable Long officerId) {
+
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
         OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
         operationLogService.logger(
                 userInfo,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));
@@ -106,9 +111,10 @@ public class OfficerBasicInfoController {
     })
     @RequestMapping(value = "/{officerId}/alerts",method = RequestMethod.GET)
     public DataInfo<ComparedBasicVO> alerts(
-            @CookieValue(name = "userInfo",required=false) String userInfo,
+            HttpServletRequest request,
             @PathVariable Long officerId) {
 
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
         OfficerBasicInfoDO officerBasicInfo=officerBasicInfoService.find(officerId);
         operationLogService.logger(
                 userInfo,String.format("查看全息档案，人员：%s",officerBasicInfo.getName()));

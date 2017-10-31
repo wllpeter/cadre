@@ -3,6 +3,7 @@ package com.ddb.xaplan.cadre.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ddb.xaplan.cadre.common.DataInfo;
+import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.entity.FeedbackDO;
 import com.ddb.xaplan.cadre.service.FeedbackService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.Date;
 import java.util.UUID;
@@ -61,9 +63,10 @@ public class FeedbackController {
     })
     @RequestMapping(method = RequestMethod.POST)
     public DataInfo<FeedbackDO> add(
-            @CookieValue(name = "userInfo",required=false) String userInfo,
+            HttpServletRequest request,
             String content,String images){
 
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
         JSONObject user = null;
         try{
             user = JSON.parseObject(userInfo);

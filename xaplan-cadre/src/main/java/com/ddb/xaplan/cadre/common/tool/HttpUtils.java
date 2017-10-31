@@ -4,6 +4,7 @@ import org.apache.http.client.fluent.Request;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -19,6 +20,18 @@ public class HttpUtils {
         cookie.setPath(path);
         cookie.setSecure(isSecure);
         return cookie;
+    }
+
+    public static String getCookieValue(HttpServletRequest request, String name) {
+        if(name==null){
+            return null;
+        }
+        for(Cookie c:request.getCookies()){
+            if(name.equals(c.getName())){
+                return c.getValue();
+            }
+        }
+        return null;
     }
 
     public static String get(String url) throws IOException {

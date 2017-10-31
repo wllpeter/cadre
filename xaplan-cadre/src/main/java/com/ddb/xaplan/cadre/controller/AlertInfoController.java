@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ddb.xaplan.cadre.common.DataInfo;
+import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.entity.*;
 import com.ddb.xaplan.cadre.service.*;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -89,10 +91,11 @@ public class AlertInfoController {
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<AlertInfoDO>> search(
-            @CookieValue(name = "userInfo",required=false) String userInfo,
+            HttpServletRequest request,
             String keyword, Long areaId, AlertInfoDO.AlertType alertType, Integer minimum,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
         JSONObject user = null;
         try{
             user = JSON.parseObject(userInfo);
