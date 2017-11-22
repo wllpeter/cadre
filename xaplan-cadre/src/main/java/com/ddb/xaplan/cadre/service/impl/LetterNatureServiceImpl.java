@@ -2,6 +2,7 @@ package com.ddb.xaplan.cadre.service.impl;
 
 import com.ddb.xaplan.cadre.dao.LetterNatureDao;
 import com.ddb.xaplan.cadre.entity.LetterNatureDO;
+import com.ddb.xaplan.cadre.entity.OfficerLettersInfoDO;
 import com.ddb.xaplan.cadre.entity.StatisticsBean;
 import com.ddb.xaplan.cadre.service.LetterNatureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +17,19 @@ public class LetterNatureServiceImpl extends BaseServiceImpl<LetterNatureDO> imp
     private LetterNatureDao letterNatureDao;
     @Override
     public List<StatisticsBean> getNatureList(int areaId) {
-        List<Object[]> ret;
+        OfficerLettersInfoDO officerLettersInfoDO;
         if (areaId == 0) {
-            ret = this.letterNatureDao.getLetterNatureList();
+            officerLettersInfoDO = this.letterNatureDao.getLetterNatureList();
         } else {
-            ret = this.letterNatureDao.getLetterNatureList(areaId);
+            officerLettersInfoDO = this.letterNatureDao.getLetterNatureList(areaId);
         }
-        if(null != ret && ret.size() > 0 ){
+        if(null != officerLettersInfoDO ){
             List<StatisticsBean> result = new ArrayList<>();
-            for(Object[] item : ret){
-                result.add(new StatisticsBean(item[0].toString(),Integer.valueOf(item[1].toString())));
-                continue;
-            }
+            result.add(new StatisticsBean("网络与其它",officerLettersInfoDO.getNetworkOtherCount()));
+            result.add(new StatisticsBean("电话",officerLettersInfoDO.getPhoneCount()));
+            result.add(new StatisticsBean("上级转来",officerLettersInfoDO.getHightLevelTransferCount()));
+            result.add(new StatisticsBean("来信",officerLettersInfoDO.getInLetterCount()));
+            result.add(new StatisticsBean("来访",officerLettersInfoDO.getVisitCount()));
             return result;
         }
         return null;
