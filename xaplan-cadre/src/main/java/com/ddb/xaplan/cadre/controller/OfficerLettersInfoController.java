@@ -2,14 +2,19 @@ package com.ddb.xaplan.cadre.controller;
 
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.OfficerLettersInfoDO;
+import com.ddb.xaplan.cadre.entity.StatisticsBean;
+import com.ddb.xaplan.cadre.service.LetterNatureService;
 import com.ddb.xaplan.cadre.service.OfficerLettersInfoService;
+import com.ddb.xaplan.cadre.service.ReportedService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 付鸣 on 2017/10/25.
@@ -22,12 +27,17 @@ public class OfficerLettersInfoController {
     //信访举报
     @Resource(name="officerLettersInfoServiceImpl")
     private OfficerLettersInfoService officerLettersInfoService;
+    @Resource(name = "reportedServiceImpl")
+    private ReportedService reportedService;
+    @Resource(name = "letterNatureServiceImpl")
+    private LetterNatureService letterNatureService;
 
-    @ApiOperation(value = "search Letters info controller")
+    @ApiOperation(value = "信访举报弹窗接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaName",paramType = "PathVariable", dataType = "String") })
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String") })
     @GetMapping(value="/getLettersStatistics")
-    public DataInfo<List<OfficerLettersInfoDO>> getLettersStatistics(@RequestParam("areaName") String areaName){
+    public DataInfo<Map<String, Object>> getLettersStatistics(String areaName){
+        Map<String,Object> result = new HashMap<>();
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;
@@ -39,13 +49,17 @@ public class OfficerLettersInfoController {
             areaId=0;
         }
         List<OfficerLettersInfoDO> list=this.officerLettersInfoService.getLettersStatistics(areaId);
-        if(list.size()==0){
-            return DataInfo.error("未找到关联数据");
-        }
-        return DataInfo.success(list);
+        List<StatisticsBean> reportedList = this.reportedService.getBeReportedList(areaId);
+        List<StatisticsBean> natureList = this.letterNatureService.getNatureList(areaId);
+        List<StatisticsBean> reportedsByYear = this.reportedService.getBeReportedByYear(areaId);
+        List<StatisticsBean> naturesByYear = this.letterNatureService.getNaturesByYear(areaId);
+        result.put("letter_resource",list);
+        result.put("reported",reportedList);
+        result.put("nature",natureList);
+        result.put("reported_by_year",reportedsByYear);
+        result.put("nature_by_year",naturesByYear);
+        return DataInfo.success(result);
 
     }
-
-
 
 }

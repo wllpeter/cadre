@@ -3,6 +3,7 @@ package com.ddb.xaplan.cadre.controller;
 import com.ddb.xaplan.cadre.common.DataInfo;
 import com.ddb.xaplan.cadre.entity.OfficerIllegalInfoDO;
 import com.ddb.xaplan.cadre.entity.StatisticsBean;
+import com.ddb.xaplan.cadre.service.IllegalStatisticsService;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
 import com.ddb.xaplan.cadre.service.OfficerIllegalInfoService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,6 +33,9 @@ public class OfficerIllegalInfoController {
     @Resource(name="officerBasicInfoServiceImpl")
     private OfficerBasicInfoService officerBasicInfoService;
 
+    @Resource(name = "IllegalStatisticsServiceImpl")
+    private IllegalStatisticsService illegalStatisticsService;
+
 
     @ApiOperation(value = "search Illegal info controller")
     @ApiImplicitParams({
@@ -52,9 +56,9 @@ public class OfficerIllegalInfoController {
      */
     @ApiOperation(value = "search IllegalStatistics info controller")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "areaName",paramType = "PathVariable", dataType = "String") })
+            @ApiImplicitParam(name = "areaName",paramType = "query", dataType = "String") })
     @GetMapping(value="/getIllegalStatistics")
-    public DataInfo<Map<String,List>> getCrimeStatistics(@RequestParam("areaName") String areaName){
+    public DataInfo<Map<String,List>> getCrimeStatistics(String areaName){
         int areaId=0;
         if(areaName.equals("雄县")){
             areaId=3;
@@ -66,15 +70,17 @@ public class OfficerIllegalInfoController {
             areaId=0;
         }
             Map<String,List> map=new HashMap<String,List>();
-        List<StatisticsBean> yearList=this.officerIllegalInfoService.getGroupYearIllegalCount(areaId);
-        List<StatisticsBean> punishmentList=this.officerIllegalInfoService.getGroupPunishmentIllegalCount(areaId);
-        List<StatisticsBean> briefList=this.officerIllegalInfoService.getGroupBriefIllegalCount(areaId);
+        List<StatisticsBean> yearList=this.illegalStatisticsService.getGroupYearIllegalCount(areaId);
+        List<StatisticsBean> partyList=this.illegalStatisticsService.getGroupPartyIllegalCount(areaId);
+        List<StatisticsBean> punishmentList=this.illegalStatisticsService.getGroupPunishmentIllegalCount(areaId);
+        List<StatisticsBean> briefList=this.illegalStatisticsService.getGroupBriefIllegalCount(areaId) ;
         map.put("yearList",yearList);
+        map.put("partyList",partyList);
         map.put("punishmentList",punishmentList);
         map.put("briefList",briefList);
         Set<String> keys=map.keySet();
         for (String str:keys ) {
-            if(map.get(str).size()==0){
+            if(null == map.get(str) || map.get(str).size()==0){
                 return DataInfo.error("未找到关联数据");
             }
         }

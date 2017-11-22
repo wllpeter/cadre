@@ -11,17 +11,16 @@ import java.util.Date;
 @Where(clause = "is_deleted=0")
 public class OfficerEnterpriseInfoDO extends BaseEntity {
     private OfficerBasicInfoDO officerBasicInfo;
-    private String creditCode;
-    private String regCode;
-    //企业名称
-    private String name;
-    private String regType;
-    private String enterpriseType;
-    private String ownerName;
-    private String ownerId;
-    private String capital;
-    private String managementRange;
-    private Date setUpDate;
+    private String creditCode;//信用号
+    private String regCode;//注册号
+    private String name;//企业名称
+    private String regType;//注册类型
+    private String enterpriseType;//企业类型
+    private String ownerName;//注册人姓名
+    private String ownerId;//注册人身份证号
+    private String capital;//注册资本
+    private String managementRange;//经营范围
+    private Date setUpDate;//成立日期
 
     @JsonBackReference
     @OneToOne

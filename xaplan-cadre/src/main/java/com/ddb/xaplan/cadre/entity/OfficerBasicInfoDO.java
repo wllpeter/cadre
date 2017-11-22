@@ -236,4 +236,22 @@ public class OfficerBasicInfoDO extends BaseEntity {
     public void setAreaIds(String areaIds) {
         this.areaIds = areaIds;
     }
+
+    @Transient
+    public String getAreaName() {
+
+        String result = null;
+
+        try{
+            AreaDO areaDO = getArea();
+            while(areaDO!=null){
+                result = areaDO.getName();
+                areaDO = areaDO.getParent();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

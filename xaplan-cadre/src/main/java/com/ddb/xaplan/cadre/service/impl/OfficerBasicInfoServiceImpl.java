@@ -1,11 +1,14 @@
 package com.ddb.xaplan.cadre.service.impl;
 
 import com.ddb.xaplan.cadre.dao.OfficerBasicInfoDao;
+import com.ddb.xaplan.cadre.entity.AlertInfoDO;
 import com.ddb.xaplan.cadre.entity.AreaDO;
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import com.ddb.xaplan.cadre.enums.Gender;
 import com.ddb.xaplan.cadre.enums.TitleLevel;
 import com.ddb.xaplan.cadre.service.OfficerBasicInfoService;
+import com.ddb.xaplan.cadre.vo.ComparedBasicVO;
+import com.ddb.xaplan.cadre.vo.ComparedItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * Created by 王凯斌 on 2017/10/17.
@@ -31,9 +34,72 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     private OfficerBasicInfoDao officerBasicInfoDao;
 
     @Override
+    public ComparedBasicVO findVO(OfficerBasicInfoDO officerBasicInfoDO, List<AlertInfoDO> alertInfoDOList) {
+
+        Map<String,String> dict = new HashMap<>();
+        dict.put("name","姓名");
+        dict.put("gender","性别");
+        dict.put("culture","民族");
+        dict.put("birthDate","生日");
+        dict.put("nativePlace","籍贯");
+        dict.put("address","地址");
+
+        ComparedBasicVO result = new ComparedBasicVO();
+        Map<String,AlertInfoDO> map = alertListToMap(alertInfoDOList);
+
+        for(Field attr:ComparedBasicVO.class.getDeclaredFields()){
+            if("id".equals(attr.getName())){
+                continue;
+            }
+            try{
+                Field valueField =OfficerBasicInfoDO.class.getDeclaredField(attr.getName());
+                attr.setAccessible(true);
+                valueField.setAccessible(true);
+
+                if(dict.containsKey(attr.getName())){
+
+                    if(map.containsKey(dict.get(attr.getName()))){
+                        attr.set(
+                                result,
+                                ComparedItem.abnormal(valueField.get(officerBasicInfoDO),
+                                        map.get(dict.get(attr.getName())).getDescription()
+                                        ));
+                        continue;
+                    }
+                }
+                attr.set(result,ComparedItem.normal(valueField.get(officerBasicInfoDO)));
+            }catch (Exception e){
+                e.printStackTrace();
+                continue;
+            }
+
+        }
+        result.setId(officerBasicInfoDO.getId());
+        return result;
+    }
+
+    private Map alertListToMap(List<AlertInfoDO> alertInfoDOList){
+
+        Set<String> attrs = new HashSet<>();
+        attrs.add("姓名");
+        attrs.add("性别");
+        attrs.add("民族");
+        attrs.add("籍贯");
+        attrs.add("地址");
+
+        Map<String,AlertInfoDO> result = new HashMap<>();
+        for(AlertInfoDO item:alertInfoDOList){
+            if(attrs.contains(item.getContent())){
+                result.put(item.getContent(),item);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable) {
+            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,String userAreaCode) {
 
         return officerBasicInfoDao.findAll(new Specification<OfficerBasicInfoDO>() {
 
@@ -49,9 +115,20 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
                                     )
                             );
                 }
+                if(userAreaCode!=null){
+                    if(!userAreaCode.equals("130600")){
+                        Map<String,Long> map = new HashMap<>();
+                        map.put("130629",2L);
+                        map.put("130632",1L);
+                        map.put("130638",3L);
+                        predicate.getExpressions().add(
+                                criteriaBuilder.like(root.get("areaIds"), "%," +map.get(userAreaCode)+",%"));
+                    }
+
+                }
                 if(area!=null){
                     predicate.getExpressions().add(
-                            criteriaBuilder.like(root.get("areaIds"), "%" +area.getId()+"%"));
+                            criteriaBuilder.like(root.get("areaIds"), "%," +area.getId()+",%"));
                 }
                 if(StringUtils.isNotEmpty(org)){
                     predicate.getExpressions().add(
@@ -90,11 +167,21 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getPartyMemberCount(int areaId) {
-        if(areaId==0){
-            return this.officerBasicInfoDao.getPartyMemberSumCount();
-        }else{
-            return this.officerBasicInfoDao.getPartyMemberCount(areaId);
-        }
+//        if(areaId==0){
+//            //return this.officerBasicInfoDao.getPartyMemberSumCount();
+//            return ;
+//        }else{
+            final int ax = 25682;
+            final int rc = 12181;
+            final int xx = 15095;
+            switch (areaId){
+                case 1: return ax;
+                case 2: return rc;
+                case 3: return xx;
+                default: return ax+rc+xx;
+            }
+            //return this.officerBasicInfoDao.getPartyMemberCount(areaId);
+       // }
     }
 
     /**

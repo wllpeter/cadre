@@ -22,6 +22,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +50,8 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
     }
 
     @Override
-    public Page<AlertInfoDO> search(String keyword, AreaDO areaDO,
-                                    AlertInfoDO.AlertType alertType, Pageable pageable) {
+    public Page<AlertInfoDO> search(Integer minimum,String keyword, AreaDO areaDO,
+                                    AlertInfoDO.AlertType alertType, Pageable pageable,String userAreaCode) {
 
         return alertInfoDao.findAll(new Specification<AlertInfoDO>() {
 
@@ -59,12 +60,31 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
                 Predicate predicate = criteriaBuilder.conjunction();
                 if (StringUtils.isNotEmpty(keyword)) {
                     predicate.getExpressions().add(
-                            criteriaBuilder.like(root.get("organization"), "%" +keyword+"%")
+                            criteriaBuilder.or(
+                                    criteriaBuilder.like(root.get("organization"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("name"), "%" +keyword+"%"),
+                                    criteriaBuilder.like(root.get("content"), "%" +keyword+"%")
+                            )
                     );
+                }
+                if(minimum!=null){
+                    predicate.getExpressions().add(
+                            criteriaBuilder.greaterThanOrEqualTo(root.get("amount"),minimum));
+                }
+                if(userAreaCode!=null){
+                    if(!userAreaCode.equals("130600")){
+                        Map<String,Long> map = new HashMap<>();
+                        map.put("130629",2L);
+                        map.put("130632",1L);
+                        map.put("130638",3L);
+                        predicate.getExpressions().add(
+                                criteriaBuilder.like(root.get("areaIds"), "%," +map.get(userAreaCode)+",%"));
+                    }
+
                 }
                 if(areaDO!=null){
                     predicate.getExpressions().add(
-                            criteriaBuilder.equal(root.get("area"), areaDO));
+                            criteriaBuilder.like(root.get("areaIds"), "%," +areaDO.getId()+",%"));
                 }
                 if(alertType!=null){
                     predicate.getExpressions().add(
@@ -86,10 +106,21 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
         if ((sourceValue==null||comparedValue==null)
                 ||!sourceValue.equals(comparedValue)){
             Map<String,Object> describe = new HashMap<>();
-            describe.put("sourceValue","组织部:"+sourceValue);
-            describe.put("comparedValue","公安局:"+comparedValue);
+
+            if(sourceValue==null||"".equals(sourceValue)){
+                describe.put("sourceValue","组织部: - ");
+            }else{
+                describe.put("sourceValue","组织部:"+sourceValue);
+            }
+
+            if(comparedValue==null||"".equals(comparedValue)){
+                describe.put("comparedValue","公安局: - ");
+            }else{
+                describe.put("comparedValue","公安局:"+comparedValue);
+            }
 
             AlertInfoDO alertInfoDO = new AlertInfoDO();
+            alertInfoDO.setOfficerBasicInfo(source);
             alertInfoDO.setAlertType(AlertInfoDO.AlertType.BASIC);
             alertInfoDO.setArea(source.getArea());
             alertInfoDO.setIdCard(source.getIdCard());
@@ -97,6 +128,7 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
             alertInfoDO.setOrganization(source.getOrganization());
             alertInfoDO.setPhoto(source.getPhoto());
             alertInfoDO.setTitle(source.getTitle());
+            alertInfoDO.setAreaIds(source.getAreaIds());
             alertInfoDO.setContent(dict.get(attr));
             alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
 
@@ -122,6 +154,53 @@ public class AlertInfoServiceImpl extends BaseServiceImpl<AlertInfoDO> implement
     @Override
     public HashMap<String, Object> getAlertCountByArea() {
         List<String> areaList = this.alertInfoDao.getAlertCountByArea();
+        int anxinCount = 0;
+        int xiongxianCount = 0;
+        int rongchengCount = 0;
+        for(String str : areaList){
+            if(null == str){
+                continue;
+            }
+            if(str.contains(ANXIN)){
+                anxinCount++;
+                continue;
+            }
+            else if(str.contains(RONGCHENG)){
+                rongchengCount++;
+                continue;
+            }
+            else if(str.contains(XIONGXIAN)){
+                xiongxianCount++;
+                continue;
+            }
+            else {
+                continue;
+            }
+        }
+        HashMap<String,Object> ret = new HashMap<>();
+        ret.put("1" , anxinCount);
+        ret.put("2" , rongchengCount);
+        ret.put("3" , xiongxianCount);
+        return ret;
+    }
+
+    @Override
+    public HashMap<String, Object> getAlertCountByContent(Integer alertType) {
+        List<Object[]> alertsRet = this.alertInfoDao.getAlertCountByContent(alertType);
+        if(null == alertsRet || alertsRet.size() == 0){
+            return null;
+        }
+        HashMap<String, Object> ret = new LinkedHashMap<>();
+        for (Object[] object: alertsRet) {
+            ret.put(String.valueOf(object[0]),Integer.valueOf(object[1].toString()));
+            continue;
+        }
+        return ret;
+    }
+
+    @Override
+    public HashMap<String, Object> getAlertCountByArea(Integer alertType) {
+        List<String> areaList = this.alertInfoDao.getAlertCountByArea(alertType);
         int anxinCount = 0;
         int xiongxianCount = 0;
         int rongchengCount = 0;

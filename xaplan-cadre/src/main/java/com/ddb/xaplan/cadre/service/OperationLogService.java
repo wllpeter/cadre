@@ -16,4 +16,6 @@ public interface OperationLogService extends BaseService<OperationLogDO>{
 
     List<OperationLogDO> search(Date startDate, Date endDate);
 
+    void logger(String userInfo,String content);
+
 }

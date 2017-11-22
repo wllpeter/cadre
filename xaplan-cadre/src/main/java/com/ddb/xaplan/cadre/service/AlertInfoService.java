@@ -14,12 +14,16 @@ import java.util.HashMap;
  */
 public interface AlertInfoService extends BaseService<AlertInfoDO>{
 
-    Page<AlertInfoDO> search(String keyword,AreaDO areaDO,
-                             AlertInfoDO.AlertType alertType, Pageable pageable);
+    Page<AlertInfoDO> search(Integer minimum,String keyword,AreaDO areaDO,
+                             AlertInfoDO.AlertType alertType, Pageable pageable,String userAreaCode);
 
     AlertInfoDO compareBasicInfo(OfficerBasicInfoDO source, CompareBasicInfoDO compared, String attr);
 
     HashMap<String,Object> getAlertCountByContent();
 
     HashMap<String,Object> getAlertCountByArea();
+
+    HashMap<String,Object> getAlertCountByContent(Integer alertType);
+
+    HashMap<String,Object> getAlertCountByArea(Integer alertType);
 }

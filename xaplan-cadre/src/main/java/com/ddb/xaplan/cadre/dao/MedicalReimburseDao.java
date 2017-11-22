@@ -13,10 +13,15 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
 
     List<MedicalReimburseDO> findByAreaAndAddressLike(AreaDO area,String address);
 
-    @Query(value = "SELECT MONTH(occur_date) monthValue,count(*) countValue from medical_reimburse \n" +
-            "where occur_date is not null and YEAR(occur_date) = ?1 and hospitalized = ?2 and area_ids like CONCAT('%,',?3,',%')" +
-            "GROUP BY MONTH(occur_date)\n",nativeQuery = true)
+    @Query(value = "SELECT MONTH(start_date) monthValue,count(*) countValue from medical_reimburse \n" +
+            "where start_date is not null and YEAR(start_date) = ?1 and hospitalized = ?2 and area_ids like CONCAT('%,',?3,',%')" +
+            "GROUP BY MONTH(start_date)\n",nativeQuery = true)
     List<Object[]> monthStatistics(String year,int hospitalized, Long areaId);
+
+    @Query(value = "SELECT MONTH(occur_date) monthValue,count(*) countValue from medical_reimburse \n" +
+            "where occur_date is not null and YEAR(occur_date) = ?1 and area_ids like CONCAT('%,',?2,',%')" +
+            "GROUP BY MONTH(occur_date)\n",nativeQuery = true)
+    List<Object[]> monthCountStatistics(String year, Long areaId);
 
     @Query(value = "SELECT MONTH(occur_date) monthValue,sum(reimbursement_amount) sumValue from medical_reimburse \n" +
             "where occur_date is not null and YEAR(occur_date) = ?1 and area_ids like CONCAT('%,',?2,',%')" +
@@ -80,9 +85,9 @@ public interface MedicalReimburseDao extends BaseDao<MedicalReimburseDO>{
             "count(*) as reimbursement_count,\n" +
             "sum(reimbursement_amount) as reimbursement_amount,\n" +
             "sum(hospitalized_duration) as hospitalized_duration,\n" +
-            "count(case when hospitalized =1 then null when hospitalized = 0 then 1 end) as clinicTime,\n" +
+            "count(hospitalized) - sum(hospitalized) as clinicTime,\n" +
             "GROUP_CONCAT(DISTINCT disease_name SEPARATOR ' ') as disease_name, \n" +
-            "count(case when hospitalized =0 then null when hospitalized = 1 then 1 end) as hospitalizedTime\n" +
+            "sum(hospitalized) as hospitalizedTime\n" +
             "from medical_reimburse m \n" +
             "where YEAR(occur_date) = ?2 \n" +
             "and area_ids like CONCAT(\"%,\",?1,\",%\")\n" +

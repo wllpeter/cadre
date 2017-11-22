@@ -1,8 +1,10 @@
 package com.ddb.xaplan.cadre.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.ddb.xaplan.cadre.common.DataInfo;
+import com.ddb.xaplan.cadre.common.tool.HttpUtils;
 import com.ddb.xaplan.cadre.entity.*;
 import com.ddb.xaplan.cadre.service.*;
 import io.swagger.annotations.ApiImplicitParam;
@@ -13,12 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -76,37 +76,66 @@ public class AlertInfoController {
     @Resource(name = "officerVehicleInfoServiceImpl")
     private OfficerVehicleInfoService officerVehicleInfoService;
 
+    @Resource(name = "operationLogServiceImpl")
+    private OperationLogService operationLogService;
+
     @ApiOperation(value = "alert info search controller")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "alertType", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "areaId", paramType = "query", dataType = "Long"),
+            @ApiImplicitParam(name = "minimum", paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "size", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "page", paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "sort", paramType = "query", dataType = "String")
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<AlertInfoDO>> search(
-            String keyword, Long areaId, AlertInfoDO.AlertType alertType,
+            HttpServletRequest request,
+            String keyword, Long areaId, AlertInfoDO.AlertType alertType, Integer minimum,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return DataInfo.success(alertInfoService.search(keyword, areaService.find(areaId), alertType, pageable));
+        String userInfo = HttpUtils.getCookieValue(request,"userInfo");
+        JSONObject user = null;
+        try{
+            user = JSON.parseObject(userInfo);
+        }catch (Exception e){
+            user=null;
+        }
+
+        if(userInfo==null||user==null){
+            return DataInfo.error("登陆状态有误");
+        }
+        operationLogService.logger(
+                userInfo, "查看预警信息");
+        return DataInfo.success(alertInfoService.search(minimum, keyword, areaService.find(areaId), alertType, pageable,
+                user.getString("distinctCode")));
+    }
+
+    @ApiOperation(value = "全息档案预警")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "officerId", paramType = "PathVariable", dataType = "String")
+    })
+    @RequestMapping(value = "/{officerId}/infos", method = RequestMethod.GET)
+    public DataInfo<List<AlertInfoDO>> infos(@PathVariable Long officerId) {
+
+        return DataInfo.success(
+                alertInfoService.search("officerBasicInfo", officerBasicInfoService.find(officerId)));
     }
 
     @RequestMapping(value = "/generate", method = RequestMethod.GET)
     public DataInfo<String> generate() {
         enterpriseGenerateHelper();
-//        basicGenerateHelper();
-//        estateGenerateHelper();
-//        vehicleGenerateHelper();
-//        corruptionGenerateHelper();
+        basicGenerateHelper();
+        estateGenerateHelper();
+        vehicleGenerateHelper();
+        corruptionGenerateHelper();
         return DataInfo.success("In process");
     }
 
-    @Async
     private void basicGenerateHelper() {
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
-        String[] attrs = {"name", "gender", "culture", "birthDate", "nativePlace", "address"};
+        String[] attrs = {"name", "gender", "culture", "nativePlace", "address"};
         for (OfficerBasicInfoDO item : items) {
             if (StringUtils.isEmpty(item.getIdCard())) {
                 continue;
@@ -122,7 +151,6 @@ public class AlertInfoController {
         }
     }
 
-    @Async
     private void estateGenerateHelper() {
 
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
@@ -135,7 +163,7 @@ public class AlertInfoController {
             Set<String> idCards = getCardIds(item);
 
 
-            for(String idCard:idCards){
+            for (String idCard : idCards) {
                 if (StringUtils.isEmpty(idCard)) {
                     continue;
                 }
@@ -146,20 +174,19 @@ public class AlertInfoController {
                 continue;
             }
 
-            Map<String,Object> describe = new HashMap<>();
-            describe.put("sourceValue",officerEstateInfoService.search("officerBasicInfo",item));
-            describe.put("comparedValue",comparedValue);
+            Map<String, Object> describe = new HashMap<>();
+            describe.put("sourceValue", officerEstateInfoService.search("officerBasicInfo", item));
+            describe.put("comparedValue", comparedValue);
 
-            AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
+            AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("房产数量预警");
             alertInfoDO.setAmount(comparedValue.size());
-            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
+            alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);
         }
 
     }
 
-    @Async
     private void vehicleGenerateHelper() {
 
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
@@ -173,7 +200,7 @@ public class AlertInfoController {
             List<CompareVehicleInfoDO> comparedValue = new ArrayList<>();
             Integer amount = 0;
 
-            for (String idCard :idCards) {
+            for (String idCard : idCards) {
                 if (StringUtils.isEmpty(idCard)) {
                     continue;
                 }
@@ -187,19 +214,18 @@ public class AlertInfoController {
             }
 
 
-            Map<String,Object> describe = new HashMap<>();
-            describe.put("sourceValue",officerVehicleInfoService.search("officerBasicInfo",item));
-            describe.put("comparedValue",comparedValue);
+            Map<String, Object> describe = new HashMap<>();
+            describe.put("sourceValue", officerVehicleInfoService.search("officerBasicInfo", item));
+            describe.put("comparedValue", comparedValue);
 
-            AlertInfoDO alertInfoDO =getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
+            AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("车辆数量预警");
             alertInfoDO.setAmount(comparedValue.size());
-            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
+            alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);
         }
     }
 
-    @Async
     private void enterpriseGenerateHelper() {
 
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
@@ -212,14 +238,23 @@ public class AlertInfoController {
 
             List<CompareEnterpriseInfoDO> comparedValue = new ArrayList<>();
             Integer amount = 0;
+            Float count = 0f;
 
-            for (String idCard :idCards) {
+            for (String idCard : idCards) {
                 if (StringUtils.isEmpty(idCard)) {
                     continue;
                 }
-                amount += compareEnterpriseInfoService.countByOwnerId(idCard);
-                comparedValue.addAll(
-                        compareEnterpriseInfoService.search("ownerId", idCard));
+                List<CompareEnterpriseInfoDO>  es =compareEnterpriseInfoService.search("ownerId", idCard);
+                comparedValue.addAll(es);
+                amount += es.size();
+                for(CompareEnterpriseInfoDO compareEnterpriseInfo:es){
+                    if(StringUtils.isEmpty(compareEnterpriseInfo.getCapital())){
+                        continue;
+                    }
+                    count+=Float.valueOf(compareEnterpriseInfo.getCapital());
+                }
+
+
             }
 
             if (amount <= 0) {
@@ -227,19 +262,19 @@ public class AlertInfoController {
             }
 
 
-            Map<String,Object> describe = new HashMap<>();
-            describe.put("sourceValue",officerEnterpriseInfoService.search("officerBasicInfo",item));
-            describe.put("comparedValue",comparedValue);
+            Map<String, Object> describe = new HashMap<>();
+            describe.put("sourceValue", officerEnterpriseInfoService.search("officerBasicInfo", item));
+            describe.put("comparedValue", comparedValue);
 
-            AlertInfoDO alertInfoDO =getAlertInfo(item,AlertInfoDO.AlertType.REGISTER);
+            AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.REGISTER);
             alertInfoDO.setContent("企业数量预警");
+            alertInfoDO.setPhoto(count.toString());
             alertInfoDO.setAmount(comparedValue.size());
-            alertInfoDO.setDescription(JSON.toJSONString(describe,SerializerFeature.WriteNullStringAsEmpty));
+            alertInfoDO.setDescription(JSON.toJSONString(describe, SerializerFeature.WriteNullStringAsEmpty));
             alertInfoService.save(alertInfoDO);
         }
     }
 
-    @Async
     private void corruptionGenerateHelper() {
 
         List<OfficerBasicInfoDO> items = officerBasicInfoService.findAll();
@@ -251,58 +286,73 @@ public class AlertInfoController {
             Set<String> idCards = getCardIds(item);
             Set<String> names = getNames(item);
 
-            for (String idCard :idCards) {
-                for(ComparePovertyInfoDO comparePovertyInfoDO:
-                        comparePovertyInfoService.search("idCard",idCard)){
+            for (String idCard : idCards) {
+                for (ComparePovertyInfoDO comparePovertyInfoDO :
+                        comparePovertyInfoService.search("idCard", idCard)) {
 
-                    AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
+                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("贫困户预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(comparePovertyInfoDO,SerializerFeature.WriteNullStringAsEmpty));
+                    alertInfoDO.setDescription(JSON.toJSONString(comparePovertyInfoDO, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
-                for(CompareSubsidyInfoDO compareSubsidyInfoDO:
-                        compareSubsidyInfoService.search("idCard",idCard)){
+                Set<String> sets = new HashSet<>();
+                for (CompareSubsidyInfoDO compareSubsidyInfoDO :
+                        compareSubsidyInfoService.search("idCard", idCard)) {
 
-                    AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
-                    alertInfoDO.setContent("低保预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO,SerializerFeature.WriteNullStringAsEmpty));
-                    alertInfoService.save(alertInfoDO);
+                    if(!sets.contains(compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getAmount())){
+                        AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
+                        alertInfoDO.setContent("低保预警");
+                        alertInfoDO.setDescription(JSON.toJSONString(compareSubsidyInfoDO, SerializerFeature.WriteNullStringAsEmpty));
+                        alertInfoService.save(alertInfoDO);
+
+                        sets.add(compareSubsidyInfoDO.getName()+compareSubsidyInfoDO.getAmount());
+                    }
+
                 }
-                for(CompareHouseSubsidyDO compareHouseSubsidy:
-                        compareHouseSubsidyService.search("idCard",idCard)){
+                for (CompareHouseSubsidyDO compareHouseSubsidy :
+                        compareHouseSubsidyService.search("idCard", idCard)) {
 
-                    AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
+                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("危房改造补助预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareHouseSubsidy,SerializerFeature.WriteNullStringAsEmpty));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareHouseSubsidy, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
-                for(CompareSpecialCareDO compareSpecialCareDO:
-                        compareSpecialCareService.search("idCard",idCard)){
+                for (CompareSpecialCareDO compareSpecialCareDO :
+                        compareSpecialCareService.search("idCard", idCard)) {
 
-                    AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
+                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("优抚预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareSpecialCareDO,SerializerFeature.WriteNullStringAsEmpty));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareSpecialCareDO, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
 
-            }
+                for (CompareScholarshipDO compareScholarship :
+                        compareScholarshipService.search("idCard", idCard)) {
 
-            for (String name:names){
-                for(CompareScholarshipDO compareScholarship:
-                        compareScholarshipService.search("name",name)){
-
-                    AlertInfoDO alertInfoDO = getAlertInfo(item,AlertInfoDO.AlertType.CORRUPTION);
+                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
                     alertInfoDO.setContent("助学金预警");
-                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship,SerializerFeature.WriteNullStringAsEmpty));
+                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship, SerializerFeature.WriteNullStringAsEmpty));
                     alertInfoService.save(alertInfoDO);
                 }
+
             }
+
+//            for (String name : names) {
+//                for (CompareScholarshipDO compareScholarship :
+//                        compareScholarshipService.search("name", name)) {
+//
+//                    AlertInfoDO alertInfoDO = getAlertInfo(item, AlertInfoDO.AlertType.CORRUPTION);
+//                    alertInfoDO.setContent("助学金预警");
+//                    alertInfoDO.setDescription(JSON.toJSONString(compareScholarship, SerializerFeature.WriteNullStringAsEmpty));
+//                    alertInfoService.save(alertInfoDO);
+//                }
+//            }
 
 
         }
     }
 
-    private Set<String> getCardIds(OfficerBasicInfoDO officerBasicInfoDO){
+    private Set<String> getCardIds(OfficerBasicInfoDO officerBasicInfoDO) {
         Set<String> idCards = new HashSet<>();
 
         if (StringUtils.isEmpty(officerBasicInfoDO.getIdCard())) {
@@ -313,7 +363,7 @@ public class AlertInfoController {
                 officerFamilyMemberInfoService.search("cadre_id_card", officerBasicInfoDO.getIdCard())) {
 
             if (StringUtils.isEmpty(member.getIdCard())
-                    ||officerBasicInfoDO.getIdCard().equals(member.getIdCard())) {
+                    || officerBasicInfoDO.getIdCard().equals(member.getIdCard())) {
                 continue;
             }
             idCards.add(member.getIdCard());
@@ -321,7 +371,7 @@ public class AlertInfoController {
         return idCards;
     }
 
-    private Set<String> getNames(OfficerBasicInfoDO officerBasicInfoDO){
+    private Set<String> getNames(OfficerBasicInfoDO officerBasicInfoDO) {
         Set<String> names = new HashSet<>();
 
         if (StringUtils.isEmpty(officerBasicInfoDO.getIdCard())) {
@@ -331,7 +381,7 @@ public class AlertInfoController {
                 officerFamilyMemberInfoService.search("cadre_id_card", officerBasicInfoDO.getIdCard())) {
 
             if (StringUtils.isEmpty(member.getIdCard())
-                    ||officerBasicInfoDO.getIdCard().equals(member.getIdCard())) {
+                    || officerBasicInfoDO.getIdCard().equals(member.getIdCard())) {
                 continue;
             }
             names.add(member.getName());
@@ -339,11 +389,13 @@ public class AlertInfoController {
         return names;
     }
 
-    private AlertInfoDO getAlertInfo(OfficerBasicInfoDO item,AlertInfoDO.AlertType alertType){
+    private AlertInfoDO getAlertInfo(OfficerBasicInfoDO item, AlertInfoDO.AlertType alertType) {
 
         AlertInfoDO alertInfoDO = new AlertInfoDO();
+        alertInfoDO.setOfficerBasicInfo(item);
         alertInfoDO.setAlertType(alertType);
         alertInfoDO.setArea(item.getArea());
+        alertInfoDO.setAreaIds(item.getAreaIds());
         alertInfoDO.setIdCard(item.getIdCard());
         alertInfoDO.setName(item.getName());
         alertInfoDO.setOrganization(item.getOrganization());
@@ -352,10 +404,10 @@ public class AlertInfoController {
         return alertInfoDO;
     }
 
-    private String getAreaIds(AreaDO areaDO){
+    private String getAreaIds(AreaDO areaDO) {
 
         StringBuilder areaIds = new StringBuilder();
-        while(areaDO!=null){
+        while (areaDO != null) {
             areaIds.append(areaDO.getId());
             areaIds.append(",");
             areaDO = areaDO.getParent();

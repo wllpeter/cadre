@@ -9,19 +9,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by 王凯斌 on 2017/6/17.
  */
 @Component
-public class ExcelUtils {
+public class  ExcelUtils {
 
     private final static int page = 10000;
 
@@ -60,12 +59,8 @@ public class ExcelUtils {
                 fillRowWithCells(dataRow, data.get(n));
             }
         }
-        File parentFile = new File(excelPath);
-        File excelFile = new File(parentFile, fileName + ".xls");
-        FileOutputStream fileOut = new FileOutputStream(excelFile);
-        wb.write(fileOut);
-        fileOut.close();
-        return fileName + ".xls";
+        String fileResult = createExcelByWorkBook(fileName,wb);
+        return fileResult;
     }
 
     /**
@@ -104,22 +99,93 @@ public class ExcelUtils {
 
         List<List<String>> newData = new ArrayList<>();
         for (T item : data) {
-            List<Field> fields = new ArrayList<>();
-            fields.addAll(Arrays.asList(item.getClass().getSuperclass().getDeclaredFields()));
-            fields.addAll(Arrays.asList(item.getClass().getDeclaredFields()));
-
-            List<String> row = new ArrayList<>();
-            for(String attr:attrs){
-                for(Field field:fields){
-                    if (field.getName().equals(attr)){
-                        field.setAccessible(true);
-                        row.add(String.valueOf(field.get(item)));
-                    }
-                }
-            }
+            List<String> row = createRow(item, attrs);
             newData.add(row);
         }
         return createExcel(fileName, title, newData);
     }
 
+    private static <T> List<String> createRow(T item, String[] attrs) throws Exception {
+        List<Field> fields = new ArrayList<>();
+        fields.addAll(Arrays.asList(item.getClass().getSuperclass().getDeclaredFields()));
+        fields.addAll(Arrays.asList(item.getClass().getDeclaredFields()));
+
+        List<String> row = new ArrayList<>();
+        for(String attr:attrs){
+            for(Field field:fields){
+                if (field.getName().equals(attr)){
+                    field.setAccessible(true);
+                    row.add(String.valueOf(field.get(item)));
+                }
+            }
+        }
+        return  row;
+    }
+
+    /**
+     * author：ZAN YANG
+     * 组装不同sheet的表格
+     */
+    public static <T> HSSFWorkbook setSheet2Workbook(HSSFWorkbook workbook, ExcelExportEntity<T> excelExportEntity )throws Exception{
+        Sheet sheet = workbook.createSheet(excelExportEntity.getSheetName());
+        if(excelExportEntity.getDatas() == null || excelExportEntity.getDatas().size() == 0){
+            return workbook;
+        }
+        Row titleRow = sheet.createRow(0);
+        fillRowWithCells(titleRow, excelExportEntity.getTitles());
+        List<List<String>> newData = new LinkedList<>();
+        List<T> datas = excelExportEntity.getDatas();
+        for(T data : datas) {
+            List<String> rows = createRow(data,excelExportEntity.getArgs());
+            newData.add(rows);
+        }
+        int endIndex = newData.size();
+        for(int startIndex = 0; startIndex < endIndex; startIndex++){
+            Row dataRow = sheet.createRow(startIndex+1);
+            fillRowWithCells(dataRow, newData.get(startIndex));
+            continue;
+        }
+        return workbook;
+    }
+
+//    public static <T> HSSFWorkbook setSheet2Workbook(HSSFWorkbook workbook, String sheetName, List<String> titles,List<Map> datas)throws Exception{
+//        Sheet sheet = workbook.createSheet(sheetName);
+//        Row titleRow = sheet.createRow(0);
+//        fillRowWithCells(titleRow, titles);
+//        List<List<String>> newData = new LinkedList<>();
+//        List<T> datas = excelExportEntity.getDatas();
+//        for(T data : datas) {
+//            List<String> rows = createRow(data,excelExportEntity.getArgs());
+//            newData.add(rows);
+//        }
+//        int endIndex = newData.size();
+//        for(int startIndex = 0; startIndex < endIndex; startIndex++){
+//            Row dataRow = sheet.createRow(startIndex+1);
+//            fillRowWithCells(dataRow, newData.get(startIndex));
+//            continue;
+//        }
+//        return workbook;
+//    }
+
+    public static String createExcelByWorkBook(String fileName,Workbook workbook) throws Exception{
+        File parentFile = new File(excelPath);
+        File excelFile = new File(parentFile, fileName + ".xls");
+        FileOutputStream fileOut = new FileOutputStream(excelFile);
+        workbook.write(fileOut);
+        fileOut.close();
+        return fileName+".xls";
+    }
+
+    public static void createExcelByWorkBookByBytes(String fileName, Workbook workbook, HttpServletResponse response) throws Exception{
+          response.reset();
+        //ByteArrayOutputStream os = new ByteArrayOutputStream();
+        //workbook.write(os);
+          response.reset();
+          response.setContentType("application/vnd.ms-excel;charset=utf-8");
+          response.setHeader("Content-Disposition",
+                 "attachment;filename=" + new String((fileName + ".xls").getBytes("GBK"), "iso-8859-1"));
+          workbook.write(response.getOutputStream());
+          response.getOutputStream().flush();
+          response.getOutputStream().close();
+    }
 }

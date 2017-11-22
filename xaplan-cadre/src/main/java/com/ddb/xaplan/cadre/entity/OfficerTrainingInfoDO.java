@@ -28,7 +28,7 @@ public class OfficerTrainingInfoDO extends BaseEntity{
     private String clazz;
 
     //网络培训总学时
-    private int hours;
+    private Integer hours;
 
 
     //干部信息   一对一的关系
@@ -70,11 +70,11 @@ public class OfficerTrainingInfoDO extends BaseEntity{
     }
 
     @Column
-    public int getHours() {
+    public Integer getHours() {
         return hours;
     }
 
-    public void setHours(int hours) {
+    public void setHours(Integer hours) {
         this.hours = hours;
     }
 }

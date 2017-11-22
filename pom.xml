@@ -24,6 +24,7 @@
 		<docker.plugin.version>0.4.13</docker.plugin.version>
 		<commons-beanutils.version>1.9.3</commons-beanutils.version>
 		<poi.version>3.16</poi.version>
+		<fluent-hc.version>4.5.3</fluent-hc.version>
 	</properties>
 
 
@@ -67,6 +68,11 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
 				<version>${poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>fluent-hc</artifactId>
+				<version>${fluent-hc.version}</version>
 			</dependency>
 
 		</dependencies>

@@ -17,6 +17,8 @@ public interface MedicalReimburseService extends BaseService<MedicalReimburseDO>
 
     int[] monthStatistics(String year, int hospitalized,Long areaId);
 
+    int[] monthCountStatistics(String year, Long areaId);
+
     double[] monthAmountStatistics(String year, Long areaId);
 
     List<DiseaseRankItem> diseaseRank(String year, Long areaId);
