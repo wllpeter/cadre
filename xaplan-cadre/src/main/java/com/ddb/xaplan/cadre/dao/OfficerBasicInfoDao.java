@@ -169,7 +169,7 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
      */
     @Query(value="select count(1) from officer_basic_info where\n" +
             " area_ids like concat('%,',:areaId,',%') and year(SYSDATE())-year(birth_date)>40" +
-            " and year(SYSDATE())-year(birth_date)<=50",nativeQuery=true)
+            " and year(SYSDATE())-year(birth_date)<=50",    nativeQuery=true)
     public int getFourtyAndFivtyCount(@Param("areaId")int areaId);
     /**
      * 获取三县年龄41-50岁人数
