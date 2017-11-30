@@ -12,8 +12,6 @@ public enum EducationLevel {
 
     JUNIOR_MIDDLE,//初中
 
-    SECONDARY_SPECIALIZED,//中专
-
     HIGH,//高中
 
     PROFESSION_College,//大专
@@ -22,5 +20,7 @@ public enum EducationLevel {
 
     MASTER,//硕士
 
-    PHD//博士
+    PHD,//博士
+
+    SECONDARY_SPECIALIZED//中专
 }
