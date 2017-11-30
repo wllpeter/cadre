@@ -12,6 +12,8 @@ public enum EducationLevel {
 
     JUNIOR_MIDDLE,//初中
 
+    SECONDARY_SPECIALIZED,//中专
+
     HIGH,//高中
 
     PROFESSION_College,//大专
