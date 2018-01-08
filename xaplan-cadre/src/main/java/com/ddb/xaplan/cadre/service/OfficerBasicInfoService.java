@@ -9,6 +9,7 @@ import com.ddb.xaplan.cadre.vo.ComparedBasicVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,9 +93,17 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
      */
     public int getCountyCount(int areaId,int title_level);
 
+    /**
+     * 获取各县村干部数量
+     */
+    Integer getVillageCadresCount(int areaId);
+
+
+
     Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,String userAreaCode);
+            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,
+            String userAreaCode,String culture,Date date);
 
 
 

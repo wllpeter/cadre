@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,13 +65,15 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "maxAge",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "size",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "page",paramType = "query", dataType = "Long"),
-            @ApiImplicitParam(name = "sort",paramType = "query", dataType = "String")
+            @ApiImplicitParam(name = "sort",paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "culture",paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "date",paramType = "query", dataType = "String")
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<OfficerBasicInfoDO>> search(
             HttpServletRequest request,
             String keyword, Long areaId, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge,
+            Gender gender, Integer minimumAge, Integer maxAge,String culture,String date,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         String userInfo = HttpUtils.getCookieValue(request,"userInfo");
@@ -81,12 +86,27 @@ public class OfficerBasicInfoController {
         if(userInfo==null||user==null){
             return DataInfo.error("登陆状态有误");
         }
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        Date d;
+        if(date==null || date.equals("")){
+             d=new Date();
+        }else{
+            date=date+"-01-01";
+            d=null;
+            try {
+                d =sdf.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         return DataInfo.success(
                 officerBasicInfoService.search(
                         keyword,areaService.find(areaId),org,titleLevel,
                         gender,minimumAge,maxAge,pageable,
-                        user.getString("distinctCode")));
+                        user.getString("distinctCode"),culture,d));
+
     }
 
     @ApiOperation(value = "get basic info controller")
@@ -191,6 +211,10 @@ public class OfficerBasicInfoController {
         String lettersCount=Integer.toString(this.officerLettersInfoService.getLettersCount(areaId));
         //本年与去年信访数量比例
         String lettersProportion=this.officerLettersInfoService.getLettersProportion(areaId);
+
+        String villageCadresCount=Integer.toString(this.officerBasicInfoService.getVillageCadresCount(areaId));
+
+
         map.put("partyMemberCount",partyMemberCount);
         map.put("cadreCount",cadreCount);
         map.put("localNativePlaceCount",localNativePlaceCount);
@@ -215,6 +239,7 @@ public class OfficerBasicInfoController {
         map.put("crimeProportion",crimeProportion);
         map.put("lettersCount",lettersCount);
         map.put("lettersProportion",lettersProportion);
+        map.put("villageCadresCount",villageCadresCount);
         return DataInfo.success(map);
     }
 

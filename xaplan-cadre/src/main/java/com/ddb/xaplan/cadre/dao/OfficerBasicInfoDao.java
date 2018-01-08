@@ -4,6 +4,8 @@ import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Created by 王凯斌 on 2017/10/16.
  */
@@ -207,6 +209,43 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
     @Query(value="select count(1) from officer_basic_info where\n" +
             " title_level=:title_level",nativeQuery=true)
     public int getSumCountyCount(@Param("title_level")int title_level);
+
+    // 2018--------------------------------------------------------------
+
+    /**
+     * 获取三县村干部人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            "title like '%村%'",nativeQuery=true)
+    Integer getVillageCadresCount();
+
+    /**
+     * 获取各县村干部人数
+     */
+    @Query(value="select count(1) from officer_basic_info where\n" +
+            "   area_ids like concat('%,',:areaId,',%') and  title like '%村%'",nativeQuery=true)
+    Integer getSumVillageCadresCount(@Param("areaId")int areaId);
+
+
+    /**
+     * 按年份计算年龄获取村干部信息
+     */
+    @Query(value="select * from officer_basic_info\n" +
+            "   where :year-year(birth_date)>=:minAge AND :year-year(birth_date)<=:maxAge",nativeQuery=true)
+    List<OfficerBasicInfoDO> findSumByYearAge(@Param("year")int year,@Param("maxAge")int maxAge,@Param("minAge")int minAge);
+
+    /**
+     * 按年份计算年龄获取各县村干部信息
+     */
+    @Query(value="select * from officer_basic_info\n" +
+            "   where :year-year(birth_date)>=:minAge AND :year-year(birth_date)<=:maxAge and area_ids like concat('%,',:areaId,',%')",nativeQuery=true)
+    List<OfficerBasicInfoDO> findByYearAge(@Param("areaId")int areaId,@Param("year")int year,@Param("maxAge")int maxAge,@Param("minAge")int minAge);
+
+
+
+
+
+
 
 
 
