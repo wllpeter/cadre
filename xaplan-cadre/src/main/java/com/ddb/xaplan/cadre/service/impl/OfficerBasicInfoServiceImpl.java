@@ -99,7 +99,8 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     @Override
     public Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,String userAreaCode) {
+            Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,
+            String userAreaCode,String culture,Date date) {
 
         return officerBasicInfoDao.findAll(new Specification<OfficerBasicInfoDO>() {
 
@@ -142,17 +143,22 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
                     predicate.getExpressions().add(
                             criteriaBuilder.equal(root.get("gender"), gender));
                 }
+                if(culture!=null){
+                    predicate.getExpressions().add(
+                            criteriaBuilder.equal(root.get("culture"), culture));
+                }
+
                 if(minimumAge!=null){
                     predicate.getExpressions().add(
                             criteriaBuilder.lessThanOrEqualTo(
                                     root.get("birthDate"),
-                                    DateUtils.addYears(new Date(),-minimumAge)));
+                                    DateUtils.addYears(date,-minimumAge)));
                 }
                 if(maxAge!=null){
                     predicate.getExpressions().add(
                             criteriaBuilder.greaterThanOrEqualTo(
                                     root.get("birthDate"),
-                                    DateUtils.addYears(new Date(),-maxAge)));
+                                    DateUtils.addYears(date,-maxAge)));
                 }
                 return predicate;
             }
@@ -355,6 +361,17 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     }
 
 
+    /**
+     * 获取各县村干部数量
+     */
+    @Override
+    public Integer getVillageCadresCount(int areaId) {
+        if(areaId==0){
+            return this.officerBasicInfoDao.getVillageCadresCount();
+        }else{
+            return this.officerBasicInfoDao.getSumVillageCadresCount(areaId);
+        }
+    }
 
 
 }
