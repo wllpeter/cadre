@@ -374,4 +374,17 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     }
 
 
+    /**
+     *获取各县科员数量
+     */
+    @Override
+    public Integer getClerkCount(int areaId) {
+        if(areaId==0){
+            return this.officerBasicInfoDao.getSumClerkCount();
+        }else{
+            return this.officerBasicInfoDao.getClerkCount(areaId);
+        }
+    }
+
+
 }
