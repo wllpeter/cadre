@@ -98,6 +98,13 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
      */
     Integer getVillageCadresCount(int areaId);
 
+    /**
+     *获取各县科员数量
+     */
+    Integer getClerkCount(int areaId);
+
+
+
 
 
     Page<OfficerBasicInfoDO> search(

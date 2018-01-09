@@ -67,13 +67,14 @@ public class OfficerBasicInfoController {
             @ApiImplicitParam(name = "page",paramType = "query", dataType = "Long"),
             @ApiImplicitParam(name = "sort",paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "culture",paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "civilServant",paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "date",paramType = "query", dataType = "String")
     })
     @RequestMapping(method = RequestMethod.GET)
     public DataInfo<Page<OfficerBasicInfoDO>> search(
             HttpServletRequest request,
             String keyword, Long areaId, String org, TitleLevel titleLevel,
-            Gender gender, Integer minimumAge, Integer maxAge,String culture,String date,
+            Gender gender, Integer minimumAge, Integer maxAge,String culture,String civilServant,String date,
             @PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
 
         String userInfo = HttpUtils.getCookieValue(request,"userInfo");
@@ -211,10 +212,12 @@ public class OfficerBasicInfoController {
         String lettersCount=Integer.toString(this.officerLettersInfoService.getLettersCount(areaId));
         //本年与去年信访数量比例
         String lettersProportion=this.officerLettersInfoService.getLettersProportion(areaId);
-
+        //村干部
         String villageCadresCount=Integer.toString(this.officerBasicInfoService.getVillageCadresCount(areaId));
-
-
+        //科员
+        String clerkCount=Integer.toString(this.officerBasicInfoService.getClerkCount(areaId));
+        //公务员
+        String civilServantCount="1200";
         map.put("partyMemberCount",partyMemberCount);
         map.put("cadreCount",cadreCount);
         map.put("localNativePlaceCount",localNativePlaceCount);
@@ -240,6 +243,8 @@ public class OfficerBasicInfoController {
         map.put("lettersCount",lettersCount);
         map.put("lettersProportion",lettersProportion);
         map.put("villageCadresCount",villageCadresCount);
+        map.put("clerkCount",clerkCount);
+        map.put("clerkcivilServantCountCount",civilServantCount);
         return DataInfo.success(map);
     }
 

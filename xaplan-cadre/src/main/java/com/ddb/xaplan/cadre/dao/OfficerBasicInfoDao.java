@@ -210,6 +210,9 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
             " title_level=:title_level",nativeQuery=true)
     public int getSumCountyCount(@Param("title_level")int title_level);
 
+
+
+
     // 2018--------------------------------------------------------------
 
     /**
@@ -241,6 +244,20 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
             "   where :year-year(birth_date)>=:minAge AND :year-year(birth_date)<=:maxAge and area_ids like concat('%,',:areaId,',%')",nativeQuery=true)
     List<OfficerBasicInfoDO> findByYearAge(@Param("areaId")int areaId,@Param("year")int year,@Param("maxAge")int maxAge,@Param("minAge")int minAge);
 
+
+    /**
+     * 统计三县科员人数
+     */
+    @Query(value="select count(1) from officer_basic_info\n" +
+            "where title_level = 0",nativeQuery=true)
+    Integer getSumClerkCount();
+
+    /**
+     * 统计各县科员人数
+     */
+    @Query(value="select count(1) from officer_basic_info\n" +
+            "where title_level = 0 and area_ids like concat('%,',:areaId,',%')",nativeQuery=true)
+    Integer getClerkCount(@Param("areaId")int areaId);
 
 
 
