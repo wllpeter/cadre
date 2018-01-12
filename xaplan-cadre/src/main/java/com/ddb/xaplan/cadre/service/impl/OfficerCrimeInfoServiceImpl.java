@@ -25,9 +25,9 @@ public class OfficerCrimeInfoServiceImpl extends BaseServiceImpl<OfficerCrimeInf
     @Override
     public int getCrimeCount(int areaId) {
         if(areaId==0){
-            return this.officerCrimeInfoDao.getSumCrimeCount(0);
+            return this.officerCrimeInfoDao.getSumCrimeCount(1);
         }else {
-            return this.officerCrimeInfoDao.getCrimeCount(areaId, 0);
+            return this.officerCrimeInfoDao.getCrimeCount(areaId, 1);
         }
     }
 
@@ -39,11 +39,11 @@ public class OfficerCrimeInfoServiceImpl extends BaseServiceImpl<OfficerCrimeInf
         double year;
         double yest;
         if(areaId==0){
-            year = this.officerCrimeInfoDao.getSumCrimeCount(0);
-            yest = this.officerCrimeInfoDao.getSumCrimeCount(1);
+            year = this.officerCrimeInfoDao.getSumCrimeCount(1);
+            yest = this.officerCrimeInfoDao.getSumCrimeCount(2);
         }else {
-            year = this.officerCrimeInfoDao.getCrimeCount(areaId, 0);
-            yest = this.officerCrimeInfoDao.getCrimeCount(areaId, 1);
+            year = this.officerCrimeInfoDao.getCrimeCount(areaId, 1);
+            yest = this.officerCrimeInfoDao.getCrimeCount(areaId, 2);
         }
         if(yest==0){
             return "-";
