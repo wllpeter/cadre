@@ -25,16 +25,16 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
     @Override
     public int getLettersCount(int areaId) {
         if (areaId == 0) {
-            if (this.officerLettersInfoDao.getLettersSumCount(0) == null) {
+            if (this.officerLettersInfoDao.getLettersSumCount(1) == null) {
                 return 0;
             } else {
-                return Integer.parseInt(this.officerLettersInfoDao.getLettersSumCount(0));
+                return Integer.parseInt(this.officerLettersInfoDao.getLettersSumCount(1));
             }
         } else {
-            if (this.officerLettersInfoDao.getLettersCount(areaId, 0) == null) {
+            if (this.officerLettersInfoDao.getLettersCount(areaId, 1) == null) {
                 return 0;
             } else {
-                return Integer.parseInt(this.officerLettersInfoDao.getLettersCount(areaId, 0));
+                return Integer.parseInt(this.officerLettersInfoDao.getLettersCount(areaId, 1));
             }
         }
     }
@@ -47,9 +47,9 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
         double year;
         String syear;
         if (areaId == 0) {
-            syear = this.officerLettersInfoDao.getLettersSumCount(0);
+            syear = this.officerLettersInfoDao.getLettersSumCount(1);
         } else {
-            syear = this.officerLettersInfoDao.getLettersCount(areaId, 0);
+            syear = this.officerLettersInfoDao.getLettersCount(areaId, 1);
         }
         if (syear == null || syear == "") {
             year = 0;
@@ -59,9 +59,9 @@ public class OfficerLettersInfoServiceImpl extends BaseServiceImpl<OfficerLetter
         double yest;
         String syest;
         if (areaId == 0) {
-            syest = this.officerLettersInfoDao.getLettersSumCount(1);
+            syest = this.officerLettersInfoDao.getLettersSumCount(2);
         } else {
-            syest = this.officerLettersInfoDao.getLettersCount(areaId, 1);
+            syest = this.officerLettersInfoDao.getLettersCount(areaId, 2);
         }
         if (syest == null || syest == "") {
             yest = 0;

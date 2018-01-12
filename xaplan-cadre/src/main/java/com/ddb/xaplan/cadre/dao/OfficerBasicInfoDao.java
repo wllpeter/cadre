@@ -1,6 +1,7 @@
 package com.ddb.xaplan.cadre.dao;
 
 import com.ddb.xaplan.cadre.entity.OfficerBasicInfoDO;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -259,6 +260,26 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
             "where title_level = 0 and area_ids like concat('%,',:areaId,',%')",nativeQuery=true)
     Integer getClerkCount(@Param("areaId")int areaId);
 
+    @Query(value="select * from officer_basic_info",nativeQuery=true)
+    List<OfficerBasicInfoDO> findAllBasic();
+
+    @Modifying
+    @Query(value="update officer_basic_info set area_ids=:areaIds where id=:id",nativeQuery=true)
+    void updateBasic(@Param("areaIds")String areaIds,@Param("id")Long id);
+
+    /**
+     * 获取三县公务员数量
+     */
+    @Query(value="select count(1) from officer_basic_info\n" +
+            "where cadre_type='公务员'",nativeQuery=true)
+    Integer getSumCivilServantCount();
+
+    /**
+     * 获取各县公务员数量
+     */
+    @Query(value="select count(1) from officer_basic_info\n" +
+            "where cadre_type='公务员' and area_ids like concat('%,',:areaId,',%') ",nativeQuery=true)
+    Integer getCivilServantCount(@Param("areaId")int areaId);
 
 
 

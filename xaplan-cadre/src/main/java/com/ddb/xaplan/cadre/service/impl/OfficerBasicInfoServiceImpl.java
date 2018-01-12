@@ -16,11 +16,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -100,7 +103,7 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     public Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
             Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,
-            String userAreaCode,String culture,Date date) {
+            String userAreaCode,String culture,Date date,String civilServant) {
 
         return officerBasicInfoDao.findAll(new Specification<OfficerBasicInfoDO>() {
 
@@ -143,9 +146,17 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
                     predicate.getExpressions().add(
                             criteriaBuilder.equal(root.get("gender"), gender));
                 }
-                if(culture!=null){
-                    predicate.getExpressions().add(
-                            criteriaBuilder.equal(root.get("culture"), culture));
+                if(culture!=null && !"".equals(culture)){
+                    if(culture.equals("汉族"))
+                        predicate.getExpressions().add(criteriaBuilder.equal(root.get("culture"), culture));
+                    else
+                        predicate.getExpressions().add(criteriaBuilder.notEqual(root.get("culture"), "汉族"));
+                }
+                if(civilServant!=null && !"".equals(civilServant)){
+                    if(civilServant.equals("公务员"))
+                        predicate.getExpressions().add(criteriaBuilder.equal(root.get("civilServant"), civilServant));
+                    else
+                        predicate.getExpressions().add(criteriaBuilder.notEqual(root.get("civilServant"), "公务员"));
                 }
 
                 if(minimumAge!=null){
@@ -380,10 +391,43 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
     @Override
     public Integer getClerkCount(int areaId) {
         if(areaId==0){
+
             return this.officerBasicInfoDao.getSumClerkCount();
         }else{
             return this.officerBasicInfoDao.getClerkCount(areaId);
         }
+    }
+    /**
+     * 获取各县公务员数量
+     */
+    @Override
+    public Integer getcivilServantCount(int areaId) {
+        if(areaId==0){
+
+            return this.officerBasicInfoDao.getSumCivilServantCount();
+        }else{
+            return this.officerBasicInfoDao.getCivilServantCount(areaId);
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean update() {
+        List<OfficerBasicInfoDO> list=this.officerBasicInfoDao.findAllBasic();
+        boolean flag=true;
+        for (OfficerBasicInfoDO item: list) {
+            String areaIds=item.getAreaIdOn();
+            System.out.println(areaIds);
+            try {
+                this.officerBasicInfoDao.updateBasic(areaIds,item.getId());
+            } catch (Exception e) {
+                flag=false;
+                e.printStackTrace();
+
+            }
+        }
+
+        return false;
     }
 
 
