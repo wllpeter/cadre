@@ -103,6 +103,13 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
      */
     Integer getClerkCount(int areaId);
 
+    /**
+     * 获取各县公务员数量
+     */
+    Integer getcivilServantCount(int areaId);
+
+    boolean update();
+
 
 
 
@@ -110,7 +117,7 @@ public interface OfficerBasicInfoService extends BaseService<OfficerBasicInfoDO>
     Page<OfficerBasicInfoDO> search(
             String keyword, AreaDO area, String org, TitleLevel titleLevel,
             Gender gender, Integer minimumAge, Integer maxAge, Pageable pageable,
-            String userAreaCode,String culture,Date date);
+            String userAreaCode,String culture,Date date,String civilServant);
 
 
 

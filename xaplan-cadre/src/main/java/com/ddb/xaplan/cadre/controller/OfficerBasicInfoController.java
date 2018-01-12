@@ -99,14 +99,15 @@ public class OfficerBasicInfoController {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         }
+        if(civilServant.equals("是"))
+            civilServant="公务员";
 
         return DataInfo.success(
                 officerBasicInfoService.search(
                         keyword,areaService.find(areaId),org,titleLevel,
                         gender,minimumAge,maxAge,pageable,
-                        user.getString("distinctCode"),culture,d));
+                        user.getString("distinctCode"),culture,d,civilServant));
 
     }
 
@@ -217,7 +218,7 @@ public class OfficerBasicInfoController {
         //科员
         String clerkCount=Integer.toString(this.officerBasicInfoService.getClerkCount(areaId));
         //公务员
-        String civilServantCount="1200";
+        String civilServantCount=Integer.toString(this.officerBasicInfoService.getcivilServantCount(areaId));
         map.put("partyMemberCount",partyMemberCount);
         map.put("cadreCount",cadreCount);
         map.put("localNativePlaceCount",localNativePlaceCount);
@@ -245,6 +246,13 @@ public class OfficerBasicInfoController {
         map.put("villageCadresCount",villageCadresCount);
         map.put("clerkCount",clerkCount);
         map.put("clerkcivilServantCountCount",civilServantCount);
+        return DataInfo.success(map);
+    }
+
+    @GetMapping(value = "/update")
+    public DataInfo<Map<String,String>> update(){
+        Map<String,String> map=new HashMap<String,String>();
+        map.put("flag",this.officerBasicInfoService.update()+"");
         return DataInfo.success(map);
     }
 

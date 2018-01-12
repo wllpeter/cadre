@@ -56,6 +56,8 @@ public class OfficerBasicInfoDO extends BaseEntity {
 
     private String areaIds;
 
+    private String cadreType;
+
     @Column
     public String getPhoto() {
         return photo;
@@ -237,6 +239,15 @@ public class OfficerBasicInfoDO extends BaseEntity {
         this.areaIds = areaIds;
     }
 
+    @Column
+    public String getCadreType() {
+        return cadreType;
+    }
+
+    public void setCadreType(String cadreType) {
+        this.cadreType = cadreType;
+    }
+
     @Transient
     public String getAreaName() {
 
@@ -254,4 +265,24 @@ public class OfficerBasicInfoDO extends BaseEntity {
 
         return result;
     }
+    @Transient
+    public String getAreaIdOn() {
+
+        String result = ",";
+
+        try{
+            AreaDO areaDO = this.getArea();
+            while(areaDO!=null){
+                result += areaDO.getId()+",";
+                areaDO = areaDO.getParent();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+
 }
