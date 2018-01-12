@@ -27,9 +27,9 @@ public class OfficerIllegalInfoServiceImpl extends BaseServiceImpl<OfficerIllega
     @Override
     public int getIllegalCount(int areaId) {
         if(areaId==0){
-            return this.officerIllegalInfoDao.getSumIllegalCount(0);
+            return this.officerIllegalInfoDao.getSumIllegalCount(1);
         }else {
-            return this.officerIllegalInfoDao.getIllegalCount(areaId, 0);
+            return this.officerIllegalInfoDao.getIllegalCount(areaId, 1);
         }
     }
 
@@ -41,11 +41,11 @@ public class OfficerIllegalInfoServiceImpl extends BaseServiceImpl<OfficerIllega
         double year;
         double yest;
         if(areaId==0){
-            year = this.officerIllegalInfoDao.getSumIllegalCount(0);
-            yest = this.officerIllegalInfoDao.getSumIllegalCount(1);
+            year = this.officerIllegalInfoDao.getSumIllegalCount(1);
+            yest = this.officerIllegalInfoDao.getSumIllegalCount(2);
         }else {
-            year = this.officerIllegalInfoDao.getIllegalCount(areaId, 0);
-            yest = this.officerIllegalInfoDao.getIllegalCount(areaId, 1);
+            year = this.officerIllegalInfoDao.getIllegalCount(areaId, 1);
+            yest = this.officerIllegalInfoDao.getIllegalCount(areaId, 2);
         }
         if(yest==0){
             return "-";
