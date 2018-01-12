@@ -100,7 +100,7 @@ public class OfficerBasicInfoController {
                 e.printStackTrace();
             }
         }
-        if(civilServant.equals("是"))
+        if(civilServant!=null && civilServant.equals("是"))
             civilServant="公务员";
 
         return DataInfo.success(
