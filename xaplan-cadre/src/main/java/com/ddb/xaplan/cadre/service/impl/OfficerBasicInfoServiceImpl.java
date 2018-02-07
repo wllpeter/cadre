@@ -188,7 +188,7 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
 //            //return this.officerBasicInfoDao.getPartyMemberSumCount();
 //            return ;
 //        }else{
-            final int ax = 25682;
+            final int ax = 22287;
             final int rc = 12181;
             final int xx = 15095;
             switch (areaId){

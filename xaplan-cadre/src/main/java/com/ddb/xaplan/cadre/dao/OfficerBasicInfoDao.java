@@ -220,14 +220,14 @@ public interface OfficerBasicInfoDao extends BaseDao<OfficerBasicInfoDO>{
      * 获取三县村干部人数
      */
     @Query(value="select count(1) from officer_basic_info where\n" +
-            "title like '%村%'",nativeQuery=true)
+            "cadre_type='村干部'",nativeQuery=true)
     Integer getVillageCadresCount();
 
     /**
      * 获取各县村干部人数
      */
     @Query(value="select count(1) from officer_basic_info where\n" +
-            "   area_ids like concat('%,',:areaId,',%') and  title like '%村%'",nativeQuery=true)
+            "   area_ids like concat('%,',:areaId,',%') and  cadre_type='村干部'",nativeQuery=true)
     Integer getSumVillageCadresCount(@Param("areaId")int areaId);
 
 
