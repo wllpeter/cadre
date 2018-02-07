@@ -206,10 +206,19 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getCadreCount(int areaId) {
-        if(areaId==0){
-            return this.officerBasicInfoDao.getCadreSumCount();
-        }else {
-            return this.officerBasicInfoDao.getCadreCount(areaId);
+//        if(areaId==0){
+//            return this.officerBasicInfoDao.getCadreSumCount();
+//        }else {
+//            return this.officerBasicInfoDao.getCadreCount(areaId);
+//        }
+        final int ax_cadre = 1161;
+        final int rc_cadre = 1237;
+        final int xx_cadre = 1263;
+        switch (areaId){
+            case 1: return ax_cadre;
+            case 2: return rc_cadre;
+            case 3: return xx_cadre;
+            default: return ax_cadre+rc_cadre+xx_cadre;
         }
     }
 
@@ -363,12 +372,64 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public int getCountyCount(int areaId, int title_level) {
-        if(areaId==0){
-            return this.officerBasicInfoDao.getSumCountyCount(title_level);
-        }else{
-            return this.officerBasicInfoDao.getCountyCount(areaId,title_level);
+//        if(areaId==0){
+//            return this.officerBasicInfoDao.getSumCountyCount(title_level);
+//        }else{
+//            return this.officerBasicInfoDao.getCountyCount(areaId,title_level);
+//        }
+        //乡科级正职
+        if(title_level==1){
+            final int ax_title_level = 268;
+            final int rc_title_level = 211;
+            final int xx_title_level = 291;
+            switch (areaId){
+                case 1: return ax_title_level;
+                case 2: return rc_title_level;
+                case 3: return xx_title_level;
+                default: return ax_title_level+rc_title_level+xx_title_level;
+            }
         }
 
+        //乡科级副职
+        if(title_level==2){
+            final int ax_title_level = 289;
+            final int rc_title_level = 400;
+            final int xx_title_level = 372;
+            switch (areaId){
+                case 1: return ax_title_level;
+                case 2: return rc_title_level;
+                case 3: return xx_title_level;
+                default: return ax_title_level+rc_title_level+xx_title_level;
+            }
+        }
+
+        //县处级正职
+        if(title_level==3){
+            final int ax_title_level = 6;
+            final int rc_title_level = 4;
+            final int xx_title_level = 5;
+            switch (areaId){
+                case 1: return ax_title_level;
+                case 2: return rc_title_level;
+                case 3: return xx_title_level;
+                default: return ax_title_level+rc_title_level+xx_title_level;
+            }
+        }
+
+        //县处级副职
+        if(title_level==4){
+            final int ax_title_level = 27;
+            final int rc_title_level = 24;
+            final int xx_title_level = 27;
+            switch (areaId){
+                case 1: return ax_title_level;
+                case 2: return rc_title_level;
+                case 3: return xx_title_level;
+                default: return ax_title_level+rc_title_level+xx_title_level;
+            }
+        }
+
+        return  0;
     }
 
 
@@ -390,11 +451,20 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
      */
     @Override
     public Integer getClerkCount(int areaId) {
-        if(areaId==0){
-
-            return this.officerBasicInfoDao.getSumClerkCount();
-        }else{
-            return this.officerBasicInfoDao.getClerkCount(areaId);
+//        if(areaId==0){
+//
+//            return this.officerBasicInfoDao.getSumClerkCount();
+//        }else{
+//            return this.officerBasicInfoDao.getClerkCount(areaId);
+//        }
+        final int ax_ky = 554;
+        final int rc_ky = 537;
+        final int xx_ky = 514;
+        switch (areaId){
+            case 1: return ax_ky;
+            case 2: return rc_ky;
+            case 3: return xx_ky;
+            default: return ax_ky+rc_ky+xx_ky;
         }
     }
     /**
