@@ -211,9 +211,9 @@ public class OfficerBasicInfoServiceImpl extends BaseServiceImpl<OfficerBasicInf
 //        }else {
 //            return this.officerBasicInfoDao.getCadreCount(areaId);
 //        }
-        final int ax_cadre = 1161;
-        final int rc_cadre = 1237;
-        final int xx_cadre = 1263;
+        final int ax_cadre = 590;
+        final int rc_cadre = 639;
+        final int xx_cadre = 695;
         switch (areaId){
             case 1: return ax_cadre;
             case 2: return rc_cadre;
